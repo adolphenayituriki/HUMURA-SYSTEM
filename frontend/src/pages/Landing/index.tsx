@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowRight, Shield, HeartHandshake, BarChart3, Users, Stethoscope,
@@ -16,15 +16,6 @@ const fadeUp = {
   viewport: { once: true, margin: '-60px' },
   transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const },
 };
-
-const navItems = [
-  { label: 'Home', href: '#hero' },
-  { label: 'About', href: '#about' },
-  { label: 'Services', href: '#services' },
-  { label: 'Youth', href: '#youth' },
-  { label: 'Community', href: '#community' },
-  { label: 'Contact', href: '#contact' },
-];
 
 export default function Landing() {
   const { t } = useI18nStore();

@@ -26,7 +26,7 @@ const MOCK_NOTIFICATIONS: Notification[] = [
   { id: 'n5', title: 'Group Session', message: 'Healing Circle 3 completed Trust phase', type: 'info', read: false, createdAt: '2026-05-16', link: '/sociotherapy' },
 ];
 
-export const useNotificationStore = create<NotificationState>()((set, get) => ({
+export const useNotificationStore = create<NotificationState>()((set) => ({
   notifications: MOCK_NOTIFICATIONS,
   unreadCount: MOCK_NOTIFICATIONS.filter(n => !n.read).length,
   addNotification: (n) => set((s) => ({

@@ -81,7 +81,7 @@ export default function YouthPage() {
         <select value={programFilter} onChange={e => setProgramFilter(e.target.value)}
           className="h-9 px-3 rounded-lg text-sm text-ink-600 border border-ink-200 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/40 appearance-none cursor-pointer outline-none">
           <option value="all">{trans.youth.allPrograms}</option>
-          {programs.map(p => <option key={p} value={p}>{trans.youth.programKeys[PROG_KEYS[p]] || p}</option>)}
+          {programs.map(p => <option key={p} value={p}>{(trans.youth.programKeys as Record<string, string>)[PROG_KEYS[p]] || p}</option>)}
         </select>
         <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
           className="h-9 px-3 rounded-lg text-sm text-ink-600 border border-ink-200 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/40 appearance-none cursor-pointer outline-none">
@@ -114,7 +114,7 @@ export default function YouthPage() {
                   <div className="flex items-center gap-2 text-xs text-ink-400 mb-3">
                     <span>{trans.youth.age} {y.age}</span>
                     <span className="text-ink-200">·</span>
-                    <Badge color="warm">{trans.youth.programKeys[PROG_KEYS[y.program]] || y.program}</Badge>
+                    <Badge color="warm">{(trans.youth.programKeys as Record<string, string>)[PROG_KEYS[y.program]] || y.program}</Badge>
                   </div>
 
                   <div className="pt-3 border-t border-ink-100">

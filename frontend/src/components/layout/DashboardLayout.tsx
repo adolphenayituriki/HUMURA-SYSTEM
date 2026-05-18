@@ -5,7 +5,7 @@ import {
   LayoutDashboard, Users, Stethoscope, HeartHandshake,
   Wallet, AlertTriangle, BarChart3, Settings, LogOut,
   ChevronLeft, UserCircle, Search,
-  Bell, ChevronDown, Menu, X, Check, User, Shield,
+  Bell, ChevronDown, Menu, X, Check,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { useSidebarStore } from '../../store/sidebarStore';

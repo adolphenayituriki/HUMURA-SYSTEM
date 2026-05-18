@@ -68,7 +68,7 @@ export default function ScreeningPage() {
               <div key={p.key}>
                 <label className="block text-xs font-semibold text-ink-400 mb-1.5">{p.label}</label>
                 <input placeholder={p.label} value={formData[p.key] ?? ''}
-                  onChange={e => setFormData(f => ({ ...f, [p]: e.target.value }))}
+                  onChange={e => setFormData(f => ({ ...f, [p.key]: e.target.value }))}
                   className="w-full h-10 px-4 rounded-lg text-sm border border-ink-200/70 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/30 outline-none placeholder:text-ink-300" />
               </div>
             ))}
