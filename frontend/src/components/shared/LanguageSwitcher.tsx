@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useI18nStore, type Lang, LANG_LABELS } from '../../i18n';
-import { Globe, ChevronDown, Check } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGlobe, faChevronDown, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 const LANGS: Lang[] = ['en', 'fr', 'rw'];
 
@@ -27,9 +28,9 @@ export function LanguageSwitcher({ className, dark }: { className?: string; dark
             : 'text-ink-500 hover:text-ink-700 hover:bg-ink-100/60 border border-transparent'
         }`}
       >
-        <Globe size={13} />
+        <FontAwesomeIcon icon={faGlobe} className="text-[13px]" />
         {LANG_LABELS[lang]}
-        <ChevronDown size={11} className={`transition-transform ${open ? 'rotate-180' : ''}`} />
+        <FontAwesomeIcon icon={faChevronDown} className={`text-[11px] transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
 
       {open && (
@@ -53,7 +54,7 @@ export function LanguageSwitcher({ className, dark }: { className?: string; dark
               }`}
             >
               <span className="flex-1 text-left">{LANG_LABELS[l]}</span>
-              {lang === l && <Check size={13} className="shrink-0" />}
+              {lang === l && <FontAwesomeIcon icon={faCheck} className="text-[13px] shrink-0" />}
             </button>
           ))}
         </div>

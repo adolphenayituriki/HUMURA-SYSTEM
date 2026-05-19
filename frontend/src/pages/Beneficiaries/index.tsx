@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, ChevronLeft, ChevronRight, Filter } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass, faChevronLeft, faChevronRight, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { service } from '../../services/mockData';
 import { Badge } from '../../components/shared/Badge';
 import { Button } from '../../components/shared/Button';
@@ -53,7 +54,7 @@ export default function BeneficiariesPage() {
 
       <div className="flex flex-wrap items-center gap-3 md:gap-4">
         <div className="relative flex-1 min-w-[200px] max-w-xs">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-300 pointer-events-none" />
+          <FontAwesomeIcon icon={faMagnifyingGlass} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-300 pointer-events-none text-[14px]" />
           <input value={search} onChange={e => { setSearch(e.target.value); setPage(0); }}
             placeholder={trans.beneficiaries.searchPlaceholder}
             className="w-full h-10 pl-9 pr-3 rounded-lg text-sm border border-ink-200/70 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/30 outline-none placeholder:text-ink-300 bg-white" />
@@ -72,7 +73,7 @@ export default function BeneficiariesPage() {
           <option value="recovered">{trans.beneficiaries.statusRecovered}</option>
         </select>
         <div className="flex items-center gap-1.5 text-xs text-ink-400 whitespace-nowrap">
-          <Filter size={12} />
+          <FontAwesomeIcon icon={faFilter} className="text-[12px]" />
           <span>{filtered.length} {trans.beneficiaries.results}</span>
         </div>
       </div>
@@ -123,7 +124,7 @@ export default function BeneficiariesPage() {
         <span className="text-xs text-ink-400">{trans.beneficiaries.page} {safePage + 1} {trans.beneficiaries.of} {pages}</span>
         <div className="flex gap-1">
           <Button disabled={safePage === 0} onClick={() => setPage(p => p - 1)} variant="secondary" size="icon">
-            <ChevronLeft size={14} />
+            <FontAwesomeIcon icon={faChevronLeft} className="text-[14px]" />
           </Button>
           {pageWindow[0] > 0 && (
             <>
@@ -144,7 +145,7 @@ export default function BeneficiariesPage() {
             </>
           )}
           <Button disabled={safePage === pages - 1} onClick={() => setPage(p => p + 1)} variant="secondary" size="icon">
-            <ChevronRight size={14} />
+            <FontAwesomeIcon icon={faChevronRight} className="text-[14px]" />
           </Button>
         </div>
       </div>

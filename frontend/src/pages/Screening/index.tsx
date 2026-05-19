@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faChevronLeft, faChevronRight, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { service } from '../../services/mockData';
 import { Badge } from '../../components/shared/Badge';
 import { StatCard } from '../../components/shared/StatCard';
@@ -198,7 +199,7 @@ export default function ScreeningPage() {
           <p className="text-sm text-ink-400 mt-2">{trans.screening.subtitle}</p>
         </div>
         <Button onClick={() => { setShowForm(!showForm); if (!showForm) resetForm(); }} variant="primary" className="shrink-0">
-          <Plus size={14} /> {trans.screening.newAssessment}
+          <FontAwesomeIcon icon={faPlus} className="text-[14px]" /> {trans.screening.newAssessment}
         </Button>
       </div>
 
@@ -220,7 +221,7 @@ export default function ScreeningPage() {
                       <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
                         i < step ? 'bg-brand-600 text-white' : i === step ? 'border-2 border-brand-600 text-brand-700' : 'border border-ink-300 text-ink-400'
                       }`}>
-                        {i < step ? <Check size={12} /> : i + 1}
+                        {i < step ? <FontAwesomeIcon icon={faCheck} className="text-[12px]" /> : i + 1}
                       </div>
                       <span className="text-xs font-medium hidden sm:inline">{s.label}</span>
                     </div>
@@ -233,17 +234,17 @@ export default function ScreeningPage() {
 
               <div className="flex items-center justify-between pt-4 border-t border-ink-100">
                 <Button onClick={() => setStep(s => Math.max(0, s - 1))} disabled={step === 0} variant="ghost" size="sm">
-                  <ChevronLeft size={14} /> {trans.screening.back}
+                  <FontAwesomeIcon icon={faChevronLeft} className="text-[14px]" /> {trans.screening.back}
                 </Button>
                 <div className="flex gap-2">
                   <Button onClick={() => { setShowForm(false); resetForm(); }} variant="ghost" size="sm">{trans.screening.cancel}</Button>
                   {step < STEPS.length - 1 ? (
                     <Button onClick={() => setStep(s => Math.min(STEPS.length - 1, s + 1))} variant="primary" size="sm">
-                      {trans.screening.next} <ChevronRight size={14} />
+                      {trans.screening.next} <FontAwesomeIcon icon={faChevronRight} className="text-[14px]" />
                     </Button>
                   ) : (
                     <Button onClick={() => { setShowForm(false); resetForm(); }} variant="success" size="sm">
-                      <Check size={14} /> {trans.screening.submitAssessment}
+                      <FontAwesomeIcon icon={faCheck} className="text-[14px]" /> {trans.screening.submitAssessment}
                     </Button>
                   )}
                 </div>

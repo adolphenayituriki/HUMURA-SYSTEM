@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { service } from '../../services/mockData';
 import { Card } from '../../components/shared/Card';
 import { Badge } from '../../components/shared/Badge';
@@ -59,7 +60,7 @@ export default function ReferralsPage() {
           </Button>
         ))}
         <div className="relative ml-auto">
-          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-300 pointer-events-none" />
+          <FontAwesomeIcon icon={faMagnifyingGlass} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-300 pointer-events-none text-[13px]" />
           <input value={search} onChange={e => setSearch(e.target.value)}
             placeholder={trans.referrals.search}
             className="w-36 md:w-44 h-8 pl-8 pr-3 rounded-lg text-sm border border-ink-200 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/40 placeholder:text-ink-300 outline-none bg-white" />

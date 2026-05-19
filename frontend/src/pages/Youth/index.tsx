@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, CheckCircle } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { service } from '../../services/mockData';
 import { Card } from '../../components/shared/Card';
 import { Badge } from '../../components/shared/Badge';
@@ -57,14 +58,14 @@ export default function YouthPage() {
           <p className="text-sm text-ink-400 mt-2">{trans.youth.subtitle}</p>
         </div>
         <Button variant="primary" className="shrink-0" onClick={() => { setEnrollMsg(true); setTimeout(() => setEnrollMsg(false), 2500); }}>
-          <Plus size={14} /> {trans.youth.enrollYouth}
+          <FontAwesomeIcon icon={faPlus} className="text-[14px]" /> {trans.youth.enrollYouth}
         </Button>
       </div>
 
       {enrollMsg && (
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
           className="border border-forest-200/60 rounded-xl px-4 py-3 text-xs font-semibold text-forest-700 flex items-center gap-2 bg-forest-50/30">
-          <CheckCircle size={14} /> {trans.youth.enrollSuccess}
+          <FontAwesomeIcon icon={faCircleCheck} className="text-[14px]" /> {trans.youth.enrollSuccess}
         </motion.div>
       )}
 

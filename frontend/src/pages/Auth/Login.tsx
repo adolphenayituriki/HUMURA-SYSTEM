@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff, ShieldCheck, ChevronRight, ChevronDown } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEnvelope, faLock, faEye, faEyeSlash, faChevronDown, faChevronRight, faShield } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '../../components/shared/Button';
 import { useAuthStore } from '../../store/authStore';
 import { service } from '../../services/mockData';
@@ -34,7 +35,7 @@ export default function Login() {
     e.preventDefault();
     setError('');
     const user = service.getUsers().find((u) => u.email === email);
-    if (!user) { setError(trans.auth.noAccountFound); return; }
+    if (!user) { setError('No account found with this email.'); return; }
     login(user, 'mock-jwt-token');
     navigate('/dashboard');
   };
@@ -52,30 +53,36 @@ export default function Login() {
     <div>
       <div className="mb-6 sm:mb-8">
         <h2 className="text-xl sm:text-[26px] font-bold text-ink-900 tracking-[-.02em] leading-tight">
-          {trans.auth.welcomeBack}
+          Sign In
         </h2>
         <p className="text-xs sm:text-sm text-ink-400 mt-1.5">
-          {trans.auth.signInTo}
+          Access your secure dashboard
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:gap-5">
-        <div className="relative group">
-          <Mail size={16} className="absolute left-3 sm:left-3.5 top-1/2 -translate-y-1/2 text-ink-400 pointer-events-none transition-colors group-focus-within:text-brand-500 sm:size-[18px]" />
-          <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-            className="w-full h-10 sm:h-12 pl-9 sm:pl-10 pr-3 sm:pr-3.5 rounded-lg text-xs sm:text-sm text-ink-800 placeholder:text-ink-400 bg-ink-50/40 border border-ink-200 focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-200/25 transition-all outline-none"
-            placeholder={trans.auth.email} required autoComplete="email" />
+        <div>
+          <label className="text-xs font-semibold text-ink-500 mb-1.5 block">Email Address</label>
+          <div className="flex items-center gap-3 w-full h-12 sm:h-14 px-4 rounded-lg text-sm bg-ink-50/40 border border-ink-200 focus-within:border-brand-500 focus-within:bg-white focus-within:ring-2 focus-within:ring-brand-200/25 transition-all">
+            <FontAwesomeIcon icon={faEnvelope} className="text-ink-400 shrink-0 text-sm" />
+            <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+              className="flex-1 bg-transparent border-none outline-none text-ink-800 placeholder:text-ink-400 h-full min-w-0"
+              placeholder="Enter your registered email" required autoComplete="email" />
+          </div>
         </div>
 
-        <div className="relative group">
-          <Lock size={16} className="absolute left-3 sm:left-3.5 top-1/2 -translate-y-1/2 text-ink-400 pointer-events-none transition-colors group-focus-within:text-brand-500 sm:size-[18px]" />
-          <input id="password" type={showPw ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)}
-            className="w-full h-10 sm:h-12 pl-9 sm:pl-10 pr-10 rounded-lg text-xs sm:text-sm text-ink-800 placeholder:text-ink-400 bg-ink-50/40 border border-ink-200 focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-200/25 transition-all outline-none"
-            placeholder={trans.auth.password} required autoComplete="current-password" />
-          <button type="button" onClick={() => setShowPw(!showPw)}
-            className="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 text-ink-400 hover:text-ink-600 transition-colors cursor-pointer p-1">
-            {showPw ? <EyeOff size={16} className="sm:size-[18px]" /> : <Eye size={16} className="sm:size-[18px]" />}
-          </button>
+        <div>
+          <label className="text-xs font-semibold text-ink-500 mb-1.5 block">Password</label>
+          <div className="flex items-center gap-3 w-full h-12 sm:h-14 px-4 rounded-lg text-sm bg-ink-50/40 border border-ink-200 focus-within:border-brand-500 focus-within:bg-white focus-within:ring-2 focus-within:ring-brand-200/25 transition-all">
+            <FontAwesomeIcon icon={faLock} className="text-ink-400 shrink-0 text-sm" />
+            <input id="password" type={showPw ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)}
+              className="flex-1 bg-transparent border-none outline-none text-ink-800 placeholder:text-ink-400 h-full min-w-0"
+              placeholder="Enter your password" required autoComplete="current-password" />
+            <button type="button" onClick={() => setShowPw(!showPw)}
+              className="text-ink-400 hover:text-ink-600 transition-colors cursor-pointer p-1 shrink-0">
+              {showPw ? <FontAwesomeIcon icon={faEyeSlash} className="text-sm" /> : <FontAwesomeIcon icon={faEye} className="text-sm" />}
+            </button>
+          </div>
         </div>
 
         {error && (
@@ -85,28 +92,23 @@ export default function Login() {
           </div>
         )}
 
-        <div className="flex items-center justify-between">
-          <label className="flex items-center gap-2 text-xs text-ink-500 cursor-pointer select-none hover:text-ink-700 transition-colors">
-            <input type="checkbox"
-              className="w-3.5 h-3.5 rounded border-ink-300 text-brand-600 focus:ring-brand-300 focus:ring-offset-0 cursor-pointer" />
-            {trans.auth.rememberMe}
-          </label>
+        <div className="flex justify-end">
           <Link to="/forgot-password"
             className="text-xs font-semibold text-brand-600 hover:text-brand-700 transition-colors">
-            {trans.auth.forgotPassword}
+            Forgot Password?
           </Link>
         </div>
 
         <Button type="submit" variant="primary" size="lg" className="w-full">
-          {trans.auth.signIn}
+          Sign In
         </Button>
       </form>
 
       <div className="mt-5 sm:mt-6 pt-5 sm:pt-6 border-t border-ink-100 text-center">
         <p className="text-xs text-ink-400">
-          {trans.auth.noAccount}{' '}
+          New to the platform?{' '}
           <Link to="/register" className="font-semibold text-brand-600 hover:text-brand-700 transition-colors">
-            {trans.auth.createOne}
+            Create an account
           </Link>
         </p>
       </div>
@@ -118,9 +120,9 @@ export default function Login() {
           onClick={() => setShowDemo(!showDemo)}
           className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg border border-dashed border-ink-200 bg-ink-50/20 hover:bg-amber-50 hover:border-amber-300 text-xs font-medium text-ink-500 hover:text-amber-700 transition-all cursor-pointer"
         >
-          <ShieldCheck size={14} className="text-amber-400" />
+          <FontAwesomeIcon icon={faShield} className="text-amber-400" />
           {trans.auth.demoUsers}
-          {showDemo ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+          {showDemo ? <FontAwesomeIcon icon={faChevronDown} /> : <FontAwesomeIcon icon={faChevronRight} />}
         </button>
 
         {showDemo && (
@@ -142,7 +144,7 @@ export default function Login() {
                     {trans.admin.roles[ROLE_LABEL_KEYS[u.role] as keyof typeof trans.admin.roles] as string}
                   </p>
                 </div>
-                <ChevronRight size={14} className="text-ink-300 group-hover:text-brand-400 transition-colors shrink-0" />
+                <FontAwesomeIcon icon={faChevronRight} className="text-ink-300 group-hover:text-brand-400 transition-colors shrink-0" />
               </button>
             ))}
           </div>

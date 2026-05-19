@@ -340,6 +340,7 @@ export const fr: Translations = {
     youth: 'Jeunesse',
     community: 'Communauté',
     contact: 'Contact',
+    media: 'Médias',
     login: 'Connexion',
     getStarted: 'Commencer',
     heroBadge: 'Initiative communautaire de rétablissement traumatique',

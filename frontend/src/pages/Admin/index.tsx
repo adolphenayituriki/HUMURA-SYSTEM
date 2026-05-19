@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, UserPlus, Trash2, Edit3 } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShield, faUserPlus, faTrashCan, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { service } from '../../services/mockData';
 import { Card } from '../../components/shared/Card';
 import { Badge } from '../../components/shared/Badge';
@@ -69,7 +70,7 @@ export default function AdminPage() {
             </div>
             <Button variant="brand-outline" size="md"
               onClick={() => alert('User creation form would open here (demo).')}>
-              <UserPlus size={14} /> {trans.admin.addUser}
+              <FontAwesomeIcon icon={faUserPlus} className="text-[14px]" /> {trans.admin.addUser}
             </Button>
           </Card>
 
@@ -96,8 +97,8 @@ export default function AdminPage() {
                       <div className="pt-3 border-t border-ink-100 flex items-center justify-between">
                         <span className="text-xs text-ink-400">{u.facility || u.district || trans.admin.fallbackEmpty}</span>
                         <div className="flex gap-1">
-                          <Button variant="ghost" size="icon" className="!text-ink-300 hover:!text-ink-600"><Edit3 size={13} /></Button>
-                          <Button variant="ghost" size="icon" className="!text-ink-300 hover:!text-rose-500"><Trash2 size={13} /></Button>
+                          <Button variant="ghost" size="icon" className="!text-ink-300 hover:!text-ink-600"><FontAwesomeIcon icon={faPenToSquare} className="text-[13px]" /></Button>
+                          <Button variant="ghost" size="icon" className="!text-ink-300 hover:!text-rose-500"><FontAwesomeIcon icon={faTrashCan} className="text-[13px]" /></Button>
                         </div>
                       </div>
                     </div>
@@ -113,7 +114,7 @@ export default function AdminPage() {
         <div className="grid lg:grid-cols-2 gap-5 md:gap-6">
           <Card>
             <h3 className="text-sm font-bold text-ink-800 mb-4 flex items-center gap-2">
-              <Shield size={15} className="text-brand-500" />
+              <FontAwesomeIcon icon={faShield} className="text-[15px] text-brand-500" />
               {trans.admin.platformSettings}
             </h3>
             <div className="space-y-0">
@@ -136,7 +137,7 @@ export default function AdminPage() {
 
           <Card>
             <h3 className="text-sm font-bold text-ink-800 mb-4 flex items-center gap-2">
-              <Shield size={15} className="text-forest-500" />
+              <FontAwesomeIcon icon={faShield} className="text-[15px] text-forest-500" />
               {trans.admin.securityTitle}
             </h3>
             <div className="space-y-2">

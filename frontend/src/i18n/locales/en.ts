@@ -338,6 +338,7 @@ export const en = {
     youth: 'Youth',
     community: 'Community',
     contact: 'Contact',
+    media: 'Media',
     login: 'Login',
     getStarted: 'Get Started',
     heroBadge: 'Community-Based Trauma Recovery Initiative',

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, ChevronUp, Users } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown, faChevronUp, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { service } from '../../services/mockData';
 import { Card } from '../../components/shared/Card';
 import { Badge } from '../../components/shared/Badge';
@@ -91,7 +92,7 @@ export default function SociotherapyPage() {
                 </div>
 
                 <div className="flex items-center gap-3 text-xs text-ink-400 mb-3">
-                  <span className="flex items-center gap-1"><Users size={12} /> {g.memberCount}/{g.maxMembers}</span>
+                  <span className="flex items-center gap-1"><FontAwesomeIcon icon={faUsers} className="text-[12px]" /> {g.memberCount}/{g.maxMembers}</span>
                   <span>{trans.sociotherapy.sessions} {groupSessions.length}</span>
                 </div>
 
@@ -106,7 +107,7 @@ export default function SociotherapyPage() {
                 <p className="text-[10px] text-ink-300 mt-1 text-right">{pct}% {trans.sociotherapy.capacity}</p>
 
                 <Button onClick={() => setExpanded(expanded === g.id ? null : g.id)} variant="ghost" size="xs" className="w-full mt-3">
-                  {expanded === g.id ? <><ChevronUp size={13} /> {trans.sociotherapy.hideSessions}</> : <><ChevronDown size={13} /> {trans.sociotherapy.viewSessions}</>}
+                  {expanded === g.id ? <><FontAwesomeIcon icon={faChevronUp} className="text-[13px]" /> {trans.sociotherapy.hideSessions}</> : <><FontAwesomeIcon icon={faChevronDown} className="text-[13px]" /> {trans.sociotherapy.viewSessions}</>}
                 </Button>
 
                 {expanded === g.id && groupSessions.length > 0 && (

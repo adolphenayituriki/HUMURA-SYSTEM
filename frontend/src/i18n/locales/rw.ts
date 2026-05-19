@@ -340,6 +340,7 @@ export const rw: Translations = {
     youth: 'Urubyiruko',
     community: 'Umuryango',
     contact: 'Twandikire',
+    media: 'Itangazamakuru',
     login: 'Injira',
     getStarted: 'Tangira',
     heroBadge: 'Gufasha gukira agahinda mu muryango',

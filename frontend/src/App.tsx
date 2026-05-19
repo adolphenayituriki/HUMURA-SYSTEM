@@ -16,6 +16,7 @@ import Youth from './pages/Youth';
 import Reports from './pages/Reports';
 import Admin from './pages/Admin';
 import Landing from './pages/Landing';
+import Media from './pages/Media';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isAuth = useAuthStore((s) => s.isAuthenticated);
@@ -31,8 +32,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public landing */}
+        {/* Public pages */}
         <Route path="/" element={<Landing />} />
+        <Route path="/media" element={<Media />} />
 
         {/* Auth routes */}
         <Route element={<AuthLayout />}>

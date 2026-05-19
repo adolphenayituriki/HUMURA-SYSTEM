@@ -1,12 +1,13 @@
 import { useEffect, useState, useRef } from 'react';
 import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  LayoutDashboard, Users, Stethoscope, HeartHandshake,
-  Wallet, AlertTriangle, BarChart3, Settings, LogOut,
-  ChevronLeft, UserCircle, Search,
-  Bell, ChevronDown, Menu, X, Check,
-} from 'lucide-react';
+  faChartPie, faUsers, faStethoscope, faHandshake,
+  faWallet, faTriangleExclamation, faChartBar, faGear, faRightFromBracket,
+  faChevronLeft, faCircleUser, faMagnifyingGlass,
+  faBell, faChevronDown, faBars, faXmark, faCheck,
+} from '@fortawesome/free-solid-svg-icons';
 import { useAuthStore } from '../../store/authStore';
 import { useSidebarStore } from '../../store/sidebarStore';
 import { useNotificationStore } from '../../store/notificationStore';
@@ -36,16 +37,16 @@ const ROLE_LABEL: Record<UserRole, string> = {
 };
 
 const NAV_ICONS: Record<string, React.ReactNode> = {
-  dashboard: <LayoutDashboard size={18} strokeWidth={1.75}/>,
-  beneficiaries: <Users size={18} strokeWidth={1.75}/>,
-  screening: <Stethoscope size={18} strokeWidth={1.75}/>,
-  referrals: <HeartHandshake size={18} strokeWidth={1.75}/>,
-  sociotherapy: <Users size={18} strokeWidth={1.75}/>,
-  cooperatives: <Wallet size={18} strokeWidth={1.75}/>,
-  emergencies: <AlertTriangle size={18} strokeWidth={1.75}/>,
-  youth: <UserCircle size={18} strokeWidth={1.75}/>,
-  reports: <BarChart3 size={18} strokeWidth={1.75}/>,
-  admin: <Settings size={18} strokeWidth={1.75}/>,
+  dashboard: <FontAwesomeIcon icon={faChartPie} className="text-[18px]" />,
+  beneficiaries: <FontAwesomeIcon icon={faUsers} className="text-[18px]" />,
+  screening: <FontAwesomeIcon icon={faStethoscope} className="text-[18px]" />,
+  referrals: <FontAwesomeIcon icon={faHandshake} className="text-[18px]" />,
+  sociotherapy: <FontAwesomeIcon icon={faUsers} className="text-[18px]" />,
+  cooperatives: <FontAwesomeIcon icon={faWallet} className="text-[18px]" />,
+  emergencies: <FontAwesomeIcon icon={faTriangleExclamation} className="text-[18px]" />,
+  youth: <FontAwesomeIcon icon={faCircleUser} className="text-[18px]" />,
+  reports: <FontAwesomeIcon icon={faChartBar} className="text-[18px]" />,
+  admin: <FontAwesomeIcon icon={faGear} className="text-[18px]" />,
 };
 
 export default function DashboardLayout() {
@@ -147,7 +148,7 @@ export default function DashboardLayout() {
               </div>
               <button onClick={() => { if (isMobile) setMobileOpen(false); else toggleSidebar(); }}
                 className="w-6 h-6 rounded-md flex items-center justify-center text-ink-300 hover:text-ink-600 hover:bg-ink-50 transition-all shrink-0">
-                <ChevronLeft size={13} />
+                <FontAwesomeIcon icon={faChevronLeft} className="text-[13px]" />
               </button>
             </>
           ) : !isMobile ? (
@@ -155,7 +156,7 @@ export default function DashboardLayout() {
               <img src="/logo.png" alt="HUMURA" className="h-7 w-auto shrink-0" />
               <button onClick={toggleSidebar}
                 className="absolute -right-3 top-4 w-6 h-6 rounded-md flex items-center justify-center text-ink-300 hover:text-ink-600 hover:bg-white border border-ink-200/60 bg-white shadow-sm transition-all">
-                <Menu size={13} />
+                <FontAwesomeIcon icon={faBars} className="text-[13px]" />
               </button>
             </>
           ) : mobileOpen && (
@@ -169,13 +170,13 @@ export default function DashboardLayout() {
               </div>
               <button onClick={() => setMobileOpen(false)}
                 className="w-6 h-6 rounded-md flex items-center justify-center text-ink-300 hover:text-ink-600 hover:bg-ink-50 transition-all shrink-0">
-                <X size={13} />
+                <FontAwesomeIcon icon={faXmark} className="text-[13px]" />
               </button>
             </>
           )}
         </div>
 
-        <nav className="flex-1 overflow-y-auto py-4 px-2.5 space-y-0.5 overscroll-contain">
+        <nav className="flex-1 overflow-y-auto py-6 px-2.5 space-y-0.5 overscroll-contain">
           {items.map(({ to, label, icon }) => {
             const isActive = location.pathname === to || (to !== '/dashboard' && location.pathname.startsWith(to));
             return (
@@ -213,7 +214,7 @@ export default function DashboardLayout() {
           })}
         </nav>
 
-        <div className="border-t border-ink-100/80 p-2.5">
+        <div className="border-t border-ink-100/80 px-3 py-2">
           <div className={clsx(
             'flex items-center rounded-xl transition-colors',
             sidebarExpanded ? 'gap-2.5 p-2' : 'gap-0 p-1 justify-center'
@@ -238,17 +239,17 @@ export default function DashboardLayout() {
               'flex items-center gap-2 w-full rounded-lg text-xs font-medium transition-all mt-0.5',
               sidebarExpanded ? 'px-3 py-2 justify-start text-ink-300 hover:text-rose-600 hover:bg-rose-50' : 'px-0 py-2 justify-center text-ink-300 hover:text-rose-500'
             )}>
-            <LogOut size={13} />
+            <FontAwesomeIcon icon={faRightFromBracket} className="text-[13px]" />
             {sidebarExpanded && <span>{trans.common.signOut}</span>}
           </button>
         </div>
       </motion.aside>
 
       <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
-        <header className="h-14 md:h-16 flex items-center gap-2 md:gap-3 px-3 md:px-8 shrink-0 border-b border-ink-100/60 bg-white/80 backdrop-blur-sm sticky top-0 z-30">
+        <header className="h-14 md:h-16 flex items-center gap-4 md:gap-6 px-3 md:px-8 shrink-0 border-b border-ink-100/60 bg-white/80 backdrop-blur-sm sticky top-0 z-30">
           <button onClick={() => setMobileOpen(true)}
             className="md:hidden w-8 h-8 rounded-lg flex items-center justify-center text-ink-400 hover:text-ink-700 hover:bg-ink-50 transition-all -ml-1">
-            <Menu size={17} />
+            <FontAwesomeIcon icon={faBars} className="text-[17px]" />
           </button>
 
           <div className="flex-1 min-w-0">
@@ -256,7 +257,7 @@ export default function DashboardLayout() {
           </div>
 
           <div className="relative hidden md:block">
-            <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-300 pointer-events-none" />
+            <FontAwesomeIcon icon={faMagnifyingGlass} className="text-[13px] absolute left-3 top-1/2 -translate-y-1/2 text-ink-300 pointer-events-none" />
             <input type="search" placeholder={trans.layout.search}
               className="w-36 lg:w-48 xl:w-56 h-8 pl-8 pr-8 rounded-lg text-xs placeholder:text-ink-300 bg-ink-50/60 border border-ink-200/60 focus:bg-white focus:border-brand-400 focus:ring-2 focus:ring-brand-200/30 transition-all outline-none" />
             <kbd className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[9px] font-medium text-ink-300 bg-ink-100/60 px-1.5 py-0.5 rounded pointer-events-none hidden xl:block">⌘K</kbd>
@@ -269,7 +270,7 @@ export default function DashboardLayout() {
           <div ref={notifRef} className="relative">
             <button onClick={() => setNotifOpen(!notifOpen)}
               className="relative w-8 h-8 rounded-lg flex items-center justify-center text-ink-400 hover:text-ink-700 hover:bg-ink-50 transition-all">
-              <Bell size={16} />
+              <FontAwesomeIcon icon={faBell} className="text-[16px]" />
               {unreadCount > 0 && (
                 <span className="absolute top-1.5 right-1.5 min-w-[14px] h-[14px] flex items-center justify-center rounded-full bg-rose-500 text-[8px] font-bold text-white ring-[2px] ring-white px-[3px]">
                   {unreadCount}
@@ -308,7 +309,7 @@ export default function DashboardLayout() {
                           <p className="text-[11px] text-ink-400 mt-0.5 line-clamp-2">{n.message}</p>
                           <p className="text-[10px] text-ink-300 mt-1">{n.createdAt}</p>
                         </div>
-                        {!n.read && <Check size={12} className="text-brand-500 shrink-0 mt-1" />}
+                        {!n.read && <FontAwesomeIcon icon={faCheck} className="text-[12px] text-brand-500 shrink-0 mt-1" />}
                       </button>
                     ))
                   )}
@@ -323,11 +324,11 @@ export default function DashboardLayout() {
               <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-brand-500 flex items-center justify-center text-white text-[10px] md:text-xs font-bold shrink-0">
                 {initials}
               </div>
-              <div className="hidden sm:block min-w-0 text-left">
+              <div className="hidden sm:block min-w-0 text-left my-auto">
                 <p className="text-xs font-semibold text-ink-700 leading-tight truncate max-w-[100px] lg:max-w-[180px]">{user?.fullName}</p>
                 <p className="text-[10px] text-ink-400 leading-tight truncate">{ROLE_LABEL[user?.role ?? 'community_member']}</p>
               </div>
-              <ChevronDown size={11} className={clsx('text-ink-300 hidden sm:block shrink-0 transition-transform', profileOpen && 'rotate-180')} />
+              <FontAwesomeIcon icon={faChevronDown} className={clsx('text-[11px] text-ink-300 hidden sm:block shrink-0 transition-transform', profileOpen && 'rotate-180')} />
             </button>
 
             {profileOpen && (
@@ -342,11 +343,11 @@ export default function DashboardLayout() {
                 <div className="py-1">
                   <button onClick={() => { navigate('/admin'); setProfileOpen(false); }}
                     className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium text-ink-600 hover:text-ink-800 hover:bg-ink-50/70 transition-colors">
-                    <Settings size={14} /> {trans.nav.admin}
+                    <FontAwesomeIcon icon={faGear} className="text-[14px]" /> {trans.nav.admin}
                   </button>
                   <button onClick={() => { logout(); setProfileOpen(false); }}
                     className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium text-rose-600 hover:text-rose-700 hover:bg-rose-50/70 transition-colors">
-                    <LogOut size={14} /> {trans.common.signOut}
+                    <FontAwesomeIcon icon={faRightFromBracket} className="text-[14px]" /> {trans.common.signOut}
                   </button>
                 </div>
               </div>
@@ -355,7 +356,7 @@ export default function DashboardLayout() {
         </header>
 
         <main className="flex-1 overflow-y-auto overflow-x-hidden">
-          <div className="px-4 md:px-8 lg:px-12 py-6 md:py-8 lg:py-10 xl:max-w-[1440px] xl:mx-auto">
+          <div className="container py-8 md:py-10 lg:py-12">
             <Outlet />
           </div>
         </main>

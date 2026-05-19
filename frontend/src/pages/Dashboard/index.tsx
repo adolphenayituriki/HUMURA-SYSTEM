@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import {
-  Stethoscope, HeartHandshake, Sparkles, ArrowRight, BarChart3, Settings,
-} from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStethoscope, faHandshake, faWandSparkles, faArrowRight, faChartBar, faGear } from '@fortawesome/free-solid-svg-icons';
 import { Card } from '../../components/shared/Card';
 import { Badge } from '../../components/shared/Badge';
 import { Button } from '../../components/shared/Button';
@@ -49,10 +48,10 @@ function MiniBar({ h, label, index }: { h: number; label: string; index: number 
 }
 
 const QUICK_ACTIONS = [
-  { label: 'New Screening', href: '/screening', icon: <Stethoscope size={16} />, desc: 'PHQ-9 & GAD-7 assessment' },
-  { label: 'Create Referral', href: '/referrals', icon: <HeartHandshake size={16} />, desc: 'Refer to specialist care' },
-  { label: 'View Reports', href: '/reports', icon: <BarChart3 size={16} />, desc: 'Analytics & outcomes' },
-  { label: 'Manage Users', href: '/admin', icon: <Settings size={16} />, desc: 'Roles & permissions' },
+  { label: 'New Screening', href: '/screening', icon: <FontAwesomeIcon icon={faStethoscope} className="text-[16px]" />, desc: 'PHQ-9 & GAD-7 assessment' },
+  { label: 'Create Referral', href: '/referrals', icon: <FontAwesomeIcon icon={faHandshake} className="text-[16px]" />, desc: 'Refer to specialist care' },
+  { label: 'View Reports', href: '/reports', icon: <FontAwesomeIcon icon={faChartBar} className="text-[16px]" />, desc: 'Analytics & outcomes' },
+  { label: 'Manage Users', href: '/admin', icon: <FontAwesomeIcon icon={faGear} className="text-[16px]" />, desc: 'Roles & permissions' },
 ];
 
 export default function Dashboard() {
@@ -86,7 +85,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-4 md:gap-5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-5 md:gap-6">
         {KPI_CONFIG.map((kpi, i) => {
           const val = rawStats[kpi.key as keyof typeof rawStats];
           return (
@@ -95,12 +94,12 @@ export default function Dashboard() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.04, duration: 0.3 }}
               onClick={() => navigate(kpi.href)}
-              className="relative bg-white rounded-xl border border-ink-200/60 p-5 md:p-6 cursor-pointer transition-all duration-200 hover:-translate-y-[2px] hover:shadow-md hover:border-brand-200/50"
+              className="relative bg-white rounded-xl border border-ink-200/60 p-5 md:p-6 cursor-pointer transition-all duration-200 hover:-translate-y-[2px] hover:shadow-md hover:border-brand-200/50 h-full"
             >
               <p className="text-[10px] md:text-[11px] font-semibold text-ink-400 uppercase tracking-[.04em] mb-1.5">{dash[kpi.label as keyof typeof dash] ?? kpi.label}</p>
-              <p className="text-xl md:text-2xl font-bold text-ink-900 tracking-[-.02em]">{String(val)}</p>
+              <p className="text-xl md:text-2xl font-semibold text-ink-900 tracking-[-.02em]">{String(val)}</p>
               <div className="mt-2 flex items-center gap-1 text-xs font-medium text-brand-600 opacity-0 group-hover:opacity-100 transition-opacity">
-                {dash.view} <ArrowRight size={11} />
+                {dash.view} <FontAwesomeIcon icon={faArrowRight} className="text-[11px]" />
               </div>
             </motion.div>
           );
@@ -121,19 +120,19 @@ export default function Dashboard() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-bold text-ink-800">{dash.recentReferrals}</h2>
             <Button onClick={() => navigate('/referrals')} variant="ghost" size="xs">
-              {dash.view} all <ArrowRight size={11} />
+              {dash.view} all <FontAwesomeIcon icon={faArrowRight} className="text-[11px]" />
             </Button>
           </div>
           {recentRefs.length === 0 ? (
             <p className="text-xs text-ink-300 text-center py-6">No referrals yet.</p>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {recentRefs.map((r, i) => (
                 <motion.div key={r.id}
                   initial={{ opacity: 0, x: -4 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.04 }}
-                  className="flex items-center justify-between py-2 px-3 rounded-lg bg-ink-50/30 border border-ink-100/60"
+                  className="flex items-center justify-between py-2.5 px-3 rounded-lg bg-ink-50/30 border border-ink-100/60"
                 >
                   <div className="min-w-0 flex-1 mr-2">
                     <p className="text-xs font-semibold text-ink-800 truncate">{r.beneficiaryName}</p>
@@ -156,13 +155,13 @@ export default function Dashboard() {
           {activeGrps.length === 0 ? (
             <p className="text-xs text-ink-300 text-center py-6">No active groups.</p>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {activeGrps.map((g, i) => (
                 <motion.div key={g.id}
                   initial={{ opacity: 0, x: -4 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.04 }}
-                  className="py-2 px-3 rounded-lg bg-ink-50/30 border border-ink-100/60"
+                  className="py-2.5 px-3 rounded-lg bg-ink-50/30 border border-ink-100/60"
                 >
                   <p className="text-xs font-semibold text-ink-800">{g.name}</p>
                   <div className="flex items-center gap-2 mt-1">
@@ -178,7 +177,7 @@ export default function Dashboard() {
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-        <Card className="lg:col-span-2">
+        <Card className="lg:col-span-2 min-h-[200px]">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-bold text-ink-800">{dash.activeEmergencyAlerts}</h2>
             {activeErgs.length > 0 && (
@@ -188,7 +187,7 @@ export default function Dashboard() {
           {activeErgs.length === 0 ? (
             <div className="py-8 text-center">
               <div className="w-12 h-12 rounded-full bg-forest-50 border border-forest-200/60 text-forest-600 flex items-center justify-center mx-auto mb-3">
-                <Sparkles size={20} />
+                <FontAwesomeIcon icon={faWandSparkles} className="text-[20px]" />
               </div>
               <p className="text-sm font-bold text-ink-700">{dash.allClear}</p>
               <p className="text-xs text-ink-400 mt-0.5">{dash.noActiveAlerts}</p>

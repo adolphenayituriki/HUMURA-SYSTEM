@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { BarChart3, Download, TrendingUp } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChartBar, faDownload, faChartLine } from '@fortawesome/free-solid-svg-icons';
 import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
@@ -95,7 +96,7 @@ export default function ReportsPage() {
             </Button>
           ))}
           <Button variant="secondary" size="xs" className="hidden sm:flex">
-            <Download size={12} /> Export
+            <FontAwesomeIcon icon={faDownload} className="text-[12px]" /> Export
           </Button>
         </div>
       </div>
@@ -112,7 +113,7 @@ export default function ReportsPage() {
       <div className="grid lg:grid-cols-3 gap-5 md:gap-6">
         <Card className="lg:col-span-2">
           <h2 className="text-sm font-bold text-ink-800 mb-5 flex items-center gap-2">
-            <BarChart3 size={14} className="text-brand-500" />
+            <FontAwesomeIcon icon={faChartBar} className="text-[14px] text-brand-500" />
             Monthly Activity Trend
           </h2>
           <ResponsiveContainer width="100%" height={290}>
@@ -147,7 +148,7 @@ export default function ReportsPage() {
       <div className="grid lg:grid-cols-3 gap-5 md:gap-6">
         <Card className="lg:col-span-2">
           <h2 className="text-sm font-bold text-ink-800 mb-5 flex items-center gap-2">
-            <TrendingUp size={14} className="text-forest-500" />
+            <FontAwesomeIcon icon={faChartLine} className="text-[14px] text-forest-500" />
             Treatment Outcomes — Recovered vs Relapsed
           </h2>
           <ResponsiveContainer width="100%" height={270}>

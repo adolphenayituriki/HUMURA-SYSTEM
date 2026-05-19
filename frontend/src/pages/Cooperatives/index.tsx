@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { service } from '../../services/mockData';
 import { Card } from '../../components/shared/Card';
 import { Badge } from '../../components/shared/Badge';
@@ -48,7 +49,7 @@ export default function CooperativesPage() {
                 <div className="flex items-start justify-between mb-3">
                   <div>
                     <p className="text-sm font-bold text-ink-800">{c.name}</p>
-                    <p className="text-xs text-ink-400 mt-0.5 flex items-center gap-1"><MapPin size={11} /> {c.district}</p>
+                    <p className="text-xs text-ink-400 mt-0.5 flex items-center gap-1"><FontAwesomeIcon icon={faLocationDot} className="text-[11px]" /> {c.district}</p>
                   </div>
                   <Badge color={
                     c.type === 'SACCO' ? 'brand' :

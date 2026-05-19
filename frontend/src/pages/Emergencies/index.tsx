@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { AlertTriangle, Clock, MapPin, UserCheck } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTriangleExclamation, faClock, faLocationDot, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 import { service } from '../../services/mockData';
 import { Card } from '../../components/shared/Card';
 import { Badge } from '../../components/shared/Badge';
@@ -41,7 +42,7 @@ export default function EmergenciesPage() {
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
           className="border border-rose-200 rounded-xl p-4 flex items-center gap-3 bg-rose-50/30">
           <div className="w-9 h-9 rounded-full bg-rose-100 border border-rose-200 text-rose-600 flex items-center justify-center shrink-0">
-            <AlertTriangle size={18} />
+            <FontAwesomeIcon icon={faTriangleExclamation} className="text-[18px]" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-bold text-rose-800">{active.length} {active.length === 1 ? trans.emergencies.activeAlert : trans.emergencies.activeAlerts} require{active.length === 1 ? 's' : ''} attention</p>
@@ -77,9 +78,9 @@ export default function EmergenciesPage() {
               </div>
 
               <div className="flex flex-wrap items-center gap-4 text-xs text-ink-400 mb-3">
-                <span className="flex items-center gap-1"><MapPin size={12} /> {a.location}</span>
-                <span className="flex items-center gap-1"><Clock size={12} /> {a.createdAt}</span>
-                <span className="flex items-center gap-1"><UserCheck size={12} /> {a.responseTeam}</span>
+                <span className="flex items-center gap-1"><FontAwesomeIcon icon={faLocationDot} className="text-[12px]" /> {a.location}</span>
+                <span className="flex items-center gap-1"><FontAwesomeIcon icon={faClock} className="text-[12px]" /> {a.createdAt}</span>
+                <span className="flex items-center gap-1"><FontAwesomeIcon icon={faUserCheck} className="text-[12px]" /> {a.responseTeam}</span>
               </div>
 
               <div className="flex items-center gap-2 pt-3 border-t border-ink-100">
