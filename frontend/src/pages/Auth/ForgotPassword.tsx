@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, AlertTriangle, CheckCircle, ArrowLeft } from 'lucide-react';
+import { Button } from '../../components/shared/Button';
 import { useI18nStore } from '../../i18n';
 
 export default function ForgotPassword() {
@@ -50,14 +51,9 @@ export default function ForgotPassword() {
             placeholder={trans.auth.emailPlaceholder} required autoComplete="email" />
         </div>
 
-        <button type="submit"
-          className="w-full h-10 sm:h-12 rounded-lg text-xs sm:text-sm font-semibold text-white tracking-wide transition-all cursor-pointer"
-          style={{ background: '#005d2f' }}
-          onMouseOver={(e) => e.currentTarget.style.background = '#00753d'}
-          onMouseOut={(e) => e.currentTarget.style.background = '#005d2f'}
-        >
+        <Button type="submit" variant="primary" size="lg" className="w-full">
           {trans.auth.sendResetLink}
-        </button>
+        </Button>
       </form>
     </div>
   );

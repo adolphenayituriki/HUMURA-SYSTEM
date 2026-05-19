@@ -39,7 +39,7 @@ export default function AdminPage() {
   const [users] = useState(service.getUsers());
 
   return (
-    <div className="space-y-8 md:space-y-10">
+    <div className="space-y-6 md:space-y-8">
       <div className="flex items-end justify-between gap-4">
         <div className="min-w-0">
           <h1 className="text-2xl md:text-3xl font-bold text-ink-900 tracking-[-.02em]">{trans.admin.title}</h1>
@@ -73,17 +73,17 @@ export default function AdminPage() {
             </Button>
           </Card>
 
-          <div className="grid sm:grid-cols-2 gap-6 md:gap-8">
+          <div className="grid sm:grid-cols-2 gap-5 md:gap-6">
             {users.map((u, i) => {
               const initials = u.fullName.split(' ').map(w => w[0]).slice(0, 2).join('');
               return (
                 <motion.div key={u.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: Math.min(i * 0.04, 0.35) }}>
-                  <Card hover className="!p-0 overflow-hidden">
+                  <Card className="!p-0 overflow-hidden">
                     <div className="h-1 bg-gradient-to-r from-brand-300 via-warm-400 to-rose-300" />
                     <div className="p-5">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
-                          <div className="w-11 h-11 rounded-full border border-ink-200 text-ink-400 flex items-center justify-center text-sm font-bold">
+                          <div className="w-11 h-11 rounded-full bg-ink-50 border border-ink-200 text-ink-500 flex items-center justify-center text-sm font-bold">
                             {initials}
                           </div>
                           <div>
@@ -110,7 +110,7 @@ export default function AdminPage() {
       )}
 
       {activeTab === 'settings' && (
-        <div className="grid lg:grid-cols-2 gap-6 md:gap-8">
+        <div className="grid lg:grid-cols-2 gap-5 md:gap-6">
           <Card>
             <h3 className="text-sm font-bold text-ink-800 mb-4 flex items-center gap-2">
               <Shield size={15} className="text-brand-500" />
@@ -141,7 +141,7 @@ export default function AdminPage() {
             </h3>
             <div className="space-y-2">
               {trans.admin.securityItems.map((item, i) => (
-                <div key={i} className="flex items-start gap-2.5 p-3 rounded-xl border border-forest-200/60">
+                <div key={i} className="flex items-start gap-2.5 p-3 rounded-xl border border-forest-200/60 bg-forest-50/20">
                   <span className="text-forest-600 mt-0.5 shrink-0 font-bold">✓</span>
                   <span className="text-xs text-ink-700">{item}</span>
                 </div>

@@ -28,14 +28,14 @@ export default function ReferralsPage() {
   });
 
   const stats = [
-    { label: trans.referrals.totalReferrals, value: referrals.length, accent: 'brand' as const },
-    { label: trans.referrals.pending, value: referrals.filter(r => r.status === 'pending').length, accent: 'warm' as const },
-    { label: trans.referrals.accepted, value: referrals.filter(r => r.status === 'accepted').length, accent: 'brand' as const },
-    { label: trans.referrals.completed, value: referrals.filter(r => r.status === 'completed').length, accent: 'forest' as const },
+    { label: trans.referrals.totalReferrals, value: referrals.length },
+    { label: trans.referrals.pending, value: referrals.filter(r => r.status === 'pending').length },
+    { label: trans.referrals.accepted, value: referrals.filter(r => r.status === 'accepted').length },
+    { label: trans.referrals.completed, value: referrals.filter(r => r.status === 'completed').length },
   ];
 
   return (
-    <div className="space-y-8 md:space-y-10">
+    <div className="space-y-6 md:space-y-8">
       <div className="flex items-end justify-between gap-4">
         <div className="min-w-0">
           <h1 className="text-2xl md:text-3xl font-bold text-ink-900 tracking-[-.02em]">{trans.referrals.title}</h1>
@@ -47,7 +47,7 @@ export default function ReferralsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 md:gap-7">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
         {stats.map(s => <StatCard key={s.label} {...s} />)}
       </div>
 
@@ -62,11 +62,11 @@ export default function ReferralsPage() {
           <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-300 pointer-events-none" />
           <input value={search} onChange={e => setSearch(e.target.value)}
             placeholder={trans.referrals.search}
-            className="w-36 md:w-44 h-8 pl-8 pr-3 rounded-lg text-sm border border-ink-200 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/40 placeholder:text-ink-300 outline-none" />
+            className="w-36 md:w-44 h-8 pl-8 pr-3 rounded-lg text-sm border border-ink-200 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/40 placeholder:text-ink-300 outline-none bg-white" />
         </div>
       </div>
 
-      <div className="grid sm:grid-cols-2 gap-6 md:gap-8">
+      <div className="grid sm:grid-cols-2 gap-5 md:gap-6">
         {filtered.length === 0 ? (
           <Card className="md:col-span-2 text-center py-14">
             <p className="text-ink-300 text-sm">{trans.referrals.noResults}</p>
@@ -74,7 +74,7 @@ export default function ReferralsPage() {
         ) : (
           filtered.map((r, i) => (
             <motion.div key={r.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: Math.min(i * 0.04, 0.35) }}>
-              <Card hover className="h-full">
+              <Card className="h-full">
                 <div className="flex items-start justify-between mb-3">
                   <div>
                     <p className="text-sm font-bold text-ink-800">{r.beneficiaryName}</p>
@@ -84,9 +84,10 @@ export default function ReferralsPage() {
                     {r.status === 'pending' ? trans.referrals.pending : r.status === 'accepted' ? trans.referrals.accepted : r.status === 'completed' ? trans.referrals.completed : r.status === 'cancelled' ? trans.referrals.cancelled : r.status}
                   </Badge>
                 </div>
-                <div className="flex items-center gap-3 text-xs text-ink-400 mb-3">
+                <div className="flex items-center gap-3 text-xs text-ink-400 mb-3 flex-wrap">
                   <span>{trans.referrals.from} {r.from} ({r.fromRole})</span>
-                  <span>{trans.referrals.arrow} {r.to} ({r.toRole})</span>
+                  <span className="text-ink-200">→</span>
+                  <span>{r.to} ({r.toRole})</span>
                 </div>
                 <p className="text-xs text-ink-500 mb-3 line-clamp-2">{r.reason}</p>
                 <div className="flex items-center justify-between pt-3 border-t border-ink-100">

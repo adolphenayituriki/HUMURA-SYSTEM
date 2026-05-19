@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, ShieldCheck, ChevronRight, ChevronDown } from 'lucide-react';
+import { Button } from '../../components/shared/Button';
 import { useAuthStore } from '../../store/authStore';
 import { service } from '../../services/mockData';
 import { useI18nStore } from '../../i18n';
@@ -96,14 +97,9 @@ export default function Login() {
           </Link>
         </div>
 
-        <button type="submit"
-          className="w-full h-10 sm:h-12 rounded-lg text-xs sm:text-sm font-semibold text-white tracking-wide transition-all cursor-pointer"
-          style={{ background: '#005d2f' }}
-          onMouseOver={(e) => e.currentTarget.style.background = '#00753d'}
-          onMouseOut={(e) => e.currentTarget.style.background = '#005d2f'}
-        >
+        <Button type="submit" variant="primary" size="lg" className="w-full">
           {trans.auth.signIn}
-        </button>
+        </Button>
       </form>
 
       <div className="mt-5 sm:mt-6 pt-5 sm:pt-6 border-t border-ink-100 text-center">

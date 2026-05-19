@@ -31,7 +31,7 @@ export default function SociotherapyPage() {
   const active = groups.filter(g => g.status === 'active');
 
   return (
-    <div className="space-y-8 md:space-y-10">
+    <div className="space-y-6 md:space-y-8">
       <div className="flex items-end justify-between gap-4">
         <div className="min-w-0">
           <h1 className="text-2xl md:text-3xl font-bold text-ink-900 tracking-[-.02em]">{trans.sociotherapy.title}</h1>
@@ -40,14 +40,14 @@ export default function SociotherapyPage() {
         <Badge color="warm" className="shrink-0">{active.length} {trans.common.active}</Badge>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 md:gap-7">
-        <StatCard label={trans.sociotherapy.totalGroups} value={groups.length} accent="brand" />
-        <StatCard label={trans.sociotherapy.active} value={active.length} accent="forest" />
-        <StatCard label={trans.sociotherapy.totalMembers} value={groups.reduce((a, g) => a + g.memberCount, 0)} accent="warm" />
-        <StatCard label={trans.sociotherapy.avgCapacity} value={groups.length ? Math.round(groups.reduce((a, g) => a + (g.memberCount / g.maxMembers) * 100, 0) / groups.length) + '%' : '0%'} accent="brand" />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+        <StatCard label={trans.sociotherapy.totalGroups} value={groups.length} />
+        <StatCard label={trans.sociotherapy.active} value={active.length} />
+        <StatCard label={trans.sociotherapy.totalMembers} value={groups.reduce((a, g) => a + g.memberCount, 0)} />
+        <StatCard label={trans.sociotherapy.avgCapacity} value={groups.length ? Math.round(groups.reduce((a, g) => a + (g.memberCount / g.maxMembers) * 100, 0) / groups.length) + '%' : '0%'} />
       </div>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-2">
         <Button onClick={() => setPhaseFilter('all')}
           variant={phaseFilter === 'all' ? 'primary' : 'secondary'} size="sm">
           {trans.sociotherapy.allPhases}
@@ -60,7 +60,7 @@ export default function SociotherapyPage() {
         ))}
       </div>
 
-      <div className="grid sm:grid-cols-2 gap-6 md:gap-8">
+      <div className="grid sm:grid-cols-2 gap-5 md:gap-6">
         {filtered.map((g, i) => {
           const pct = Math.round((g.memberCount / g.maxMembers) * 100);
           const fillColor = pct >= 90 ? 'bg-rose-500' : pct >= 70 ? 'bg-warm-500' : 'bg-brand-500';
@@ -71,7 +71,7 @@ export default function SociotherapyPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: Math.min(i * 0.04, 0.35) }}
             >
-              <Card hover>
+              <Card>
                 <div className="flex items-start justify-between mb-3">
                   <div>
                     <p className="text-sm font-bold text-ink-800">{g.name}</p>
@@ -115,7 +115,7 @@ export default function SociotherapyPage() {
                     <p className="text-[10px] font-bold text-ink-400 uppercase tracking-[.08em]">{trans.sociotherapy.sessionHistory}</p>
                     <div className="space-y-1.5">
                       {groupSessions.map((s) => (
-                        <div key={s.id} className="flex items-center justify-between py-1.5 px-3 rounded-lg border border-transparent">
+                        <div key={s.id} className="flex items-center justify-between py-1.5 px-3 rounded-lg bg-ink-50/30 border border-ink-100/60">
                           <span className="text-xs text-ink-600">{s.theme}</span>
                           <div className="flex items-center gap-3">
                             <span className="text-[10px] text-ink-400">{s.date}</span>

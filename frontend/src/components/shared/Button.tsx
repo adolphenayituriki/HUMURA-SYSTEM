@@ -12,14 +12,15 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<Variant, string> = {
   primary: [
-    'text-white bg-brand-500 hover:bg-brand-600 active:bg-brand-700',
-    'shadow-[0_2px_8px_rgba(47,119,141,.2)] hover:shadow-[0_4px_16px_rgba(47,119,141,.25)]',
-    'border border-transparent',
+    'text-white',
+    'bg-brand-600 hover:bg-brand-700 active:bg-brand-800',
+    'shadow-[0_2px_10px_rgba(31,111,126,.2)] hover:shadow-[0_4px_16px_rgba(31,111,126,.25)]',
+    'border border-brand-600/20',
   ].join(' '),
   secondary: [
-    'text-ink-600 bg-white hover:bg-ink-50 active:bg-ink-100',
+    'text-ink-700 bg-white hover:bg-ink-50 active:bg-ink-100',
     'border border-ink-200 hover:border-ink-300',
-    'shadow-sm',
+    'shadow-sm hover:shadow-[0_2px_8px_rgba(0,0,0,.04)]',
   ].join(' '),
   ghost: [
     'text-ink-500 hover:text-ink-800 hover:bg-ink-50 active:bg-ink-100',
@@ -31,16 +32,16 @@ const variantStyles: Record<Variant, string> = {
     'border border-transparent',
   ].join(' '),
   success: [
-    'text-white bg-forest-500 hover:bg-forest-600 active:bg-forest-700',
-    'shadow-[0_2px_8px_rgba(34,197,94,.2)] hover:shadow-[0_4px_16px_rgba(34,197,94,.25)]',
+    'text-white bg-forest-600 hover:bg-forest-700 active:bg-forest-800',
+    'shadow-[0_2px_8px_rgba(22,163,74,.2)] hover:shadow-[0_4px_16px_rgba(22,163,74,.25)]',
     'border border-transparent',
   ].join(' '),
   neutral: [
-    'text-ink-500 bg-ink-50 hover:bg-ink-100 active:bg-ink-200',
+    'text-ink-600 bg-ink-50 hover:bg-ink-100 active:bg-ink-200',
     'border border-ink-100 hover:border-ink-200',
   ].join(' '),
   'brand-outline': [
-    'text-brand-600 bg-brand-50 hover:bg-brand-100 active:bg-brand-200',
+    'text-brand-700 bg-brand-50 hover:bg-brand-100 active:bg-brand-200',
     'border border-brand-200 hover:border-brand-300',
   ].join(' '),
 };

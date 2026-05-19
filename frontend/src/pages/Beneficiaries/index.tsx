@@ -42,29 +42,29 @@ export default function BeneficiariesPage() {
   const pageWindow = getPageWindow(safePage, pages);
 
   return (
-    <div className="space-y-8 md:space-y-10">
+    <div className="space-y-6 md:space-y-8">
       <div className="flex items-end justify-between gap-4">
         <div className="min-w-0">
           <h1 className="text-2xl md:text-3xl font-bold text-ink-900 tracking-[-.02em]">{trans.beneficiaries.title}</h1>
           <p className="text-sm text-ink-400 mt-2">{trans.beneficiaries.subtitle}</p>
         </div>
-        <Badge color="brand" creative className="shrink-0">{beneficiaries.length} {trans.common.total}</Badge>
+        <Badge color="brand" className="shrink-0">{beneficiaries.length} {trans.common.total}</Badge>
       </div>
 
-      <div className="flex flex-wrap items-center gap-4 md:gap-5">
+      <div className="flex flex-wrap items-center gap-3 md:gap-4">
         <div className="relative flex-1 min-w-[200px] max-w-xs">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-300 pointer-events-none" />
           <input value={search} onChange={e => { setSearch(e.target.value); setPage(0); }}
             placeholder={trans.beneficiaries.searchPlaceholder}
-            className="w-full h-10 pl-9 pr-3 rounded-lg text-sm border border-ink-200/70 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/30 outline-none placeholder:text-ink-300" />
+            className="w-full h-10 pl-9 pr-3 rounded-lg text-sm border border-ink-200/70 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/30 outline-none placeholder:text-ink-300 bg-white" />
         </div>
         <select value={district} onChange={e => { setDistrict(e.target.value); setPage(0); }}
-          className="h-10 px-3 rounded-lg text-sm text-ink-600 border border-ink-200/70 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/30 appearance-none cursor-pointer outline-none">
+          className="h-10 px-3 rounded-lg text-sm text-ink-600 border border-ink-200/70 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/30 appearance-none cursor-pointer outline-none bg-white">
           <option value="all">{trans.beneficiaries.allDistricts}</option>
           {districts.map(d => <option key={d} value={d}>{d}</option>)}
         </select>
         <select value={status} onChange={e => { setStatus(e.target.value); setPage(0); }}
-          className="h-10 px-3 rounded-lg text-sm text-ink-600 border border-ink-200/70 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/30 appearance-none cursor-pointer outline-none">
+          className="h-10 px-3 rounded-lg text-sm text-ink-600 border border-ink-200/70 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/30 appearance-none cursor-pointer outline-none bg-white">
           <option value="all">{trans.beneficiaries.allStatus}</option>
           <option value="active">{trans.beneficiaries.statusActive}</option>
           <option value="referred">{trans.beneficiaries.statusReferred}</option>
@@ -77,36 +77,36 @@ export default function BeneficiariesPage() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-ink-200/70 overflow-hidden">
+      <div className="rounded-xl border border-ink-200/60 overflow-hidden bg-white">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-ink-100">
+              <tr className="bg-ink-50/50 border-b border-ink-100">
                 {[trans.beneficiaries.name, trans.beneficiaries.id, trans.beneficiaries.age, trans.beneficiaries.sex, trans.beneficiaries.district, trans.beneficiaries.category, trans.beneficiaries.traumaLevel, trans.beneficiaries.status].map(h => (
-                  <th key={h} className="text-left text-[10px] font-semibold text-ink-400 uppercase tracking-[.06em] px-6 py-5 whitespace-nowrap">{h}</th>
+                  <th key={h} className="text-left text-[10px] font-semibold text-ink-500 uppercase tracking-[.04em] px-5 py-4 whitespace-nowrap">{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-ink-100">
+            <tbody className="divide-y divide-ink-100/60">
               {paged.map((b, i) => (
                 <motion.tr key={b.id}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: Math.min(i * 0.02, 0.2) }}
-                  className="hover:bg-ink-50/30 transition-colors"
+                  className="hover:bg-brand-50/20 transition-colors"
                 >
-                  <td className="px-6 py-5 font-medium text-ink-800 whitespace-nowrap">{b.fullName}</td>
-                  <td className="px-6 py-5 text-ink-400 text-xs font-mono whitespace-nowrap">{b.id}</td>
-                  <td className="px-6 py-5 text-ink-600">{b.age}</td>
-                  <td className="px-6 py-5">
+                  <td className="px-5 py-4 font-medium text-ink-800 whitespace-nowrap">{b.fullName}</td>
+                  <td className="px-5 py-4 text-ink-400 text-xs font-mono whitespace-nowrap">{b.id}</td>
+                  <td className="px-5 py-4 text-ink-600">{b.age}</td>
+                  <td className="px-5 py-4">
                     <Badge color={b.sex === 'Male' ? 'brand' : 'rose'}>{b.sex === 'Male' ? trans.beneficiaries.male : trans.beneficiaries.female}</Badge>
                   </td>
-                  <td className="px-6 py-5 text-ink-600 whitespace-nowrap">{b.district}</td>
-                  <td className="px-6 py-5 text-xs text-ink-500 max-w-[120px] truncate">{b.category}</td>
-                  <td className="px-6 py-5 whitespace-nowrap">
+                  <td className="px-5 py-4 text-ink-600 whitespace-nowrap">{b.district}</td>
+                  <td className="px-5 py-4 text-xs text-ink-500 max-w-[120px] truncate">{b.category}</td>
+                  <td className="px-5 py-4 whitespace-nowrap">
                     <Badge color={b.traumaLevel === 'high' ? 'rose' : b.traumaLevel === 'medium' ? 'warm' : 'brand'}>{b.traumaLevel}</Badge>
                   </td>
-                  <td className="px-6 py-5 whitespace-nowrap">
+                  <td className="px-5 py-4 whitespace-nowrap">
                     <Badge color={b.status === 'active' ? 'forest' : b.status === 'recovered' ? 'brand' : b.status === 'in_treatment' ? 'warm' : 'slate'}>{b.status === 'active' ? trans.beneficiaries.statusActive : b.status === 'referred' ? trans.beneficiaries.statusReferred : b.status === 'in_treatment' ? trans.beneficiaries.statusInTreatment : b.status === 'recovered' ? trans.beneficiaries.statusRecovered : b.status}</Badge>
                   </td>
                 </motion.tr>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AlertTriangle, CheckCircle, User, Mail, Phone, MapPin, Lock, Eye, EyeOff } from 'lucide-react';
+import { Button } from '../../components/shared/Button';
 import { useI18nStore } from '../../i18n';
 
 export default function Register() {
@@ -33,8 +34,7 @@ export default function Register() {
         <h2 className="text-lg sm:text-xl font-bold text-ink-900 mb-2">{trans.auth.accountCreated}</h2>
         <p className="text-xs sm:text-sm text-ink-400 mb-5 sm:mb-6">{trans.auth.accountPending}</p>
         <Link to="/login"
-          className="inline-flex items-center justify-center h-10 sm:h-11 px-6 sm:px-7 rounded-lg text-xs sm:text-sm font-semibold text-white transition-all"
-          style={{ background: '#005d2f' }}>
+          className="inline-flex items-center justify-center h-10 sm:h-11 px-6 sm:px-7 rounded-lg text-xs sm:text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 transition-all">
           {trans.auth.signInLink}
         </Link>
       </div>
@@ -86,14 +86,9 @@ export default function Register() {
           </button>
         </div>
 
-        <button type="submit"
-          className="w-full h-10 sm:h-12 rounded-lg text-xs sm:text-sm font-semibold text-white tracking-wide transition-all cursor-pointer mt-1"
-          style={{ background: '#005d2f' }}
-          onMouseOver={(e) => e.currentTarget.style.background = '#00753d'}
-          onMouseOut={(e) => e.currentTarget.style.background = '#005d2f'}
-        >
+        <Button type="submit" variant="primary" size="lg" className="w-full mt-1">
           {trans.auth.createAccount}
-        </button>
+        </Button>
       </form>
 
       <div className="mt-6 sm:mt-7 pt-5 sm:pt-6 border-t border-ink-100 text-center">

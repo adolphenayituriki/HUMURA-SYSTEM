@@ -9,7 +9,7 @@ import { Button } from '../../components/shared/Button';
 import { service } from '../../services/mockData';
 import { useI18nStore } from '../../i18n';
 
-const TEAL = '#2f778d';
+const TEAL = '#2b8b9c';
 const SAGE = '#22c55e';
 const WARN = '#f07a4b';
 const ROSE = '#e84c5e';
@@ -81,7 +81,7 @@ export default function ReportsPage() {
   const riskPie = RISK_PIE_RAW.map(r => ({ ...r, name: r.name === 'Low' ? trans.screening.low : r.name === 'Medium' ? trans.screening.medium : r.name === 'High' ? trans.screening.highRisk : trans.screening.critical }));
 
   return (
-    <div className="space-y-8 md:space-y-10">
+    <div className="space-y-6 md:space-y-8">
       <div className="flex items-end justify-between gap-4">
         <div className="min-w-0">
           <h1 className="text-2xl md:text-3xl font-bold text-ink-900 tracking-[-.02em]">{trans.reports.title}</h1>
@@ -100,17 +100,17 @@ export default function ReportsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-5 md:gap-7">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-5">
         {Object.entries(stats).map(([k, s]) => (
-          <div key={k} className="relative rounded-xl border border-ink-200/70 p-5 md:p-6 overflow-hidden group transition-all hover:-translate-y-[2px] hover:shadow-[0_8px_24px_rgba(0,0,0,.06)]">
-            <p className="text-[10px] font-bold text-ink-400 uppercase tracking-[.08em]">{k.replace(/([A-Z])/g, ' $1').trim()}</p>
+          <div key={k} className="relative rounded-xl bg-white border border-ink-200/60 p-5 md:p-6 transition-all hover:-translate-y-[2px] hover:shadow-md">
+            <p className="text-[10px] font-bold text-ink-400 uppercase tracking-[.04em]">{k.replace(/([A-Z])/g, ' $1').trim()}</p>
             <p className="text-xl font-bold text-ink-900 mt-1.5">{s.value}</p>
           </div>
         ))}
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-6 md:gap-8">
-        <Card className="lg:col-span-2" elevated>
+      <div className="grid lg:grid-cols-3 gap-5 md:gap-6">
+        <Card className="lg:col-span-2">
           <h2 className="text-sm font-bold text-ink-800 mb-5 flex items-center gap-2">
             <BarChart3 size={14} className="text-brand-500" />
             Monthly Activity Trend
@@ -129,7 +129,7 @@ export default function ReportsPage() {
           </ResponsiveContainer>
         </Card>
 
-        <Card elevated>
+        <Card>
           <h2 className="text-sm font-bold text-ink-800 mb-5">Screening Risk Distribution</h2>
           <ResponsiveContainer width="100%" height={290}>
             <PieChart>
@@ -144,8 +144,8 @@ export default function ReportsPage() {
         </Card>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-6 md:gap-8">
-        <Card className="lg:col-span-2" elevated>
+      <div className="grid lg:grid-cols-3 gap-5 md:gap-6">
+        <Card className="lg:col-span-2">
           <h2 className="text-sm font-bold text-ink-800 mb-5 flex items-center gap-2">
             <TrendingUp size={14} className="text-forest-500" />
             Treatment Outcomes — Recovered vs Relapsed
@@ -163,7 +163,7 @@ export default function ReportsPage() {
           </ResponsiveContainer>
         </Card>
 
-        <Card elevated>
+        <Card>
           <h2 className="text-sm font-bold text-ink-800 mb-5">Beneficiaries by District</h2>
           <ResponsiveContainer width="100%" height={270}>
             <BarChart data={byDistrict} layout="vertical" barCategoryGap="18%">
@@ -177,21 +177,21 @@ export default function ReportsPage() {
         </Card>
       </div>
 
-      <Card elevated>
+      <Card>
         <h2 className="text-sm font-bold text-ink-800 mb-5">Healing Group Progress — Phase Distribution</h2>
         <div className="grid md:grid-cols-2 gap-6 items-center">
           <ResponsiveContainer width="100%" height={230}>
             <PieChart>
               <Pie data={[
-                  { name: trans.sociotherapy.phases.safety, value: 12, fill: '#2f778d' },
-                  { name: trans.sociotherapy.phases.trust, value: 18, fill: '#5fa6bf' },
+                  { name: trans.sociotherapy.phases.safety, value: 12, fill: '#2b8b9c' },
+                  { name: trans.sociotherapy.phases.trust, value: 18, fill: '#48b4c4' },
                   { name: trans.sociotherapy.phases.care, value: 22, fill: '#22c55e' },
                   { name: trans.sociotherapy.phases.respect, value: 15, fill: '#f07a4b' },
                   { name: trans.sociotherapy.phases.newOrientation, value: 9, fill: '#e84c5e' },
-                  { name: trans.sociotherapy.phases.memoryReconciliation, value: 14, fill: '#1e4c5c' },
+                  { name: trans.sociotherapy.phases.memoryReconciliation, value: 14, fill: '#1d5a67' },
                 ]} cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={2} dataKey="value"
                 label={({ name, value }) => `${name} (${value})`}>
-                {['#2f778d', '#5fa6bf', '#22c55e', '#f07a4b', '#e84c5e', '#1e4c5c'].map((fill, i) => (
+                {['#2b8b9c', '#48b4c4', '#22c55e', '#f07a4b', '#e84c5e', '#1d5a67'].map((fill, i) => (
                   <Cell key={i} fill={fill} />
                 ))}
               </Pie>
@@ -200,12 +200,12 @@ export default function ReportsPage() {
           </ResponsiveContainer>
           <div className="space-y-3">
             {[
-              { name: trans.sociotherapy.phases.safety, value: 12, fill: '#2f778d' },
-              { name: trans.sociotherapy.phases.trust, value: 18, fill: '#5fa6bf' },
+              { name: trans.sociotherapy.phases.safety, value: 12, fill: '#2b8b9c' },
+              { name: trans.sociotherapy.phases.trust, value: 18, fill: '#48b4c4' },
               { name: trans.sociotherapy.phases.care, value: 22, fill: '#22c55e' },
               { name: trans.sociotherapy.phases.respect, value: 15, fill: '#f07a4b' },
               { name: trans.sociotherapy.phases.newOrientation, value: 9, fill: '#e84c5e' },
-              { name: trans.sociotherapy.phases.memoryReconciliation, value: 14, fill: '#1e4c5c' },
+              { name: trans.sociotherapy.phases.memoryReconciliation, value: 14, fill: '#1d5a67' },
             ].map(p => (
               <div key={p.name} className="flex items-center gap-3">
                 <span className="w-3.5 h-3.5 rounded-sm shrink-0" style={{ background: p.fill }} />

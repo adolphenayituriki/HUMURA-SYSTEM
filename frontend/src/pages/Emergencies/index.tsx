@@ -23,24 +23,24 @@ export default function EmergenciesPage() {
   const sorted = [...alerts].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   return (
-    <div className="space-y-8 md:space-y-10">
+    <div className="space-y-6 md:space-y-8">
       <div className="flex items-end justify-between gap-4">
         <div className="min-w-0">
           <h1 className="text-2xl md:text-3xl font-bold text-ink-900 tracking-[-.02em]">{trans.emergencies.title}</h1>
           <p className="text-sm text-ink-400 mt-2">{trans.emergencies.subtitle}</p>
         </div>
         {active.length > 0 && (
-          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-rose-200 text-rose-600 text-xs font-bold animate-pulse shrink-0">
+          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold animate-pulse shrink-0">
             <span className="w-2 h-2 rounded-full bg-rose-500" />
-{active.length} {trans.emergencies.active}
+            {active.length} {trans.emergencies.active}
           </div>
         )}
       </div>
 
       {active.length > 0 && (
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
-          className="border border-rose-200 rounded-xl p-4 flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full border border-rose-200 text-rose-600 flex items-center justify-center shrink-0">
+          className="border border-rose-200 rounded-xl p-4 flex items-center gap-3 bg-rose-50/30">
+          <div className="w-9 h-9 rounded-full bg-rose-100 border border-rose-200 text-rose-600 flex items-center justify-center shrink-0">
             <AlertTriangle size={18} />
           </div>
           <div className="flex-1 min-w-0">
@@ -50,7 +50,7 @@ export default function EmergenciesPage() {
         </motion.div>
       )}
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 md:gap-7">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
         <StatCard label={trans.emergencies.totalAlerts} value={alerts.length} />
         <StatCard label={trans.emergencies.active} value={active.length} />
         <StatCard label={trans.emergencies.resolved} value={alerts.filter(a => a.status === 'resolved').length} />
