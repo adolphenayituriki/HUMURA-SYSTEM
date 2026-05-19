@@ -82,6 +82,7 @@ html {
   text-rendering: optimizeLegibility;
   scroll-behavior: smooth;
   font-size: 16px;
+  background-color: var(--color-ink-100);
 }
 
 body {
@@ -90,6 +91,9 @@ body {
   line-height: 1.6;
   color: var(--color-ink-900);
   background-color: var(--color-surface);
+  margin: 0 40px;
+  border-radius: 24px;
+  overflow-x: hidden;
 }
 
 #root { min-height: 100vh; display: flex; flex-direction: column; }
