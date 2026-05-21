@@ -2,12 +2,13 @@ import clsx from 'clsx';
 
 export function Badge({ children, color = 'slate', className }: {
   children: React.ReactNode;
-  color?: 'brand' | 'forest' | 'ink' | 'slate' | 'warm' | 'rose';
+  color?: 'brand' | 'forest' | 'ink' | 'slate' | 'warm' | 'rose' | 'blue';
   className?: string;
 }) {
   const palette: Record<string, { text: string; bg: string; border: string }> = {
     brand:  { text: 'text-brand-700', bg: 'bg-brand-50', border: 'border-brand-200/60' },
     forest: { text: 'text-forest-700', bg: 'bg-forest-50', border: 'border-forest-200/60' },
+    blue:   { text: 'text-blue-700', bg: 'bg-blue-50', border: 'border-blue-200/60' },
     ink:    { text: 'text-ink-700', bg: 'bg-ink-50', border: 'border-ink-200/60' },
     slate:  { text: 'text-ink-500', bg: 'bg-ink-50/50', border: 'border-ink-200/60' },
     warm:   { text: 'text-warm-700', bg: 'bg-warm-50', border: 'border-warm-200/60' },

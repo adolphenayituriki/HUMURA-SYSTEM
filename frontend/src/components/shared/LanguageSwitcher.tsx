@@ -1,9 +1,15 @@
 import { useState, useRef, useEffect } from 'react';
 import { useI18nStore, type Lang, LANG_LABELS } from '../../i18n';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGlobe, faChevronDown, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 const LANGS: Lang[] = ['en', 'fr', 'rw'];
+
+const FLAGS: Record<Lang, string> = {
+  en: '🇬🇧',
+  fr: '🇫🇷',
+  rw: '🇷🇼',
+};
 
 export function LanguageSwitcher({ className, dark }: { className?: string; dark?: boolean }) {
   const { lang, setLang } = useI18nStore();
@@ -18,45 +24,53 @@ export function LanguageSwitcher({ className, dark }: { className?: string; dark
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
+  const activeLabel = LANG_LABELS[lang];
+
   return (
     <div ref={ref} className={`relative ${className ?? ''}`}>
       <button
         onClick={() => setOpen(!open)}
-        className={`flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[.04em] px-2.5 py-1.5 rounded-lg transition-all ${
+        className={`flex items-center gap-1.5 h-9 px-2.5 rounded-xl text-xs font-medium transition-all ${
           dark
-            ? 'text-white/80 hover:text-white hover:bg-white/10 border border-white/10'
-            : 'text-ink-500 hover:text-ink-700 hover:bg-ink-100/60 border border-transparent'
+            ? 'text-white/70 hover:text-white hover:bg-white/8 border border-white/8'
+            : 'text-ink-400 hover:text-ink-700 hover:bg-ink-50 border border-ink-200/50 hover:border-ink-300'
         }`}
       >
-        <FontAwesomeIcon icon={faGlobe} className="text-[13px]" />
-        {LANG_LABELS[lang]}
-        <FontAwesomeIcon icon={faChevronDown} className={`text-[11px] transition-transform ${open ? 'rotate-180' : ''}`} />
+        <span className="text-sm leading-none">{FLAGS[lang]}</span>
+        <span className="hidden lg:inline uppercase tracking-[.04em]">{activeLabel}</span>
+        <FontAwesomeIcon icon={faChevronDown} className={`text-[10px] transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
 
       {open && (
         <div
-          className={`absolute top-full mt-1.5 right-0 min-w-[150px] rounded-xl border shadow-lg overflow-hidden z-50 ${
-            dark ? 'bg-[#1e3b45] border-white/10' : 'bg-white border-ink-200/70'
+          className={`absolute top-full mt-1.5 right-0 min-w-[140px] rounded-xl border shadow-lg overflow-hidden z-50 ${
+            dark ? 'bg-[#1a2f36] border-white/10' : 'bg-white border-ink-200/70 shadow-[0_8px_30px_rgba(0,0,0,.08)]'
           }`}
         >
-          {LANGS.map((l) => (
-            <button
-              key={l}
-              onClick={() => { setLang(l); setOpen(false); }}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-medium transition-all ${
-                lang === l
-                  ? dark
-                    ? 'text-white bg-white/10'
-                    : 'text-blue-600 bg-blue-50'
-                  : dark
-                    ? 'text-white/60 hover:text-white hover:bg-white/5'
-                    : 'text-ink-500 hover:text-ink-700 hover:bg-ink-100/40'
-              }`}
-            >
-              <span className="flex-1 text-left">{LANG_LABELS[l]}</span>
-              {lang === l && <FontAwesomeIcon icon={faCheck} className="text-[13px] shrink-0" />}
-            </button>
-          ))}
+          <div className="py-1">
+            {LANGS.map((l) => {
+              const isActive = lang === l;
+              return (
+                <button
+                  key={l}
+                  onClick={() => { setLang(l); setOpen(false); }}
+                  className={`w-full flex items-center gap-3 px-3.5 py-2.5 text-xs font-medium transition-all ${
+                    isActive
+                      ? dark
+                        ? 'text-white bg-white/8'
+                        : 'text-brand-700 bg-brand-50'
+                      : dark
+                        ? 'text-white/50 hover:text-white hover:bg-white/5'
+                        : 'text-ink-500 hover:text-ink-700 hover:bg-ink-50'
+                  }`}
+                >
+                  <span className="text-base leading-none">{FLAGS[l]}</span>
+                  <span className="flex-1 text-left">{LANG_LABELS[l]}</span>
+                  {isActive && <FontAwesomeIcon icon={faCheck} className="text-[12px] shrink-0 text-brand-500" />}
+                </button>
+              );
+            })}
+          </div>
         </div>
       )}
     </div>

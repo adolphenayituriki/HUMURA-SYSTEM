@@ -11,7 +11,6 @@ interface StatCardProps {
 export function StatCard({ label, value, change, up, icon }: StatCardProps) {
   return (
     <div className="relative rounded-xl bg-white border border-ink-200/60 overflow-hidden transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_6px_20px_rgba(0,0,0,.05)]">
-      <div className="absolute left-0 right-0 top-0 h-[3px] bg-gradient-to-r from-brand-400 to-brand-500" />
       <div className="p-5 md:p-6">
         <div className="flex items-start justify-between mb-2">
           <span className="text-[11px] font-semibold text-ink-400 uppercase tracking-[.04em] leading-none">{label}</span>

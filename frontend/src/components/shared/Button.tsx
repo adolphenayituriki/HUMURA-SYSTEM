@@ -14,7 +14,7 @@ const variantStyles: Record<Variant, string> = {
   primary: [
     'text-white',
     'bg-brand-600 hover:bg-brand-700 active:bg-brand-800',
-    'shadow-[0_2px_10px_rgba(31,111,126,.2)] hover:shadow-[0_4px_16px_rgba(31,111,126,.25)]',
+    'shadow-[0_2px_10px_rgba(0,122,100,.2)] hover:shadow-[0_4px_16px_rgba(0,122,100,.25)]',
     'border border-brand-600/20',
   ].join(' '),
   secondary: [
@@ -28,7 +28,7 @@ const variantStyles: Record<Variant, string> = {
   ].join(' '),
   danger: [
     'text-white bg-rose-500 hover:bg-rose-600 active:bg-rose-700',
-    'shadow-[0_2px_8px_rgba(232,76,94,.2)] hover:shadow-[0_4px_16px_rgba(232,76,94,.25)]',
+    'shadow-[0_2px_8px_rgba(239,68,68,.2)] hover:shadow-[0_4px_16px_rgba(239,68,68,.25)]',
     'border border-transparent',
   ].join(' '),
   success: [

@@ -19,6 +19,15 @@ export interface User {
   avatar?: string;
 }
 
+export const CATEGORY_TO_ROLES: Record<Beneficiary['category'], UserRole[]> = {
+  'Genocide Survivor': ['sociotherapy_facilitator', 'district_hospital'],
+  'Widow': ['cooperative_leader', 'health_center'],
+  'Orphan': ['youth_counselor', 'chw'],
+  'Former Perpetrator': ['sociotherapy_facilitator'],
+  'Vulnerable Youth': ['youth_counselor', 'chw'],
+  'Other': ['health_center', 'chw', 'district_hospital', 'sociotherapy_facilitator'],
+};
+
 export interface Beneficiary {
   id: string;
   fullName: string;
@@ -29,6 +38,7 @@ export interface Beneficiary {
   cell: string;
   phone: string;
   category: 'Genocide Survivor' | 'Widow' | 'Orphan' | 'Former Perpetrator' | 'Vulnerable Youth' | 'Other';
+  managedByRole: UserRole[];
   chwId: string;
   chwName: string;
   registeredAt: string;
@@ -48,6 +58,30 @@ export interface ScreeningResult {
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   recommendation: string;
   createdAt: string;
+}
+
+export interface SupportStep {
+  id: string;
+  action: string;
+  assignedTo: string;
+  status: 'pending' | 'in_progress' | 'done';
+  dueDate?: string;
+  notes?: string;
+}
+
+export interface SupportPlan {
+  id: string;
+  referralId: string;
+  beneficiaryId: string;
+  beneficiaryName: string;
+  openedAt: string;
+  updatedAt: string;
+  assignedManager: string;
+  managerRole: string;
+  priority: 'routine' | 'urgent' | 'emergency';
+  status: 'active' | 'on_hold' | 'closed';
+  steps: SupportStep[];
+  summary: string;
 }
 
 export interface Referral {

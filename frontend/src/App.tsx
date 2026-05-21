@@ -17,6 +17,7 @@ import Reports from './pages/Reports';
 import Admin from './pages/Admin';
 import Landing from './pages/Landing';
 import Media from './pages/Media';
+import Privacy from './pages/Privacy';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isAuth = useAuthStore((s) => s.isAuthenticated);
@@ -35,6 +36,7 @@ export default function App() {
         {/* Public pages */}
         <Route path="/" element={<Landing />} />
         <Route path="/media" element={<Media />} />
+        <Route path="/privacy" element={<Privacy />} />
 
         {/* Auth routes */}
         <Route element={<AuthLayout />}>
@@ -63,6 +65,7 @@ export default function App() {
           <Route path="/youth" element={<Youth />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/privacy" element={<Privacy />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

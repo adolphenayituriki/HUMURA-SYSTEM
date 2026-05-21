@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTriangleExclamation, faCircleCheck, faUser, faEnvelope, faIdCard, faLocationDot, faLock, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '../../components/shared/Button';
+import { useToastStore } from '../../store/toastStore';
+import { service } from '../../services/mockData';
 
 export default function Register() {
+  const { addToast } = useToastStore();
   const [fullName, setFullName] = useState('');
   const [nationalId, setNationalId] = useState('');
   const [email, setEmail] = useState('');
@@ -16,20 +19,31 @@ export default function Register() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     if (!fullName || !nationalId || !email || !district || !password) { setError('Please fill in all required fields.'); return; }
+    const exists = service.getUsers().find(u => u.email === email);
+    if (exists) { setError('An account with this email already exists.'); return; }
+    service.addUser({
+      id: `U-${String(service.getUsers().length + 1).padStart(3, '0')}`,
+      role: 'community_member',
+      fullName,
+      email,
+      district,
+    });
+    addToast('Account created successfully. You can now sign in.', 'success');
     setSuccess(true);
   };
 
   if (success) {
     return (
-      <div className="text-center py-6 sm:py-8">
-        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-forest-100 flex items-center justify-center mx-auto mb-4 sm:mb-5">
-          <FontAwesomeIcon icon={faCircleCheck} className="text-[24px] text-forest-600 sm:text-[28px]" />
+      <div className="text-center py-10 sm:py-12">
+        <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-forest-50 border-2 border-forest-200/60 flex items-center justify-center mx-auto mb-5 sm:mb-6 shadow-sm">
+          <FontAwesomeIcon icon={faCircleCheck} className="text-[28px] text-forest-600 sm:text-[32px]" />
         </div>
-        <h2 className="text-lg sm:text-xl font-bold text-ink-900 mb-2">Account Created</h2>
-        <p className="text-xs sm:text-sm text-ink-400 mb-5 sm:mb-6">Your account is pending approval. You will be notified once activated.</p>
+        <h2 className="text-xl sm:text-2xl font-bold text-ink-900 mb-3">Account Created</h2>
+        <p className="text-sm sm:text-base text-ink-400 leading-relaxed max-w-xs mx-auto mb-8 sm:mb-10">Your account is pending approval. You will be notified once activated.</p>
         <Link to="/login"
-          className="inline-flex items-center justify-center h-10 sm:h-11 px-6 sm:px-7 rounded-lg text-xs sm:text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 transition-all">
+          className="inline-flex items-center justify-center h-11 sm:h-12 px-8 sm:px-10 rounded-xl text-sm sm:text-base font-bold text-white bg-brand-600 hover:bg-brand-700 active:bg-brand-800 transition-all shadow-[0_2px_10px_rgba(31,111,126,.2)] hover:shadow-[0_4px_16px_rgba(31,111,126,.25)] active:scale-[.97]">
           Sign In
         </Link>
       </div>

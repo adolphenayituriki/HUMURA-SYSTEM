@@ -1,5 +1,6 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import { LanguageSwitcher } from '../shared/LanguageSwitcher';
+import { ToastContainer } from '../shared/ToastContainer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faHandshake, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
@@ -29,9 +30,7 @@ export default function AuthLayout() {
         </div>
 
         <div className="flex-1 flex flex-col justify-center max-w-lg">
-          <div className="w-14 h-14 rounded-2xl bg-brand-50 border border-brand-200/60 flex items-center justify-center mb-6">
-            <FontAwesomeIcon icon={isLogin ? faArrowRightFromBracket : faHandshake} className="text-[28px] text-brand-600" />
-          </div>
+          <FontAwesomeIcon icon={isLogin ? faArrowRightFromBracket : faHandshake} className="text-[28px] text-brand-600 mb-6" />
           {isLogin ? (
             <>
               <h1 className="text-[32px] xl:text-[42px] font-bold text-ink-900 leading-[1.2] tracking-[-.02em] mb-3 xl:mb-4">
@@ -78,6 +77,7 @@ export default function AuthLayout() {
           <Outlet />
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

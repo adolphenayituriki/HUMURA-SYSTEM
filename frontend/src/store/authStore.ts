@@ -9,6 +9,7 @@ interface AuthState {
   login: (user: User, token: string) => void;
   logout: () => void;
   hasRole: (roles: UserRole[]) => boolean;
+  updateProfile: (data: Partial<User>) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -22,6 +23,10 @@ export const useAuthStore = create<AuthState>()(
       hasRole: (roles) => {
         const { user } = get();
         return user ? roles.includes(user.role) : false;
+      },
+      updateProfile: (data) => {
+        const user = get().user;
+        if (user) set({ user: { ...user, ...data } });
       },
     }),
     { name: 'humura-auth' }

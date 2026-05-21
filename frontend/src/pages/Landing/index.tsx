@@ -10,6 +10,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '../../components/shared/Button';
 import { LanguageSwitcher } from '../../components/shared/LanguageSwitcher';
+import ChatWidget from '../../components/chat/ChatWidget';
+import { Link } from 'react-router-dom';
 import { useI18nStore } from '../../i18n';
 
 const fadeUp = {
@@ -36,6 +38,7 @@ export default function Landing() {
       setCurrentSlide(prev => (prev + 1) % heroSlides.length);
     }, 5500);
     return () => clearInterval(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const navItems = [
@@ -87,6 +90,7 @@ export default function Landing() {
       if (el) observer.observe(el);
     });
     return () => observer.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const scrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -285,7 +289,7 @@ export default function Landing() {
         <div className="absolute top-1/3 right-[20%] w-3 h-3 rounded-full bg-warm-300/30 blur-[3px]" />
         <div className="absolute bottom-1/3 left-1/3 w-1.5 h-1.5 rounded-full bg-brand-400/30 blur-[2px]" />
 
-        <div className="container pt-32 pb-32 md:pt-44 md:pb-44 lg:pt-52 lg:pb-52 relative w-full">
+        <div className="container mt-5 pt-32 pb-32 md:pt-44 md:pb-44 lg:pt-52 lg:pb-52 relative w-full">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-start">
             <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}>
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-50 border border-brand-200/60 text-brand-700 text-xs font-semibold uppercase tracking-[.08em] mb-6 shadow-sm">
@@ -313,7 +317,7 @@ export default function Landing() {
                   </Button>
                 </a>
               </div>
-              <div className="mt-10 flex flex-wrap items-center gap-5 text-xs text-ink-400">
+              <div className="mt-10 flex flex-wrap items-center gap-5  text-xs text-ink-400">
                 <span className="flex items-center gap-1.5"><FontAwesomeIcon icon={faCircleCheck} className="text-[14px] text-brand-500" /> {trans.landing.trustHipaa}</span>
                 <span className="flex items-center gap-1.5"><FontAwesomeIcon icon={faCircleCheck} className="text-[14px] text-brand-500" /> {trans.landing.trustRbac}</span>
                 <span className="flex items-center gap-1.5"><FontAwesomeIcon icon={faCircleCheck} className="text-[14px] text-brand-500" /> {trans.landing.trustAes}</span>
@@ -370,7 +374,7 @@ export default function Landing() {
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-4 p-4 rounded-2xl bg-white/10 border border-white/10 backdrop-blur-sm">
+                  <div className="grid grid-cols-3 gap-4 p-4 mb-25 rounded-2xl bg-white/10 border border-white/10 backdrop-blur-sm">
                     {[
                       { val: '2,847+', label: trans.landing.statsBeneficiaries },
                       { val: '128', label: trans.landing.statsGroups },
@@ -384,7 +388,7 @@ export default function Landing() {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center justify-center gap-2 mt-5">
+              <div className="flex mt-25 items-center justify-center gap-2 mt-5">
                 {heroSlides.map((_, i) => (
                   <button key={i} onClick={() => setCurrentSlide(i)}
                     className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${
@@ -400,7 +404,7 @@ export default function Landing() {
       </section>
 
       {/* ═══════════════ STATS ═══════════════ */}
-      <section className="py-24 bg-ink-50/20">
+      <section className="py-24 bg-ink-50/20 mt-32">
         <div className="container">
           <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="grid grid-cols-2 lg:grid-cols-4 gap-6">
@@ -411,7 +415,6 @@ export default function Landing() {
               { value: '97%', label: trans.landing.statsEngagement, icon: <FontAwesomeIcon icon={faHeartPulse} className="text-[22px] text-brand-500" /> },
             ].map(s => (
               <div key={s.label} className="relative bg-white rounded-2xl border border-ink-200/60 p-8 text-center shadow-sm hover:shadow-2xl hover:-translate-y-[3px] hover:border-brand-200/50 transition-all duration-300 group overflow-hidden h-full">
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-400 via-brand-500 to-brand-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center mb-4 group-hover:scale-105 transition-all duration-300">
                   {s.icon}
                 </div>
@@ -424,7 +427,7 @@ export default function Landing() {
       </section>
 
       {/* ═══════════════ PARTNERS CAROUSEL ═══════════════ */}
-      <section className="py-24 bg-white border-b border-ink-100/60 mt-12">
+      <section className="py-24 bg-white border-b border-ink-100/60 mt-32">
         <div className="container">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
             <p className="text-[11px] font-semibold text-ink-400 uppercase tracking-[.12em] text-center mb-10">
@@ -458,7 +461,7 @@ export default function Landing() {
       </section>
 
       {/* ═══════════════ ABOUT ═══════════════ */}
-      <section id="about" className="py-24 bg-white">
+      <section id="about" className="py-24 bg-white mt-32">
         <div className="container">
           <div className="grid lg:grid-cols-2 gap-20 lg:gap-28 items-start">
             <motion.div {...fadeUp}>
@@ -478,7 +481,6 @@ export default function Landing() {
                   ].map((item, i) => (
                   <motion.div key={item.title} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06, duration: 0.35 }}
                     className="relative rounded-xl border border-ink-200/60 p-7 hover:border-brand-200/50 hover:shadow-xl hover:-translate-y-[3px] transition-all duration-300 group overflow-hidden bg-white">
-                    <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-brand-400 to-brand-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3 group-hover:scale-105 transition-all duration-300">{item.icon}</div>
                     <h3 className="text-sm font-bold text-ink-900 mb-1.5">{item.title}</h3>
                     <p className="text-xs text-ink-500 leading-relaxed">{item.desc}</p>
@@ -489,7 +491,7 @@ export default function Landing() {
             <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
               className="relative">
               <div className="relative overflow-hidden rounded-3xl aspect-[4/5] shadow-2xl"
-                style={{ background: 'linear-gradient(160deg, #1a3f49 0%, #2b8b9c 40%, #48b4c4 100%)' }}>
+                style={{ background: 'linear-gradient(160deg, #001814 0%, #007A64 40%, #33a38f 100%)' }}>
                 <video autoPlay muted loop playsInline
                   poster="/healing community.png"
                   className="absolute right-0 top-0 h-full w-3/5 object-cover opacity-20 pointer-events-none"
@@ -580,7 +582,7 @@ export default function Landing() {
       </section>
 
       {/* ═══════════════ SERVICES ═══════════════ */}
-      <section id="services" className="py-24 bg-ink-50/20">
+      <section id="services" className="py-24 bg-ink-50/20 mt-32">
         <div className="container">
           <motion.div {...fadeUp} className="text-center mb-20">
             <span className="inline-block px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/60 text-brand-700 text-xs font-semibold uppercase tracking-[.08em] mb-8">{trans.landing.servicesBadge}</span>
@@ -603,7 +605,6 @@ export default function Landing() {
             ].map((f, i) => (
               <motion.div key={f.title} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-50px' }} transition={{ delay: i * 0.06, duration: 0.4 }}
                 className="relative bg-white rounded-2xl border border-ink-200/60 shadow-sm hover:shadow-2xl hover:-translate-y-[4px] hover:border-brand-200/50 transition-all duration-300 cursor-pointer group overflow-hidden">
-                <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${f.accent} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
                 <div className="px-8 pb-10 pt-8">
                   <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-105 transition-all duration-300">
                     {f.icon}
@@ -618,7 +619,7 @@ export default function Landing() {
       </section>
 
       {/* ═══════════════ YOUTH + TESTIMONIAL ═══════════════ */}
-      <section id="youth" className="py-24 bg-white">
+      <section id="youth" className="py-24 bg-white mt-32">
         <div className="container">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-start">
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
@@ -657,7 +658,7 @@ export default function Landing() {
             <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
               className="relative self-stretch flex flex-col justify-center">
               <div className="rounded-3xl p-10 lg:p-12 text-white overflow-hidden relative shadow-xl"
-                style={{ background: 'linear-gradient(160deg, #1a3f49 0%, #2b8b9c 40%, #48b4c4 100%)' }}>
+                style={{ background: 'linear-gradient(160deg, #001814 0%, #007A64 40%, #33a38f 100%)' }}>
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(255,255,255,.08)_0%,transparent_50%)]" />
                 <div className="absolute -top-6 -right-6 w-32 h-32 rounded-full bg-white/5 blur-2xl" />
                 <div className="absolute -bottom-4 -left-4 w-24 h-24 rounded-full bg-white/5 blur-xl" />
@@ -693,8 +694,7 @@ export default function Landing() {
       </section>
 
       {/* ═══════════════ COMMUNITY ═══════════════ */}
-      <section id="community" className="py-24 bg-ink-50/20 relative overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-200/40 to-transparent" />
+      <section id="community" className="py-24 bg-ink-50/20 relative overflow-hidden mt-32">
         <div className="absolute -top-20 left-1/4 w-80 h-80 rounded-full bg-brand-50/30 blur-3xl pointer-events-none" />
         <div className="absolute -bottom-20 right-1/4 w-80 h-80 rounded-full bg-warm-50/20 blur-3xl pointer-events-none" />
         <div className="container relative">
@@ -746,7 +746,6 @@ export default function Landing() {
               ].map((item, i) => (
               <motion.div key={item.role} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06, duration: 0.35 }}
                 className="relative bg-white rounded-2xl border border-ink-200/60 p-8 text-center shadow-sm hover:shadow-2xl hover:-translate-y-[3px] hover:border-brand-200/50 transition-all duration-300 group overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-400 via-brand-500 to-brand-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="w-11 h-11 mx-auto rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
                   {item.icon}
                 </div>
@@ -763,7 +762,6 @@ export default function Landing() {
               {testimonials.map((t, i) => (
                 <motion.div key={i} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06, duration: 0.35 }}
                   className="relative bg-white rounded-2xl border border-ink-200/60 p-8 shadow-sm hover:shadow-2xl hover:-translate-y-[3px] hover:border-brand-200/50 transition-all duration-300 group">
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-400 via-warm-400 to-forest-400 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <FontAwesomeIcon icon={faQuoteLeft} className="text-[20px] text-brand-300 mb-4 opacity-60 group-hover:opacity-100 transition-opacity" />
                   <p className="text-sm text-ink-600 leading-[1.8] mb-5 italic">
                     &ldquo;{t.quote}&rdquo;
@@ -790,7 +788,7 @@ export default function Landing() {
       </section>
 
       {/* ═══════════════ CONTACT ═══════════════ */}
-      <section id="contact" className="py-24 bg-white">
+      <section id="contact" className="py-24 bg-white mt-32">
         <div className="container">
           <motion.div {...fadeUp} className="text-center mb-20">
             <span className="inline-block px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/60 text-brand-700 text-xs font-semibold uppercase tracking-[.08em] mb-8">{trans.landing.contactBadge}</span>
@@ -845,8 +843,8 @@ export default function Landing() {
       </section>
 
       {/* ═══════════════ CTA ═══════════════ */}
-      <section className="relative overflow-hidden py-24 lg:py-28 mt-16"
-        style={{ background: 'linear-gradient(165deg, #0d1f25 0%, #16363f 35%, #2b8b9c 70%, #48b4c4 100%)' }}>
+      <section className="relative overflow-hidden py-24 lg:py-28 mt-32"
+        style={{ background: 'linear-gradient(165deg, #000c0a 0%, #003128 35%, #007A64 70%, #33a38f 100%)' }}>
         {/* Decorative orbs */}
         <div className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-brand-400/10 blur-[120px]" />
         <div className="absolute -bottom-40 -left-40 w-[400px] h-[400px] rounded-full bg-brand-300/10 blur-[100px]" />
@@ -857,8 +855,6 @@ export default function Landing() {
           style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,.6) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
 
         {/* Top separator */}
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-
         <div className="container relative mb-8">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
             {/* Left: text */}
@@ -900,9 +896,7 @@ export default function Landing() {
                     initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }} transition={{ delay: 0.2 + i * 0.08 }}
                     className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-5 sm:p-6 hover:bg-white/10 hover:border-white/20 transition-all duration-300 group">
-                    <div className="w-9 h-9 rounded-xl bg-brand-500/20 flex items-center justify-center text-brand-300 mb-3 group-hover:scale-110 transition-transform duration-300">
-                      <FontAwesomeIcon icon={stat.icon} className="text-[16px]" />
-                    </div>
+                    <FontAwesomeIcon icon={stat.icon} className="text-[16px] text-brand-500 shrink-0" />
                     <p className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-0.5">{stat.value}</p>
                     <p className="text-[11px] font-medium text-white/50 uppercase tracking-[.06em]">{stat.label}</p>
                   </motion.div>
@@ -913,7 +907,6 @@ export default function Landing() {
         </div>
 
         {/* Bottom glow */}
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
       </section>
 
       {/* ═══════════════ FOOTER ═══════════════ */}
@@ -921,8 +914,6 @@ export default function Landing() {
         style={{ background: 'linear-gradient(170deg, #0f242a 0%, #132e36 30%, #1a3f49 60%, #1f525f 100%)' }}>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,.04)_0%,transparent_50%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(43,139,156,.08)_0%,transparent_50%)]" />
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-400/30 to-transparent" />
-
         <div className="container relative py-20 sm:py-24">
           <div className="grid sm:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-16">
             {/* ─── Brand ─── */}
@@ -1071,6 +1062,7 @@ export default function Landing() {
           <div className="container relative py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-ink-500">
             <span>{trans.landing.footerCopyright.replace('{year}', String(new Date().getFullYear()))}</span>
             <div className="flex items-center gap-4">
+              <Link to="/privacy" className="hover:text-brand-300 transition-colors">{trans.privacy.footer}</Link>
               <span className="hidden sm:inline w-1 h-1 rounded-full bg-ink-600" />
               <span className="flex items-center gap-1.5">{trans.landing.footerCredit} <FontAwesomeIcon icon={faHeartPulse} className="text-[11px] text-brand-400/60" /></span>
               <span className="hidden sm:inline w-1 h-1 rounded-full bg-ink-600" />
@@ -1083,6 +1075,7 @@ export default function Landing() {
           </div>
         </div>
       </footer>
+      <ChatWidget />
     </div>
   );
 }

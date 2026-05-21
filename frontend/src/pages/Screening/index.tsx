@@ -1,17 +1,29 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faChevronLeft, faChevronRight, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faChevronLeft, faChevronRight, faCheck, faFilter, faStethoscope, faHeartbeat, faExclamationTriangle, faClipboardList, faUserCheck, faEnvelope, faLocationDot, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { service } from '../../services/mockData';
+import { useToastStore } from '../../store/toastStore';
 import { Badge } from '../../components/shared/Badge';
 import { StatCard } from '../../components/shared/StatCard';
 import { Button } from '../../components/shared/Button';
+import Modal from '../../components/shared/Modal';
+import ConfirmDialog from '../../components/shared/ConfirmDialog';
 import { useI18nStore } from '../../i18n';
-import type { ScreeningResult } from '../../types';
+import { useAuthStore } from '../../store/authStore';
+import type { ScreeningResult, Referral, User } from '../../types';
+
+function calcRiskLevel(phq9: number, gad7: number, pcl5: number): 'low' | 'medium' | 'high' | 'critical' {
+  if (phq9 >= 15 || gad7 >= 15 || pcl5 >= 50) return 'critical';
+  if (phq9 >= 10 || gad7 >= 10 || pcl5 >= 33) return 'high';
+  if (phq9 >= 5 || gad7 >= 5) return 'medium';
+  return 'low';
+}
 
 export default function ScreeningPage() {
   const { t } = useI18nStore();
   const trans = t();
+  const { addToast } = useToastStore();
 
   const STEPS = [
     { key: 'info', label: trans.screening.stepInfo },
@@ -21,7 +33,7 @@ export default function ScreeningPage() {
     { key: 'review', label: trans.screening.stepReview },
   ];
 
-  const [screenings] = useState<ScreeningResult[]>(() => service.getScreenings({}));
+  const [screenings, setScreenings] = useState<ScreeningResult[]>(() => service.getScreenings({}));
   const [riskFilter, setRiskFilter] = useState<'all' | 'critical' | 'high' | 'medium' | 'low'>('all');
   const [showForm, setShowForm] = useState(false);
   const [step, setStep] = useState(0);
@@ -30,8 +42,15 @@ export default function ScreeningPage() {
   const [gad7Answers, setGad7Answers] = useState<number[]>(Array(7).fill(0));
   const [pcl5Answers, setPcl5Answers] = useState<number[]>(Array(6).fill(0));
 
-  const filtered  = riskFilter === 'all' ? screenings : screenings.filter(s => s.riskLevel === riskFilter);
-  const highRisk  = screenings.filter(s => s.riskLevel === 'high' || s.riskLevel === 'critical').length;
+  const [editingScreening, setEditingScreening] = useState<ScreeningResult | null>(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editForm, setEditForm] = useState({ beneficiaryName: '', phq9Score: 0, gad7Score: 0, pcl5Score: 0, recommendation: '' });
+
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  const filtered = riskFilter === 'all' ? screenings : screenings.filter(s => s.riskLevel === riskFilter);
+  const highRisk = screenings.filter(s => s.riskLevel === 'high' || s.riskLevel === 'critical').length;
 
   const totalScore = (s: ScreeningResult) => s.phq9Score + s.gad7Score + s.pcl5Score;
   const maxTotal = 27 + 21 + 80;
@@ -49,11 +68,141 @@ export default function ScreeningPage() {
     setPcl5Answers(Array(6).fill(0));
   };
 
+  const [submittedScreening, setSubmittedScreening] = useState<ScreeningResult | null>(null);
+  const [matchedSupporter, setMatchedSupporter] = useState<{ name: string; role: string; contact: string; email: string } | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
+
   const phq9Total = phq9Answers.reduce((a, b) => a + b, 0);
   const gad7Total = gad7Answers.reduce((a, b) => a + b, 0);
   const pcl5Total = pcl5Answers.reduce((a, b) => a + b, 0);
   const combinedTotal = phq9Total + gad7Total + pcl5Total;
   const combinedPct = Math.round((combinedTotal / maxTotal) * 100);
+
+  const getRiskLevel = useCallback((): 'low' | 'medium' | 'high' | 'critical' => {
+    return calcRiskLevel(phq9Total, gad7Total, pcl5Total);
+  }, [phq9Total, gad7Total, pcl5Total]);
+
+  const findSupporter = useCallback((riskLevel: string, district: string) => {
+    const users = service.getUsers();
+    const supporters: User[] = [];
+    const districtMatch: User[] = [];
+    users.forEach(u => {
+      const isSupporter = ['district_hospital', 'health_center', 'chw', 'sociotherapy_facilitator', 'youth_counselor', 'emergency_responder'].includes(u.role);
+      if (isSupporter) {
+        supporters.push(u);
+        if (u.district === district) districtMatch.push(u);
+      }
+    });
+    const pool = districtMatch.length > 0 ? districtMatch : supporters;
+
+    const rolePriority: Record<string, string[]> = {
+      critical: ['emergency_responder', 'district_hospital'],
+      high: ['district_hospital', 'health_center'],
+      medium: ['health_center', 'chw', 'sociotherapy_facilitator'],
+      low: ['chw', 'youth_counselor', 'sociotherapy_facilitator'],
+    };
+    const preferredRoles = rolePriority[riskLevel] ?? [];
+    for (const role of preferredRoles) {
+      const match = pool.find(u => u.role === role);
+      if (match) return match;
+    }
+    return pool[0] ?? null;
+  }, []);
+
+  const handleSubmitAssessment = useCallback(() => {
+    const riskLevel = getRiskLevel();
+    const district = formData['District'] || 'Kigali';
+    const screeningId = `SCR-${String(service.getScreenings({}).length + 1).padStart(4, '0')}`;
+
+    const newScreening: ScreeningResult = {
+      id: screeningId,
+      beneficiaryId: `B-${String(service.getBeneficiaries({}).length + 1).padStart(4, '0')}`,
+      beneficiaryName: formData['Beneficiary Name'] || 'Unknown',
+      screenedBy: formData['Screened By'] || 'Unknown',
+      phq9Score: phq9Total,
+      gad7Score: gad7Total,
+      pcl5Score: pcl5Total,
+      riskLevel,
+      recommendation: riskLevel === 'critical' ? 'Immediate psychiatric referral' : riskLevel === 'high' ? 'Urgent referral to health center' : riskLevel === 'medium' ? 'Schedule follow-up counselling' : 'Community support monitoring',
+      createdAt: new Date().toISOString().split('T')[0],
+    };
+    service.addScreening(newScreening);
+    setScreenings(service.getScreenings({}));
+    addToast('Screening assessment saved successfully');
+
+    const supporter = findSupporter(riskLevel, district);
+    if (supporter) {
+      const referralId = `REF-${String(service.getReferrals({}).length + 1).padStart(4, '0')}`;
+      const newReferral: Referral = {
+        id: referralId,
+        beneficiaryId: newScreening.beneficiaryId,
+        beneficiaryName: newScreening.beneficiaryName,
+        from: newScreening.screenedBy,
+        fromRole: ['admin', 'chw', 'health_center', 'district_hospital'].includes(useAuthStore.getState().user?.role ?? '') ? useAuthStore.getState().user?.role ?? 'CHW' : 'CHW',
+        to: supporter.fullName,
+        toRole: supporter.role.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+        reason: newScreening.recommendation,
+        priority: riskLevel === 'critical' ? 'emergency' : riskLevel === 'high' ? 'urgent' : 'routine',
+        status: 'pending',
+        createdAt: newScreening.createdAt,
+        updatedAt: newScreening.createdAt,
+      };
+      service.addReferral(newReferral);
+      setMatchedSupporter({
+        name: supporter.fullName,
+        role: supporter.role.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+        contact: supporter.facility || supporter.district || 'Rwanda',
+        email: supporter.email,
+      });
+    }
+    setSubmittedScreening(newScreening);
+    setShowSuccess(true);
+  }, [formData, phq9Total, gad7Total, pcl5Total, getRiskLevel, findSupporter, addToast, setShowSuccess]);
+
+  const handleOpenEdit = useCallback((s: ScreeningResult) => {
+    setEditingScreening(s);
+    setEditForm({
+      beneficiaryName: s.beneficiaryName,
+      phq9Score: s.phq9Score,
+      gad7Score: s.gad7Score,
+      pcl5Score: s.pcl5Score,
+      recommendation: s.recommendation,
+    });
+    setShowEditModal(true);
+  }, [setEditingScreening, setEditForm, setShowEditModal]);
+
+  const handleSaveEdit = useCallback(() => {
+    if (!editingScreening) return;
+    const riskLevel = calcRiskLevel(editForm.phq9Score, editForm.gad7Score, editForm.pcl5Score);
+    service.updateScreening(editingScreening.id, {
+      beneficiaryName: editForm.beneficiaryName,
+      phq9Score: editForm.phq9Score,
+      gad7Score: editForm.gad7Score,
+      pcl5Score: editForm.pcl5Score,
+      recommendation: editForm.recommendation,
+      riskLevel,
+    });
+    setScreenings(service.getScreenings({}));
+    addToast('Screening updated successfully');
+    setShowEditModal(false);
+    setEditingScreening(null);
+  }, [editingScreening, editForm, addToast, setEditingScreening, setShowEditModal]);
+
+  const handleOpenDelete = useCallback((id: string) => {
+    setDeletingId(id);
+    setShowDeleteConfirm(true);
+  }, [setDeletingId, setShowDeleteConfirm]);
+
+  const handleConfirmDelete = useCallback(() => {
+    if (!deletingId) return;
+    service.deleteScreening(deletingId);
+    addToast('Screening deleted successfully');
+    setScreenings(service.getScreenings({}));
+    setShowDeleteConfirm(false);
+    setDeletingId(null);
+  }, [deletingId, addToast, setDeletingId, setShowDeleteConfirm]);
+
+  const editRiskLevel = calcRiskLevel(editForm.phq9Score, editForm.gad7Score, editForm.pcl5Score);
 
   const renderStep = () => {
     switch (step) {
@@ -192,10 +341,12 @@ export default function ScreeningPage() {
   };
 
   return (
-    <div className="space-y-6 md:space-y-8">
-      <div className="flex items-end justify-between gap-4">
+    <div className="space-y-8 md:space-y-10">
+      <div className="flex items-end justify-between gap-6">
         <div className="min-w-0">
-          <h1 className="text-2xl md:text-3xl font-bold text-ink-900 tracking-[-.02em]">{trans.screening.title}</h1>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-[-.02em]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-400">{trans.screening.title}</span>
+          </h1>
           <p className="text-sm text-ink-400 mt-2">{trans.screening.subtitle}</p>
         </div>
         <Button onClick={() => { setShowForm(!showForm); if (!showForm) resetForm(); }} variant="primary" className="shrink-0">
@@ -203,32 +354,39 @@ export default function ScreeningPage() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-        <StatCard label={trans.screening.totalScreenings} value={screenings.length} />
-        <StatCard label={trans.screening.highRisk} value={highRisk} />
-        <StatCard label={trans.screening.critical} value={screenings.filter(s => s.riskLevel === 'critical').length} />
-        <StatCard label={trans.screening.avgPhq9} value={screenings.length ? (screenings.reduce((a, s) => a + s.phq9Score, 0) / screenings.length).toFixed(1) : '0'} />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
+        <StatCard label={trans.screening.totalScreenings} value={screenings.length}
+          icon={<FontAwesomeIcon icon={faClipboardList} className="text-[16px] text-brand-500 shrink-0" />} />
+        <StatCard label={trans.screening.highRisk} value={highRisk}
+          icon={<FontAwesomeIcon icon={faExclamationTriangle} className="text-[16px] text-warm-500 shrink-0" />} />
+        <StatCard label={trans.screening.critical} value={screenings.filter(s => s.riskLevel === 'critical').length}
+          icon={<FontAwesomeIcon icon={faHeartbeat} className="text-[16px] text-rose-500 shrink-0" />} />
+        <StatCard label={trans.screening.avgPhq9} value={screenings.length ? (screenings.reduce((a, s) => a + s.phq9Score, 0) / screenings.length).toFixed(1) : '0'}
+          icon={<FontAwesomeIcon icon={faStethoscope} className="text-[16px] text-forest-500 shrink-0" />} />
       </div>
 
       <AnimatePresence>
         {showForm && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }}>
-            <div className="rounded-xl border border-ink-200/60 p-6 bg-white">
-              <div className="flex items-center gap-0 mb-6 border-b border-ink-100 pb-4">
-                {STEPS.map((s, i) => (
-                  <div key={s.key} className="flex items-center">
-                    <div className={`flex items-center gap-2 ${i <= step ? 'text-brand-700' : 'text-ink-300'}`}>
-                      <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
-                        i < step ? 'bg-brand-600 text-white' : i === step ? 'border-2 border-brand-600 text-brand-700' : 'border border-ink-300 text-ink-400'
-                      }`}>
-                        {i < step ? <FontAwesomeIcon icon={faCheck} className="text-[12px]" /> : i + 1}
+            <div className="rounded-xl border border-ink-200/60 bg-white shadow-sm overflow-hidden">
+              <div className="bg-gradient-to-r from-brand-50/50 to-ink-50/30 px-6 py-4 border-b border-ink-100">
+                <div className="flex items-center gap-0">
+                  {STEPS.map((s, i) => (
+                    <div key={s.key} className="flex items-center">
+                      <div className={`flex items-center gap-2 ${i <= step ? 'text-brand-700' : 'text-ink-300'}`}>
+                        <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
+                          i < step ? 'bg-brand-600 text-white shadow-sm' : i === step ? 'border-2 border-brand-600 text-brand-700 bg-white' : 'border border-ink-300 text-ink-400 bg-white'
+                        }`}>
+                          {i < step ? <FontAwesomeIcon icon={faCheck} className="text-[12px]" /> : i + 1}
+                        </div>
+                        <span className="text-xs font-medium hidden sm:inline">{s.label}</span>
                       </div>
-                      <span className="text-xs font-medium hidden sm:inline">{s.label}</span>
+                      {i < STEPS.length - 1 && <div className={`w-6 md:w-12 h-px mx-2 ${i < step ? 'bg-brand-300' : 'bg-ink-200'}`} />}
                     </div>
-                    {i < STEPS.length - 1 && <div className={`w-6 md:w-10 h-px mx-2 ${i < step ? 'bg-brand-300' : 'bg-ink-200'}`} />}
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
+              <div className="p-6">
 
               {renderStep()}
 
@@ -243,10 +401,61 @@ export default function ScreeningPage() {
                       {trans.screening.next} <FontAwesomeIcon icon={faChevronRight} className="text-[14px]" />
                     </Button>
                   ) : (
-                    <Button onClick={() => { setShowForm(false); resetForm(); }} variant="success" size="sm">
+                    <Button onClick={() => { handleSubmitAssessment(); setShowForm(false); }} variant="success" size="sm">
                       <FontAwesomeIcon icon={faCheck} className="text-[14px]" /> {trans.screening.submitAssessment}
                     </Button>
                   )}
+                </div>
+              </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showSuccess && submittedScreening && (
+          <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
+            className="rounded-2xl border border-forest-200/60 bg-gradient-to-r from-forest-50/80 to-white overflow-hidden shadow-sm">
+            <div className="p-6 md:p-8">
+              <div className="flex items-start gap-4">
+                <FontAwesomeIcon icon={faCheck} className="text-[20px] text-forest-600 shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-base font-extrabold text-ink-900">Assessment Saved Successfully</h3>
+                  <p className="text-xs text-ink-500 mt-1">
+                    Screening {submittedScreening.id} · Risk Level: <Badge color={submittedScreening.riskLevel === 'critical' ? 'rose' : submittedScreening.riskLevel === 'high' ? 'warm' : submittedScreening.riskLevel === 'medium' ? 'blue' : 'forest'}>{submittedScreening.riskLevel}</Badge>
+                  </p>
+
+                  {matchedSupporter && (
+                    <div className="mt-5 p-4 rounded-xl bg-white border border-forest-200/60">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-forest-700 mb-3">
+                        <FontAwesomeIcon icon={faUserCheck} className="text-[14px]" />
+                        Assigned Supporter
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white text-sm font-bold shrink-0">
+                          {matchedSupporter.name.split(' ').map(w => w[0]).slice(0, 2).join('')}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-bold text-ink-800">{matchedSupporter.name}</p>
+                          <p className="text-xs text-brand-600 font-medium">{matchedSupporter.role}</p>
+                          <div className="flex flex-wrap items-center gap-3 mt-2 text-[11px] text-ink-500">
+                            <span className="flex items-center gap-1"><FontAwesomeIcon icon={faLocationDot} className="text-[10px]" /> {matchedSupporter.contact}</span>
+                            <span className="flex items-center gap-1"><FontAwesomeIcon icon={faEnvelope} className="text-[10px]" /> {matchedSupporter.email}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex items-center gap-3 mt-5">
+                    <Button onClick={() => { setShowSuccess(false); resetForm(); }} variant="primary" size="sm">
+                      <FontAwesomeIcon icon={faPlus} className="text-[11px]" /> New Assessment
+                    </Button>
+                    <Button onClick={() => { setShowSuccess(false); resetForm(); }} variant="ghost" size="sm">
+                      Close
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -254,38 +463,38 @@ export default function ScreeningPage() {
         )}
       </AnimatePresence>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 p-3 rounded-xl border border-ink-200/60 bg-white shadow-sm">
         {(['all', 'critical', 'high', 'medium', 'low'] as const).map(r => (
           <Button key={r} onClick={() => setRiskFilter(r)}
-            variant={riskFilter === r ? 'primary' : 'secondary'} size="sm">
+            variant={riskFilter === r ? 'primary' : 'secondary'} size="sm"
+            className={riskFilter !== r ? '!border-ink-200/60' : ''}>
             {r === 'all' ? trans.screening.allRiskLevels : r === 'critical' ? trans.screening.critical : r === 'high' ? trans.screening.highRisk : r === 'medium' ? trans.screening.medium : trans.screening.low}
           </Button>
         ))}
       </div>
 
-      <div className="rounded-xl border border-ink-200/60 overflow-hidden bg-white">
+      <div className="rounded-xl border border-ink-200/60 overflow-hidden bg-white shadow-sm">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full text-sm table-modern">
             <thead>
-              <tr className="bg-ink-50/50 border-b border-ink-100">
-                {[trans.screening.beneficiary, 'PHQ-9', 'GAD-7', 'PCL-5', trans.screening.total, trans.screening.riskLevel, trans.screening.recommendation].map(h => (
-                  <th key={h} className="text-left text-[10px] font-semibold text-ink-500 uppercase tracking-[.04em] px-5 py-4 whitespace-nowrap">{h}</th>
+              <tr>
+                {[trans.screening.beneficiary, 'PHQ-9', 'GAD-7', 'PCL-5', trans.screening.total, trans.screening.riskLevel, trans.screening.recommendation, ''].map(h => (
+                  <th key={h}>{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-ink-100/60">
+            <tbody className="divide-y divide-ink-100/50">
               {filtered.map((s, i) => (
                 <motion.tr key={s.id}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: Math.min(i * 0.02, 0.2) }}
-                  className="hover:bg-brand-50/20 transition-colors"
                 >
-                  <td className="px-5 py-4 font-medium text-ink-800 whitespace-nowrap">{s.beneficiaryName}</td>
-                  <td className="px-5 py-4 font-mono text-xs text-ink-600 whitespace-nowrap">{s.phq9Score}/27</td>
-                  <td className="px-5 py-4 font-mono text-xs text-ink-600 whitespace-nowrap">{s.gad7Score}/21</td>
-                  <td className="px-5 py-4 font-mono text-xs text-ink-600 whitespace-nowrap">{s.pcl5Score}/80</td>
-                  <td className="px-5 py-4 whitespace-nowrap">
+                  <td className="font-medium text-ink-800 whitespace-nowrap">{s.beneficiaryName}</td>
+                  <td className="font-mono text-xs text-ink-600 whitespace-nowrap">{s.phq9Score}/27</td>
+                  <td className="font-mono text-xs text-ink-600 whitespace-nowrap">{s.gad7Score}/21</td>
+                  <td className="font-mono text-xs text-ink-600 whitespace-nowrap">{s.pcl5Score}/80</td>
+                  <td className="whitespace-nowrap">
                     <div className="flex items-center gap-2">
                       <div className="w-16 h-1.5 rounded-full bg-ink-100/70 overflow-hidden">
                         <div className={`h-full rounded-full ${scoreColor(s)}`} style={{ width: `${(totalScore(s) / maxTotal) * 100}%` }} />
@@ -293,21 +502,94 @@ export default function ScreeningPage() {
                       <span className="text-xs font-mono text-ink-600">{totalScore(s)}</span>
                     </div>
                   </td>
-                  <td className="px-5 py-4 whitespace-nowrap">
-                    <Badge color={s.riskLevel === 'critical' ? 'rose' : s.riskLevel === 'high' ? 'warm' : s.riskLevel === 'medium' ? 'warm' : 'brand'}>
+                  <td className="whitespace-nowrap">
+                    <Badge color={s.riskLevel === 'critical' ? 'rose' : s.riskLevel === 'high' ? 'warm' : s.riskLevel === 'medium' ? 'blue' : 'forest'}>
                       {s.riskLevel === 'critical' ? trans.screening.critical : s.riskLevel === 'high' ? trans.screening.highRisk : s.riskLevel === 'medium' ? trans.screening.medium : trans.screening.low}
                     </Badge>
                   </td>
-                  <td className="px-5 py-4 text-xs text-ink-500 max-w-[200px] truncate">{s.recommendation}</td>
+                  <td className="text-xs text-ink-500 max-w-[200px] truncate">{s.recommendation}</td>
+                  <td className="whitespace-nowrap">
+                    <div className="flex items-center gap-1">
+                      <button onClick={() => handleOpenEdit(s)}
+                        className="w-8 h-8 rounded-lg flex items-center justify-center text-ink-300 hover:text-brand-500 hover:bg-brand-50 transition-all">
+                        <FontAwesomeIcon icon={faPenToSquare} className="text-[14px]" />
+                      </button>
+                      <button onClick={() => handleOpenDelete(s.id)}
+                        className="w-8 h-8 rounded-lg flex items-center justify-center text-ink-300 hover:text-rose-500 hover:bg-rose-50 transition-all">
+                        <FontAwesomeIcon icon={faTrashCan} className="text-[14px]" />
+                      </button>
+                    </div>
+                  </td>
                 </motion.tr>
               ))}
             </tbody>
           </table>
-          {filtered.length === 0 && (
-            <div className="text-center py-12 text-ink-300 text-sm">{trans.screening.noResults}</div>
+            {filtered.length === 0 && (
+            <div className="text-center py-16">
+              <FontAwesomeIcon icon={faFilter} className="text-[22px] text-ink-300 mx-auto mb-4" />
+              <p className="text-sm font-semibold text-ink-500">{trans.screening.noResults}</p>
+              <p className="text-xs text-ink-300 mt-1">No screenings match your selected risk filter</p>
+            </div>
           )}
         </div>
       </div>
+
+      <Modal open={showEditModal} onClose={() => { setShowEditModal(false); setEditingScreening(null); }} title={`Edit Screening - ${editingScreening?.id ?? ''}`} size="lg">
+        <div className="space-y-5">
+          <div>
+            <label className="block text-xs font-semibold text-ink-400 mb-1.5">Beneficiary Name</label>
+            <input value={editForm.beneficiaryName}
+              onChange={e => setEditForm(f => ({ ...f, beneficiaryName: e.target.value }))}
+              className="w-full h-10 px-4 rounded-lg text-sm border border-ink-200/70 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/30 outline-none placeholder:text-ink-300 bg-white" />
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs font-semibold text-ink-400 mb-1.5">PHQ-9 Score (0-27)</label>
+              <input type="number" min={0} max={27} value={editForm.phq9Score}
+                onChange={e => setEditForm(f => ({ ...f, phq9Score: Math.min(27, Math.max(0, Number(e.target.value) || 0)) }))}
+                className="w-full h-10 px-4 rounded-lg text-sm border border-ink-200/70 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/30 outline-none bg-white" />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-ink-400 mb-1.5">GAD-7 Score (0-21)</label>
+              <input type="number" min={0} max={21} value={editForm.gad7Score}
+                onChange={e => setEditForm(f => ({ ...f, gad7Score: Math.min(21, Math.max(0, Number(e.target.value) || 0)) }))}
+                className="w-full h-10 px-4 rounded-lg text-sm border border-ink-200/70 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/30 outline-none bg-white" />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-ink-400 mb-1.5">PCL-5 Score (0-80)</label>
+              <input type="number" min={0} max={80} value={editForm.pcl5Score}
+                onChange={e => setEditForm(f => ({ ...f, pcl5Score: Math.min(80, Math.max(0, Number(e.target.value) || 0)) }))}
+                className="w-full h-10 px-4 rounded-lg text-sm border border-ink-200/70 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/30 outline-none bg-white" />
+            </div>
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-ink-400 mb-1.5">Recommendation</label>
+            <textarea value={editForm.recommendation} rows={3}
+              onChange={e => setEditForm(f => ({ ...f, recommendation: e.target.value }))}
+              className="w-full px-4 py-2.5 rounded-lg text-sm border border-ink-200/70 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/30 outline-none placeholder:text-ink-300 bg-white resize-none" />
+          </div>
+          <div className="flex items-center gap-3 pt-2">
+            <span className="text-xs font-semibold text-ink-400">Risk Level:</span>
+            <Badge color={editRiskLevel === 'critical' ? 'rose' : editRiskLevel === 'high' ? 'warm' : editRiskLevel === 'medium' ? 'blue' : 'forest'}>{editRiskLevel}</Badge>
+          </div>
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-ink-100">
+            <Button onClick={() => { setShowEditModal(false); setEditingScreening(null); }} variant="ghost" size="sm">Cancel</Button>
+            <Button onClick={handleSaveEdit} variant="primary" size="sm">
+              <FontAwesomeIcon icon={faCheck} className="text-[14px]" /> Save Changes
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      <ConfirmDialog
+        open={showDeleteConfirm}
+        onClose={() => { setShowDeleteConfirm(false); setDeletingId(null); }}
+        onConfirm={handleConfirmDelete}
+        title="Delete Screening"
+        message={`Are you sure you want to delete this screening? This action cannot be undone.`}
+        confirmLabel="Delete"
+        destructive
+      />
     </div>
   );
 }

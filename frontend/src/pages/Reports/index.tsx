@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartBar, faDownload, faChartLine } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -10,11 +11,10 @@ import { Button } from '../../components/shared/Button';
 import { service } from '../../services/mockData';
 import { useI18nStore } from '../../i18n';
 
-const TEAL = '#2b8b9c';
+const TEAL = '#007A64';
 const SAGE = '#22c55e';
-const WARN = '#f07a4b';
-const ROSE = '#e84c5e';
-const UMBRA = '#ccc7bb';
+const WARN = '#F97316';
+const ROSE = '#EF4444';
 
 const monthly = [
   { month: 'Jan', screenings: 12, referrals: 3, completed: 2 },
@@ -82,13 +82,15 @@ export default function ReportsPage() {
   const riskPie = RISK_PIE_RAW.map(r => ({ ...r, name: r.name === 'Low' ? trans.screening.low : r.name === 'Medium' ? trans.screening.medium : r.name === 'High' ? trans.screening.highRisk : trans.screening.critical }));
 
   return (
-    <div className="space-y-6 md:space-y-8">
-      <div className="flex items-end justify-between gap-4">
+    <div className="space-y-8 md:space-y-10">
+      <div className="flex items-end justify-between gap-6">
         <div className="min-w-0">
-          <h1 className="text-2xl md:text-3xl font-bold text-ink-900 tracking-[-.02em]">{trans.reports.title}</h1>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-[-.02em]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-400">{trans.reports.title}</span>
+          </h1>
           <p className="text-sm text-ink-400 mt-2">{trans.reports.subtitle}</p>
         </div>
-        <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
+        <div className="flex items-center gap-2 md:gap-3 shrink-0">
           {(['month', 'quarter', 'year'] as const).map((t) => (
             <Button key={t} onClick={() => setRange(t)}
               variant={range === t ? 'primary' : 'secondary'} size="xs">
@@ -101,14 +103,20 @@ export default function ReportsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-5">
-        {Object.entries(stats).map(([k, s]) => (
-          <div key={k} className="relative rounded-xl bg-white border border-ink-200/60 p-5 md:p-6 transition-all hover:-translate-y-[2px] hover:shadow-md">
-            <p className="text-[10px] font-bold text-ink-400 uppercase tracking-[.04em]">{k.replace(/([A-Z])/g, ' $1').trim()}</p>
-            <p className="text-xl font-bold text-ink-900 mt-1.5">{s.value}</p>
-          </div>
-        ))}
-      </div>
+      <motion.div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-5 md:gap-6"
+        initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.03 } } }}>
+        {Object.keys(stats).map((k) => {
+          const s = stats[k];
+          return (
+            <motion.div key={k}
+              variants={{ hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0 } }}
+              className="relative rounded-xl bg-white border border-ink-200/60 p-5 md:p-6 transition-all hover:-translate-y-[2px] hover:shadow-md hover:border-brand-200/50 group overflow-hidden">
+              <p className="text-[10px] font-bold text-ink-400 uppercase tracking-[.04em] mb-1">{k.replace(/([A-Z])/g, ' $1').trim()}</p>
+              <p className="text-xl font-bold text-ink-900 mt-1.5">{s.value}</p>
+            </motion.div>
+          );
+        })}
+      </motion.div>
 
       <div className="grid lg:grid-cols-3 gap-5 md:gap-6">
         <Card className="lg:col-span-2">
@@ -118,10 +126,10 @@ export default function ReportsPage() {
           </h2>
           <ResponsiveContainer width="100%" height={290}>
             <BarChart data={monthly} barCategoryGap="20%">
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0eeea" vertical={false} />
-              <XAxis dataKey="month" tick={{ fontSize: 11.5 }} stroke={UMBRA} />
-              <YAxis tick={{ fontSize: 11 }} stroke={UMBRA} />
-              <Tooltip contentStyle={{ fontSize: 12, borderRadius: 12, border: '1px solid #e5e7eb', background: '#fff' }} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+              <XAxis dataKey="month" tick={{ fontSize: 11.5 }} stroke="#cbd5e1" />
+              <YAxis tick={{ fontSize: 11 }} stroke="#cbd5e1" />
+              <Tooltip contentStyle={{ fontSize: 12, borderRadius: 12, border: '1px solid #e2e8f0', background: '#fff' }} />
               <Legend />
               <Bar dataKey="screenings" name="Screenings" fill={TEAL} radius={[4, 4, 0, 0]} />
               <Bar dataKey="referrals"  name={trans.referrals.title} fill={WARN} radius={[4, 4, 0, 0]} />
@@ -138,7 +146,7 @@ export default function ReportsPage() {
                 label={({ name, value }) => `${name} ${value}`}>
                 {riskPie.map((_, i) => <Cell key={i} fill={[SAGE, WARN, ROSE, '#7c3aed'][i]} />)}
               </Pie>
-              <Tooltip contentStyle={{ fontSize: 12, borderRadius: 12, border: '1px solid #e5e7eb', background: '#fff' }} />
+              <Tooltip contentStyle={{ fontSize: 12, borderRadius: 12, border: '1px solid #e2e8f0', background: '#fff' }} />
               <Legend />
             </PieChart>
           </ResponsiveContainer>
@@ -153,10 +161,10 @@ export default function ReportsPage() {
           </h2>
           <ResponsiveContainer width="100%" height={270}>
             <LineChart data={recovery}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0eeea" vertical={false} />
-              <XAxis dataKey="month" tick={{ fontSize: 11.5 }} stroke={UMBRA} />
-              <YAxis tick={{ fontSize: 11 }} stroke={UMBRA} />
-              <Tooltip contentStyle={{ fontSize: 12, borderRadius: 12, border: '1px solid #e5e7eb', background: '#fff' }} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+              <XAxis dataKey="month" tick={{ fontSize: 11.5 }} stroke="#cbd5e1" />
+              <YAxis tick={{ fontSize: 11 }} stroke="#cbd5e1" />
+              <Tooltip contentStyle={{ fontSize: 12, borderRadius: 12, border: '1px solid #e2e8f0', background: '#fff' }} />
               <Legend />
               <Line type="monotone" dataKey="recovered" name="Recovered" stroke={SAGE} strokeWidth={2.5} dot={{ r: 3.5, fill: SAGE }} />
               <Line type="monotone" dataKey="relapsed"   name="Relapsed"   stroke={ROSE}  strokeWidth={2.5} dot={{ r: 3.5, fill: ROSE }} />
@@ -168,10 +176,10 @@ export default function ReportsPage() {
           <h2 className="text-sm font-bold text-ink-800 mb-5">Beneficiaries by District</h2>
           <ResponsiveContainer width="100%" height={270}>
             <BarChart data={byDistrict} layout="vertical" barCategoryGap="18%">
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0eeea" horizontal={true} vertical={false} />
-              <XAxis type="number" tick={{ fontSize: 11 }} stroke={UMBRA} />
-              <YAxis type="category" dataKey="name" tick={{ fontSize: 10 }} stroke={UMBRA} width={70} />
-              <Tooltip contentStyle={{ fontSize: 12, borderRadius: 12, border: '1px solid #e5e7eb', background: '#fff' }} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" horizontal={true} vertical={false} />
+              <XAxis type="number" tick={{ fontSize: 11 }} stroke="#cbd5e1" />
+              <YAxis type="category" dataKey="name" tick={{ fontSize: 10 }} stroke="#cbd5e1" width={70} />
+              <Tooltip contentStyle={{ fontSize: 12, borderRadius: 12, border: '1px solid #e2e8f0', background: '#fff' }} />
               <Bar dataKey="value" name={trans.beneficiaries.title} fill={TEAL} radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
@@ -184,29 +192,29 @@ export default function ReportsPage() {
           <ResponsiveContainer width="100%" height={230}>
             <PieChart>
               <Pie data={[
-                  { name: trans.sociotherapy.phases.safety, value: 12, fill: '#2b8b9c' },
-                  { name: trans.sociotherapy.phases.trust, value: 18, fill: '#48b4c4' },
+                  { name: trans.sociotherapy.phases.safety, value: 12, fill: '#007A64' },
+                  { name: trans.sociotherapy.phases.trust, value: 18, fill: '#33a38f' },
                   { name: trans.sociotherapy.phases.care, value: 22, fill: '#22c55e' },
-                  { name: trans.sociotherapy.phases.respect, value: 15, fill: '#f07a4b' },
-                  { name: trans.sociotherapy.phases.newOrientation, value: 9, fill: '#e84c5e' },
-                  { name: trans.sociotherapy.phases.memoryReconciliation, value: 14, fill: '#1d5a67' },
+                  { name: trans.sociotherapy.phases.respect, value: 15, fill: '#F97316' },
+                  { name: trans.sociotherapy.phases.newOrientation, value: 9, fill: '#EF4444' },
+                  { name: trans.sociotherapy.phases.memoryReconciliation, value: 14, fill: '#00493c' },
                 ]} cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={2} dataKey="value"
                 label={({ name, value }) => `${name} (${value})`}>
-                {['#2b8b9c', '#48b4c4', '#22c55e', '#f07a4b', '#e84c5e', '#1d5a67'].map((fill, i) => (
+                {['#007A64', '#33a38f', '#22c55e', '#F97316', '#EF4444', '#00493c'].map((fill, i) => (
                   <Cell key={i} fill={fill} />
                 ))}
               </Pie>
-              <Tooltip contentStyle={{ fontSize: 12, borderRadius: 12, border: '1px solid #e5e7eb', background: '#fff' }} />
+              <Tooltip contentStyle={{ fontSize: 12, borderRadius: 12, border: '1px solid #e2e8f0', background: '#fff' }} />
             </PieChart>
           </ResponsiveContainer>
           <div className="space-y-3">
             {[
-              { name: trans.sociotherapy.phases.safety, value: 12, fill: '#2b8b9c' },
-              { name: trans.sociotherapy.phases.trust, value: 18, fill: '#48b4c4' },
+              { name: trans.sociotherapy.phases.safety, value: 12, fill: '#007A64' },
+              { name: trans.sociotherapy.phases.trust, value: 18, fill: '#33a38f' },
               { name: trans.sociotherapy.phases.care, value: 22, fill: '#22c55e' },
-              { name: trans.sociotherapy.phases.respect, value: 15, fill: '#f07a4b' },
-              { name: trans.sociotherapy.phases.newOrientation, value: 9, fill: '#e84c5e' },
-              { name: trans.sociotherapy.phases.memoryReconciliation, value: 14, fill: '#1d5a67' },
+              { name: trans.sociotherapy.phases.respect, value: 15, fill: '#F97316' },
+              { name: trans.sociotherapy.phases.newOrientation, value: 9, fill: '#EF4444' },
+              { name: trans.sociotherapy.phases.memoryReconciliation, value: 14, fill: '#00493c' },
             ].map(p => (
               <div key={p.name} className="flex items-center gap-3">
                 <span className="w-3.5 h-3.5 rounded-sm shrink-0" style={{ background: p.fill }} />
