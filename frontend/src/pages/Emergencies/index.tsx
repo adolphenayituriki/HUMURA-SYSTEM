@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTriangleExclamation, faClock, faLocationDot, faUserCheck, faTruck, faCheck, faBell, faPlus, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faTriangleExclamation, faClock, faLocationDot, faUserCheck, faTruck, faCheck, faBell, faPlus, faPenToSquare, faTrashCan, faXmark, faStethoscope, faUser, faNoteSticky, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { service } from '../../services/mockData';
 import { useToastStore } from '../../store/toastStore';
 import { Card } from '../../components/shared/Card';
@@ -47,10 +47,16 @@ export default function EmergenciesPage() {
   const [editing, setEditing] = useState<EmergencyAlert | null>(null);
   const [form, setForm] = useState<FormData>(emptyForm());
   const [deleteTarget, setDeleteTarget] = useState<EmergencyAlert | null>(null);
+  const [selectedAlert, setSelectedAlert] = useState<EmergencyAlert | null>(null);
+  const [followUpText, setFollowUpText] = useState('');
 
   const updateStatus = (id: string, status: EmergencyAlert['status']) => {
     service.updateEmergencyStatus(id, status);
-    setAlerts(prev => prev.map(a => a.id === id ? { ...a, status } : a));
+    setAlerts(prev => prev.map(a => a.id === id ? { ...a, status, resolvedAt: status === 'resolved' ? new Date().toISOString().split('T')[0] : a.resolvedAt } : a));
+    if (selectedAlert?.id === id) {
+      setSelectedAlert(prev => prev ? { ...prev, status, resolvedAt: status === 'resolved' ? new Date().toISOString().split('T')[0] : prev.resolvedAt } : null);
+    }
+    addToast(`Emergency ${status === 'resolved' ? 'resolved' : status === 'dispatched' ? 'dispatched' : 'dismissed'} successfully`);
   };
 
   const openAdd = () => {
@@ -99,7 +105,25 @@ export default function EmergenciesPage() {
     service.deleteEmergency(deleteTarget.id);
     addToast('Emergency deleted successfully');
     setAlerts(prev => prev.filter(a => a.id !== deleteTarget.id));
+    if (selectedAlert?.id === deleteTarget.id) setSelectedAlert(null);
     setDeleteTarget(null);
+  };
+
+  const openDetail = (a: EmergencyAlert) => {
+    setSelectedAlert(a);
+    setFollowUpText('');
+  };
+
+  const addFollowUp = () => {
+    if (!followUpText.trim() || !selectedAlert) return;
+    const notes = selectedAlert.followUpNotes
+      ? selectedAlert.followUpNotes + '\n---\n' + `[${new Date().toLocaleDateString()}] ${followUpText.trim()}`
+      : `[${new Date().toLocaleDateString()}] ${followUpText.trim()}`;
+    service.updateEmergency(selectedAlert.id, { followUpNotes: notes });
+    setAlerts(prev => prev.map(a => a.id === selectedAlert.id ? { ...a, followUpNotes: notes } : a));
+    setSelectedAlert(prev => prev ? { ...prev, followUpNotes: notes } : null);
+    setFollowUpText('');
+    addToast('Follow-up note added');
   };
 
   const active = alerts.filter(a => a.status === 'new' || a.status === 'dispatched');
@@ -160,33 +184,35 @@ export default function EmergenciesPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: Math.min(i * 0.03, 0.35) }}
           >
-            <Card className={`${a.status === 'new' ? 'border-l-[3px] !border-l-rose-400 !border-rose-200/40' : ''} group overflow-hidden`}>
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <FontAwesomeIcon icon={faTriangleExclamation} className={`text-[14px] shrink-0 ${a.riskLevel === 'critical' ? 'text-rose-500' : 'text-warm-500'}`} />
-                    <p className="text-sm font-bold text-ink-800">{a.type}</p>
-                    <Badge color={a.riskLevel === 'critical' ? 'rose' : a.riskLevel === 'high' ? 'warm' : a.riskLevel === 'medium' ? 'blue' : 'forest'}>{a.riskLevel === 'critical' ? trans.emergencies.critical : a.riskLevel === 'high' ? trans.screening.highRisk : a.riskLevel === 'medium' ? trans.screening.medium : trans.screening.low}</Badge>
+            <Card className={`${a.status === 'new' ? 'border-l-[3px] !border-l-rose-400 !border-rose-200/40' : ''} group overflow-hidden cursor-pointer hover:shadow-md transition-shadow`}>
+              <div onClick={() => openDetail(a)}>
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <FontAwesomeIcon icon={faTriangleExclamation} className={`text-[14px] shrink-0 ${a.riskLevel === 'critical' ? 'text-rose-500' : 'text-warm-500'}`} />
+                      <p className="text-sm font-bold text-ink-800 truncate">{a.type}</p>
+                      <Badge color={a.riskLevel === 'critical' ? 'rose' : a.riskLevel === 'high' ? 'warm' : a.riskLevel === 'medium' ? 'blue' : 'forest'}>{a.riskLevel === 'critical' ? trans.emergencies.critical : a.riskLevel === 'high' ? trans.screening.highRisk : a.riskLevel === 'medium' ? trans.screening.medium : trans.screening.low}</Badge>
+                    </div>
+                    <p className="text-xs text-ink-400 truncate">{a.beneficiaryName} · {trans.emergencies.triggeredBy} {a.triggeredBy}</p>
                   </div>
-                  <p className="text-xs text-ink-400 ml-9">{a.beneficiaryName} · {trans.emergencies.triggeredBy} {a.triggeredBy}</p>
+                  <div className="flex items-center gap-2 shrink-0" onClick={e => e.stopPropagation()}>
+                    <Badge color={a.status === 'resolved' ? 'forest' : a.status === 'dispatched' ? 'brand' : a.status === 'false_alarm' ? 'slate' : 'rose'}>{a.status === 'resolved' ? trans.emergencies.resolved : a.status === 'dispatched' ? 'Dispatched' : a.status === 'false_alarm' ? 'False Alarm' : 'New'}</Badge>
+                    <button onClick={() => openEdit(a)}
+                      className="w-7 h-7 rounded-lg flex items-center justify-center text-ink-300 hover:text-brand-600 hover:bg-brand-50 transition-all opacity-0 group-hover:opacity-100">
+                      <FontAwesomeIcon icon={faPenToSquare} className="text-[13px]" />
+                    </button>
+                    <button onClick={() => setDeleteTarget(a)}
+                      className="w-7 h-7 rounded-lg flex items-center justify-center text-ink-300 hover:text-rose-600 hover:bg-rose-50 transition-all opacity-0 group-hover:opacity-100">
+                      <FontAwesomeIcon icon={faTrashCan} className="text-[13px]" />
+                    </button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Badge color={a.status === 'resolved' ? 'forest' : a.status === 'dispatched' ? 'brand' : a.status === 'false_alarm' ? 'slate' : 'rose'}>{a.status === 'resolved' ? trans.emergencies.resolved : a.status === 'dispatched' ? 'Dispatched' : a.status === 'false_alarm' ? 'False Alarm' : 'New'}</Badge>
-                  <button onClick={() => openEdit(a)}
-                    className="w-7 h-7 rounded-lg flex items-center justify-center text-ink-300 hover:text-brand-600 hover:bg-brand-50 transition-all opacity-0 group-hover:opacity-100">
-                    <FontAwesomeIcon icon={faPenToSquare} className="text-[13px]" />
-                  </button>
-                  <button onClick={() => setDeleteTarget(a)}
-                    className="w-7 h-7 rounded-lg flex items-center justify-center text-ink-300 hover:text-rose-600 hover:bg-rose-50 transition-all opacity-0 group-hover:opacity-100">
-                    <FontAwesomeIcon icon={faTrashCan} className="text-[13px]" />
-                  </button>
-                </div>
-              </div>
 
-              <div className="flex flex-wrap items-center gap-4 text-xs text-ink-400 mb-3 ml-1">
-                <span className="flex items-center gap-1.5"><FontAwesomeIcon icon={faLocationDot} className="text-[12px] text-ink-300" /> {a.location}</span>
-                <span className="flex items-center gap-1.5"><FontAwesomeIcon icon={faClock} className="text-[12px] text-ink-300" /> {a.createdAt}</span>
-                <span className="flex items-center gap-1.5"><FontAwesomeIcon icon={faUserCheck} className="text-[12px] text-ink-300" /> {a.responseTeam}</span>
+                <div className="flex flex-wrap items-center gap-4 text-xs text-ink-400 mb-3">
+                  <span className="flex items-center gap-1.5"><FontAwesomeIcon icon={faLocationDot} className="text-[12px] text-ink-300" /> {a.location}</span>
+                  <span className="flex items-center gap-1.5"><FontAwesomeIcon icon={faClock} className="text-[12px] text-ink-300" /> {a.createdAt}</span>
+                  <span className="flex items-center gap-1.5"><FontAwesomeIcon icon={faUserCheck} className="text-[12px] text-ink-300" /> {a.responseTeam}</span>
+                </div>
               </div>
 
               <div className="flex items-center gap-2 pt-3 border-t border-ink-100">
@@ -211,6 +237,167 @@ export default function EmergenciesPage() {
           </motion.div>
         ))}
       </div>
+
+      <AnimatePresence>
+        {selectedAlert && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedAlert(null)}
+            className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              onClick={e => e.stopPropagation()}
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-auto max-h-[90vh] overflow-y-auto"
+            >
+              <div className={`px-6 pt-6 pb-4 ${selectedAlert.status === 'new' ? 'bg-gradient-to-r from-rose-50 to-rose-50/30' : selectedAlert.status === 'dispatched' ? 'bg-gradient-to-r from-brand-50 to-brand-50/30' : selectedAlert.status === 'resolved' ? 'bg-gradient-to-r from-forest-50 to-forest-50/30' : 'bg-gradient-to-r from-ink-50 to-ink-50/30'}`}>
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${selectedAlert.riskLevel === 'critical' ? 'bg-rose-100 text-rose-600' : 'bg-warm-100 text-warm-600'}`}>
+                      <FontAwesomeIcon icon={faTriangleExclamation} className="text-[18px]" />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-bold text-ink-900">{selectedAlert.type}</h3>
+                      <p className="text-xs text-ink-500">ID: {selectedAlert.id}</p>
+                    </div>
+                  </div>
+                  <button onClick={() => setSelectedAlert(null)}
+                    className="w-8 h-8 rounded-xl bg-white/80 flex items-center justify-center text-ink-400 hover:text-ink-700 hover:bg-white transition-colors shadow-sm">
+                    <FontAwesomeIcon icon={faXmark} className="text-[16px]" />
+                  </button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Badge color={selectedAlert.riskLevel === 'critical' ? 'rose' : selectedAlert.riskLevel === 'high' ? 'warm' : selectedAlert.riskLevel === 'medium' ? 'blue' : 'forest'}>
+                    {selectedAlert.riskLevel === 'critical' ? trans.emergencies.critical : selectedAlert.riskLevel === 'high' ? trans.screening.highRisk : selectedAlert.riskLevel === 'medium' ? trans.screening.medium : trans.screening.low} Risk
+                  </Badge>
+                  <Badge color={selectedAlert.status === 'resolved' ? 'forest' : selectedAlert.status === 'dispatched' ? 'brand' : selectedAlert.status === 'false_alarm' ? 'slate' : 'rose'}>
+                    {selectedAlert.status === 'resolved' ? trans.emergencies.resolved : selectedAlert.status === 'dispatched' ? 'Dispatched' : selectedAlert.status === 'false_alarm' ? 'False Alarm' : 'New'}
+                  </Badge>
+                </div>
+              </div>
+
+              <div className="px-6 py-5 space-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-ink-50/50">
+                    <span className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+                      <FontAwesomeIcon icon={faUser} className="text-[13px]" />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-bold text-ink-400 uppercase tracking-[.06em]">Beneficiary</p>
+                      <p className="text-sm font-semibold text-ink-800 truncate">{selectedAlert.beneficiaryName}</p>
+                      <p className="text-[10px] text-ink-400">ID: {selectedAlert.beneficiaryId}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-ink-50/50">
+                    <span className="w-8 h-8 rounded-lg bg-warm-50 text-warm-600 flex items-center justify-center shrink-0">
+                      <FontAwesomeIcon icon={faStethoscope} className="text-[13px]" />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-bold text-ink-400 uppercase tracking-[.06em]">Triggered By</p>
+                      <p className="text-sm font-semibold text-ink-800 truncate">{selectedAlert.triggeredBy}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-ink-50/50">
+                    <span className="w-8 h-8 rounded-lg bg-forest-50 text-forest-600 flex items-center justify-center shrink-0">
+                      <FontAwesomeIcon icon={faLocationDot} className="text-[13px]" />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-bold text-ink-400 uppercase tracking-[.06em]">Location</p>
+                      <p className="text-sm font-semibold text-ink-800">{selectedAlert.location}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-ink-50/50">
+                    <span className="w-8 h-8 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+                      <FontAwesomeIcon icon={faUserCheck} className="text-[13px]" />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-bold text-ink-400 uppercase tracking-[.06em]">Response Team</p>
+                      <p className="text-sm font-semibold text-ink-800">{selectedAlert.responseTeam}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-ink-50/50">
+                    <span className="w-8 h-8 rounded-lg bg-ink-50 text-ink-500 flex items-center justify-center shrink-0">
+                      <FontAwesomeIcon icon={faClock} className="text-[13px]" />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-bold text-ink-400 uppercase tracking-[.06em]">Created</p>
+                      <p className="text-sm font-semibold text-ink-800">{selectedAlert.createdAt}</p>
+                    </div>
+                  </div>
+                  {selectedAlert.resolvedAt && (
+                    <div className="flex items-center gap-3 p-3 rounded-xl bg-ink-50/50">
+                      <span className="w-8 h-8 rounded-lg bg-forest-50 text-forest-600 flex items-center justify-center shrink-0">
+                        <FontAwesomeIcon icon={faCheck} className="text-[13px]" />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-bold text-ink-400 uppercase tracking-[.06em]">Resolved</p>
+                        <p className="text-sm font-semibold text-ink-800">{selectedAlert.resolvedAt}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {selectedAlert.status !== 'resolved' && selectedAlert.status !== 'false_alarm' && (
+                  <div className="p-4 rounded-xl border border-ink-100/80 bg-ink-50/30">
+                    <p className="text-xs font-bold text-ink-600 mb-2">Quick Actions</p>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedAlert.status === 'new' && (
+                        <>
+                          <Button onClick={() => { updateStatus(selectedAlert.id, 'dispatched'); }} variant="brand-outline" size="xs">
+                            <FontAwesomeIcon icon={faTruck} className="text-[11px]" /> Dispatch Team
+                          </Button>
+                          <Button onClick={() => { updateStatus(selectedAlert.id, 'resolved'); }} variant="success" size="xs">
+                            <FontAwesomeIcon icon={faCheck} className="text-[11px]" /> Resolve
+                          </Button>
+                          <Button onClick={() => { updateStatus(selectedAlert.id, 'false_alarm'); }} variant="neutral" size="xs">False Alarm</Button>
+                        </>
+                      )}
+                      {selectedAlert.status === 'dispatched' && (
+                        <Button onClick={() => { updateStatus(selectedAlert.id, 'resolved'); }} variant="success" size="xs">
+                          <FontAwesomeIcon icon={faCheck} className="text-[11px]" /> Mark Resolved
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                <div className="p-4 rounded-xl border border-ink-100/80">
+                  <div className="flex items-center gap-2 mb-3">
+                    <FontAwesomeIcon icon={faNoteSticky} className="text-[14px] text-ink-400" />
+                    <p className="text-xs font-bold text-ink-600 uppercase tracking-[.06em]">Follow-up Notes</p>
+                  </div>
+                  {selectedAlert.followUpNotes ? (
+                    <div className="mb-3 space-y-2 max-h-32 overflow-y-auto">
+                      {selectedAlert.followUpNotes.split('\n---\n').map((note, i) => (
+                        <div key={i} className="text-xs text-ink-600 bg-ink-50/50 rounded-lg p-2.5 leading-relaxed">
+                          {note}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-xs text-ink-400 mb-3 italic">No follow-up notes yet.</p>
+                  )}
+                  <div className="flex gap-2">
+                    <input type="text" value={followUpText} onChange={e => setFollowUpText(e.target.value)}
+                      placeholder="Add a follow-up note..."
+                      className="flex-1 h-9 px-3 rounded-lg border border-ink-200 bg-white text-xs text-ink-800 placeholder-ink-300 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-500/20 transition-all"
+                      onKeyDown={e => { if (e.key === 'Enter') addFollowUp(); }} />
+                    <button onClick={addFollowUp} disabled={!followUpText.trim()}
+                      className="h-9 px-3 rounded-lg bg-brand-500 text-white text-xs font-semibold hover:bg-brand-600 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center gap-1.5">
+                      Add <FontAwesomeIcon icon={faArrowRight} className="text-[10px]" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={editing ? 'Edit Emergency' : 'Add Emergency'} size="lg">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

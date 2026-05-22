@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faChevronLeft, faChevronRight, faCheck, faFilter, faStethoscope, faHeartbeat, faExclamationTriangle, faClipboardList, faUserCheck, faEnvelope, faLocationDot, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faChevronLeft, faChevronRight, faCheck, faFilter, faStethoscope, faHeartbeat, faExclamationTriangle, faClipboardList, faUserCheck, faEnvelope, faLocationDot, faPenToSquare, faTrashCan, faUser } from '@fortawesome/free-solid-svg-icons';
 import { service } from '../../services/mockData';
 import { useToastStore } from '../../store/toastStore';
 import { Badge } from '../../components/shared/Badge';
@@ -24,6 +24,12 @@ export default function ScreeningPage() {
   const { t } = useI18nStore();
   const trans = t();
   const { addToast } = useToastStore();
+  const user = useAuthStore(s => s.user);
+
+  const myScreenings = () =>
+    user?.role === 'community_member'
+      ? service.getScreenings({}).filter(s => s.beneficiaryName === user.fullName)
+      : service.getScreenings({});
 
   const STEPS = [
     { key: 'info', label: trans.screening.stepInfo },
@@ -33,7 +39,7 @@ export default function ScreeningPage() {
     { key: 'review', label: trans.screening.stepReview },
   ];
 
-  const [screenings, setScreenings] = useState<ScreeningResult[]>(() => service.getScreenings({}));
+  const [screenings, setScreenings] = useState<ScreeningResult[]>(() => myScreenings());
   const [riskFilter, setRiskFilter] = useState<'all' | 'critical' | 'high' | 'medium' | 'low'>('all');
   const [showForm, setShowForm] = useState(false);
   const [step, setStep] = useState(0);
@@ -62,7 +68,9 @@ export default function ScreeningPage() {
 
   const resetForm = () => {
     setStep(0);
-    setFormData({});
+    setFormData(user?.role === 'community_member'
+      ? { 'Beneficiary Name': user.fullName, 'Screened By': user.fullName }
+      : {});
     setPhq9Answers(Array(9).fill(0));
     setGad7Answers(Array(7).fill(0));
     setPcl5Answers(Array(6).fill(0));
@@ -127,7 +135,7 @@ export default function ScreeningPage() {
       createdAt: new Date().toISOString().split('T')[0],
     };
     service.addScreening(newScreening);
-    setScreenings(service.getScreenings({}));
+    setScreenings(myScreenings());
     addToast('Screening assessment saved successfully');
 
     const supporter = findSupporter(riskLevel, district);
@@ -182,7 +190,7 @@ export default function ScreeningPage() {
       recommendation: editForm.recommendation,
       riskLevel,
     });
-    setScreenings(service.getScreenings({}));
+    setScreenings(myScreenings());
     addToast('Screening updated successfully');
     setShowEditModal(false);
     setEditingScreening(null);
@@ -197,7 +205,7 @@ export default function ScreeningPage() {
     if (!deletingId) return;
     service.deleteScreening(deletingId);
     addToast('Screening deleted successfully');
-    setScreenings(service.getScreenings({}));
+    setScreenings(myScreenings());
     setShowDeleteConfirm(false);
     setDeletingId(null);
   }, [deletingId, addToast, setDeletingId, setShowDeleteConfirm]);
@@ -474,7 +482,7 @@ export default function ScreeningPage() {
       </div>
 
       <div className="rounded-xl border border-ink-200/60 overflow-hidden bg-white shadow-sm">
-        <div className="overflow-x-auto">
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-sm table-modern">
             <thead>
               <tr>
@@ -524,14 +532,69 @@ export default function ScreeningPage() {
               ))}
             </tbody>
           </table>
-            {filtered.length === 0 && (
-            <div className="text-center py-16">
-              <FontAwesomeIcon icon={faFilter} className="text-[22px] text-ink-300 mx-auto mb-4" />
-              <p className="text-sm font-semibold text-ink-500">{trans.screening.noResults}</p>
-              <p className="text-xs text-ink-300 mt-1">No screenings match your selected risk filter</p>
-            </div>
-          )}
         </div>
+        <div className="md:hidden divide-y divide-ink-100">
+          {filtered.map((s) => (
+            <div key={s.id} className="p-4 space-y-3 hover:bg-ink-50/30 transition-colors">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="w-7 h-7 rounded-lg bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+                    <FontAwesomeIcon icon={faUser} className="text-[11px]" />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-sm font-bold text-ink-800 truncate">{s.beneficiaryName}</p>
+                    <p className="text-[10px] text-ink-400 font-mono">{s.id}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <button onClick={() => handleOpenEdit(s)}
+                    className="w-7 h-7 rounded-lg flex items-center justify-center text-ink-300 hover:text-brand-500 hover:bg-brand-50 transition-all">
+                    <FontAwesomeIcon icon={faPenToSquare} className="text-[12px]" />
+                  </button>
+                  <button onClick={() => handleOpenDelete(s.id)}
+                    className="w-7 h-7 rounded-lg flex items-center justify-center text-ink-300 hover:text-rose-500 hover:bg-rose-50 transition-all">
+                    <FontAwesomeIcon icon={faTrashCan} className="text-[12px]" />
+                  </button>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-2 text-center">
+                <div className="rounded-lg bg-ink-50/50 p-2">
+                  <p className="text-[9px] font-bold text-ink-400 uppercase tracking-wide">PHQ-9</p>
+                  <p className="text-sm font-bold font-mono text-ink-800">{s.phq9Score}<span className="text-[10px] text-ink-400 font-normal">/27</span></p>
+                </div>
+                <div className="rounded-lg bg-ink-50/50 p-2">
+                  <p className="text-[9px] font-bold text-ink-400 uppercase tracking-wide">GAD-7</p>
+                  <p className="text-sm font-bold font-mono text-ink-800">{s.gad7Score}<span className="text-[10px] text-ink-400 font-normal">/21</span></p>
+                </div>
+                <div className="rounded-lg bg-ink-50/50 p-2">
+                  <p className="text-[9px] font-bold text-ink-400 uppercase tracking-wide">PCL-5</p>
+                  <p className="text-sm font-bold font-mono text-ink-800">{s.pcl5Score}<span className="text-[10px] text-ink-400 font-normal">/80</span></p>
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 flex-1">
+                  <div className="w-20 h-1.5 rounded-full bg-ink-100/70 overflow-hidden">
+                    <div className={`h-full rounded-full ${scoreColor(s)}`} style={{ width: `${(totalScore(s) / maxTotal) * 100}%` }} />
+                  </div>
+                  <span className="text-xs font-mono text-ink-500">{totalScore(s)}</span>
+                </div>
+                <Badge color={s.riskLevel === 'critical' ? 'rose' : s.riskLevel === 'high' ? 'warm' : s.riskLevel === 'medium' ? 'blue' : 'forest'}>
+                  {s.riskLevel === 'critical' ? trans.screening.critical : s.riskLevel === 'high' ? trans.screening.highRisk : s.riskLevel === 'medium' ? trans.screening.medium : trans.screening.low}
+                </Badge>
+              </div>
+              {s.recommendation && (
+                <p className="text-[11px] text-ink-500 leading-relaxed line-clamp-2">{s.recommendation}</p>
+              )}
+            </div>
+          ))}
+        </div>
+        {filtered.length === 0 && (
+          <div className="text-center py-16">
+            <FontAwesomeIcon icon={faFilter} className="text-[22px] text-ink-300 mx-auto mb-4" />
+            <p className="text-sm font-semibold text-ink-500">{trans.screening.noResults}</p>
+            <p className="text-xs text-ink-300 mt-1">No screenings match your selected risk filter</p>
+          </div>
+        )}
       </div>
 
       <Modal open={showEditModal} onClose={() => { setShowEditModal(false); setEditingScreening(null); }} title={`Edit Screening - ${editingScreening?.id ?? ''}`} size="lg">
@@ -542,7 +605,7 @@ export default function ScreeningPage() {
               onChange={e => setEditForm(f => ({ ...f, beneficiaryName: e.target.value }))}
               className="w-full h-10 px-4 rounded-lg text-sm border border-ink-200/70 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/30 outline-none placeholder:text-ink-300 bg-white" />
           </div>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="block text-xs font-semibold text-ink-400 mb-1.5">PHQ-9 Score (0-27)</label>
               <input type="number" min={0} max={27} value={editForm.phq9Score}

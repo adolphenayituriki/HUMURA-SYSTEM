@@ -14,7 +14,7 @@ const variantStyles: Record<Variant, string> = {
   primary: [
     'text-white',
     'bg-brand-600 hover:bg-brand-700 active:bg-brand-800',
-    'shadow-[0_2px_10px_rgba(0,122,100,.2)] hover:shadow-[0_4px_16px_rgba(0,122,100,.25)]',
+    'shadow-[0_2px_10px_rgba(15,118,110,.2)] hover:shadow-[0_4px_16px_rgba(15,118,110,.25)]',
     'border border-brand-600/20',
   ].join(' '),
   secondary: [

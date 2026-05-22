@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faHandshake, faArrowRight, faCheck, faXmark, faHeartPulse, faClipboardList, faUserMd, faCalendarCheck, faStethoscope, faNotesMedical } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faHandshake, faArrowRight, faCheck, faXmark, faHeartPulse, faClipboardList, faUserMd, faCalendarCheck, faStethoscope, faNotesMedical, faNoteSticky } from '@fortawesome/free-solid-svg-icons';
 import { service } from '../../services/mockData';
 import { useToastStore } from '../../store/toastStore';
 import { Card } from '../../components/shared/Card';
@@ -31,8 +31,11 @@ export default function ReferralsPage() {
   const updateStatus = (id: string, status: Referral['status']) => {
     service.updateReferralStatus(id, status);
     setReferrals(prev => prev.map(r => r.id === id ? { ...r, status } : r));
-    if (status === 'accepted') addToast('Referral accepted');
-    else if (status === 'cancelled') addToast('Referral cancelled');
+    if (status === 'accepted') {
+      addToast('Referral accepted — follow-up plan opened');
+      const r = referrals.find(ref => ref.id === id);
+      if (r) openSupport(r);
+    } else if (status === 'cancelled') addToast('Referral cancelled');
     else if (status === 'completed') addToast('Referral marked complete');
   };
 
@@ -43,7 +46,7 @@ export default function ReferralsPage() {
     }
     if (plan) {
       setActivePlan(plan);
-      addToast('Support plan opened');
+      setNewStepNote('');
       setSupportPlanOpen(true);
     }
   };
@@ -246,6 +249,53 @@ export default function ReferralsPage() {
                   className="flex-1 h-9 px-3 rounded-lg text-xs border border-ink-200/70 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/30 outline-none bg-white transition-all placeholder:text-ink-300" />
                 <Button onClick={() => { setNewStepNote(''); }} variant="secondary" size="xs" className="!h-9">
                   <FontAwesomeIcon icon={faNotesMedical} className="text-[11px]" />
+                </Button>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-xl border border-ink-100/80 bg-white">
+              <div className="flex items-center gap-2 mb-3">
+                <FontAwesomeIcon icon={faNoteSticky} className="text-[14px] text-ink-400" />
+                <p className="text-xs font-bold text-ink-600 uppercase tracking-[.06em]">Follow-up Notes</p>
+              </div>
+              {activePlan.followUpNotes ? (
+                <div className="mb-3 space-y-2 max-h-32 overflow-y-auto">
+                  {activePlan.followUpNotes.split('\n---\n').map((note, i) => (
+                    <div key={i} className="text-xs text-ink-600 bg-ink-50/50 rounded-lg p-2.5 leading-relaxed">
+                      {note}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-ink-400 mb-3 italic">No follow-up notes yet.</p>
+              )}
+              <div className="flex gap-2">
+                <input type="text" value={newStepNote} onChange={e => setNewStepNote(e.target.value)}
+                  placeholder="Add a follow-up note..."
+                  className="flex-1 h-9 px-3 rounded-lg text-xs border border-ink-200/70 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/30 outline-none bg-white transition-all placeholder:text-ink-300"
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' && newStepNote.trim() && activePlan) {
+                      const notes = activePlan.followUpNotes
+                        ? activePlan.followUpNotes + '\n---\n' + `[${new Date().toLocaleDateString()}] ${newStepNote.trim()}`
+                        : `[${new Date().toLocaleDateString()}] ${newStepNote.trim()}`;
+                      const updated = service.updateSupportPlan(activePlan.id, { followUpNotes: notes });
+                      if (updated) setActivePlan({ ...updated });
+                      setNewStepNote('');
+                      addToast('Follow-up note added');
+                    }
+                  }} />
+                <Button onClick={() => {
+                  if (newStepNote.trim() && activePlan) {
+                    const notes = activePlan.followUpNotes
+                      ? activePlan.followUpNotes + '\n---\n' + `[${new Date().toLocaleDateString()}] ${newStepNote.trim()}`
+                      : `[${new Date().toLocaleDateString()}] ${newStepNote.trim()}`;
+                    const updated = service.updateSupportPlan(activePlan.id, { followUpNotes: notes });
+                    if (updated) setActivePlan({ ...updated });
+                    setNewStepNote('');
+                    addToast('Follow-up note added');
+                  }
+                }} variant="primary" size="xs" className="!h-9 !shrink-0">
+                  <FontAwesomeIcon icon={faNoteSticky} className="text-[11px]" /> Add
                 </Button>
               </div>
             </div>

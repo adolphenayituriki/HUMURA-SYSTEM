@@ -236,19 +236,21 @@ export default function SociotherapyPage() {
           icon={<FontAwesomeIcon icon={faUsers} className="text-[16px] text-rose-500 shrink-0" />} />
       </div>
 
-      <div className="flex flex-wrap gap-2 p-3 rounded-xl border border-ink-200/60 bg-white shadow-sm mt-2">
-        <Button onClick={() => setPhaseFilter('all')}
-          variant={phaseFilter === 'all' ? 'primary' : 'secondary'} size="sm"
-          className={phaseFilter !== 'all' ? '!border-ink-200/60' : ''}>
-          {trans.sociotherapy.allPhases}
-        </Button>
-        {PHASES.map(p => (
-          <Button key={p} onClick={() => setPhaseFilter(p)}
-            variant={phaseFilter === p ? 'primary' : 'secondary'} size="sm"
-            className={phaseFilter !== p ? '!border-ink-200/60' : ''}>
-            {PHASE_LABELS[p]}
+      <div className="overflow-x-auto -mx-3 px-3">
+        <div className="flex gap-2 p-3 rounded-xl border border-ink-200/60 bg-white shadow-sm w-max min-w-full">
+          <Button onClick={() => setPhaseFilter('all')}
+            variant={phaseFilter === 'all' ? 'primary' : 'secondary'} size="sm"
+            className={phaseFilter !== 'all' ? '!border-ink-200/60' : '!shrink-0'}>
+            {trans.sociotherapy.allPhases}
           </Button>
-        ))}
+          {PHASES.map(p => (
+            <Button key={p} onClick={() => setPhaseFilter(p)}
+              variant={phaseFilter === p ? 'primary' : 'secondary'} size="sm"
+              className={phaseFilter !== p ? '!border-ink-200/60' : '!shrink-0'}>
+              {PHASE_LABELS[p]}
+            </Button>
+          ))}
+        </div>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-5 md:gap-6">

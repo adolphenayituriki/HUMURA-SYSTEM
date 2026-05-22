@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faNewspaper, faVideo, faMicrophone, faImage, faArrowLeft, faSearch,
-  faCalendarDays, faClock, faPlay, faHeadphones, faEye,
+  faCalendarDays, faClock, faPlay, faHeadphones, faEye, faXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -28,20 +28,33 @@ const mediaItems = [
   { type: 'videos', title: 'Healing in Community — A Documentary', date: 'May 10, 2026', duration: '24:15', image: '/healing community.png' },
   { type: 'videos', title: 'Understanding the Six-Phase Sociotherapy Model', date: 'April 22, 2026', duration: '15:30', image: '/light to commemorate.jpg' },
   { type: 'videos', title: 'Youth Leaders Share Their Recovery Stories', date: 'April 5, 2026', duration: '18:45', image: '/Rwanda development.jpg' },
+  { type: 'videos', title: 'Community Healing Journey', date: 'May 20, 2026', duration: '03:30', src: '/video auto play.mp4', image: '/healing community.png' },
   { type: 'audios', title: 'Trauma Recovery Podcast: Episode 12 — Finding Strength', date: 'May 12, 2026', duration: '32:10', image: '/healing community.png' },
   { type: 'audios', title: 'Guided Breathing Exercise for Anxiety Relief', date: 'May 1, 2026', duration: '10:00', image: '/light to commemorate.jpg' },
   { type: 'audios', title: 'Community Elder Shares Wisdom on Healing', date: 'April 18, 2026', duration: '28:35', image: '/Rwanda development.jpg' },
   { type: 'images', title: 'Group Healing Session — Gasabo District', date: 'May 14, 2026', count: '12 photos', image: '/healing community.png' },
   { type: 'images', title: 'Youth Leadership Forum — Kigali', date: 'May 6, 2026', count: '8 photos', image: '/light to commemorate.jpg' },
-  { type: 'images', title: 'Cooperative Meeting — Rubavu District', date: 'April 25, 2026', count: '15 photos', image: '/Rwanda development.jpg' },
+  { type: 'images', title: 'Youth Program Workshop — Rubavu District', date: 'April 25, 2026', count: '15 photos', image: '/Rwanda development.jpg' },
 ];
 
 export default function Media() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
+  const [playingVideo, setPlayingVideo] = useState<string | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const filteredItems = (activeCategory === 'all' ? mediaItems : mediaItems.filter(item => item.type === activeCategory))
     .filter(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  const playVideo = (src: string) => {
+    setPlayingVideo(src);
+    setTimeout(() => videoRef.current?.play(), 100);
+  };
+
+  const closeVideo = () => {
+    videoRef.current?.pause();
+    setPlayingVideo(null);
+  };
 
   return (
     <div className="min-h-screen bg-surface font-sans text-ink-700 antialiased">
@@ -126,6 +139,7 @@ export default function Media() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredItems.map((item, i) => (
               <motion.div key={i} {...fadeUp} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: i * 0.05 }}
+                onClick={() => { if (item.type === 'videos' && item.src) playVideo(item.src); }}
                 className="group bg-white rounded-2xl border border-ink-100/60 overflow-hidden hover:shadow-lg hover:border-ink-200/60 transition-all duration-300 cursor-pointer">
                 <div className="relative aspect-[16/9] overflow-hidden bg-ink-100">
                   <img src={item.image} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -186,6 +200,36 @@ export default function Media() {
           </a>
         </div>
       </footer>
+
+      <AnimatePresence>
+        {playingVideo && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={closeVideo}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={e => e.stopPropagation()}
+              className="relative w-full max-w-4xl rounded-2xl overflow-hidden bg-black shadow-2xl"
+            >
+              <button onClick={closeVideo}
+                className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors">
+                <FontAwesomeIcon icon={faXmark} className="text-[16px]" />
+              </button>
+              <video ref={videoRef} controls autoPlay muted loop playsInline
+                className="w-full aspect-video object-contain bg-black"
+              >
+                <source src={playingVideo} type="video/mp4" />
+              </video>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

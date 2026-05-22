@@ -70,7 +70,7 @@ export default function ReportsPage() {
   const rawStats = service.getStats();
   const statLabels: Record<string, string> = {
     totalBeneficiaries: trans.dashboard.totalBeneficiaries, screeningsDone: trans.dashboard.screeningsDone,
-    activeGroups: trans.dashboard.activeGroups, cooperativesActive: trans.dashboard.cooperativesActive,
+    activeGroups: trans.dashboard.activeGroups,
     emergencyCases: trans.dashboard.emergencyCases, treatmentComplete: trans.dashboard.treatmentComplete,
   };
   const stats = Object.fromEntries(

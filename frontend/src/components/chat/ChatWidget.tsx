@@ -20,7 +20,7 @@ const mockConversations: Conversation[] = [
   { id: '2', name: 'Dr. Eric Ndayisenga', lastMessage: 'The referral for patient B-0042 has been reviewed and accepted at Musanze Hospital', timestamp: '15m ago', unread: 0, online: true, avatar: '/adolphe profile.jpg', role: 'District Hospital' },
   { id: '3', name: 'Ineza Jeannette', lastMessage: 'Groupe ya sociotherapy iri gukora neza, twageze mu cyiciro cya Trust', timestamp: '1h ago', unread: 1, online: false, avatar: '/adolphe profile.jpg', role: 'Facilitator' },
   { id: '4', name: 'Support Team', lastMessage: 'Your request for youth program enrollment has been processed.', timestamp: '3h ago', unread: 0, online: true, avatar: '/adolphe profile.jpg', role: 'Support' },
-  { id: '5', name: 'Mukamana Angelique', lastMessage: 'Kooperative yacu yabonye inkunga nshya yo gukora agacuruzi', timestamp: 'Yesterday', unread: 0, online: false, avatar: '/adolphe profile.jpg', role: 'Cooperative Leader' },
+  { id: '5', name: 'Mukamana Angelique', lastMessage: 'Ubuyobozi bw\'urubyiruko bwatumye niga ubuhanga bushya bwo gufasha abandi', timestamp: 'Yesterday', unread: 0, online: false, avatar: '/adolphe profile.jpg', role: 'Youth Mentor' },
 ];
 
 const faqItems = [
@@ -185,8 +185,8 @@ export default function ChatWidget() {
       </AnimatePresence>
 
       <button onClick={() => setOpen(!open)}
-        className="w-14 h-14 rounded-full bg-green-500 hover:bg-green-600 text-white shadow-lg hover:shadow-xl transition-all flex items-center justify-center cursor-pointer shrink-0">
-        <FontAwesomeIcon icon={faComments} className="text-[22px]" />
+        className="w-12 h-12 rounded-full bg-brand-500 hover:bg-brand-600 text-white shadow-md hover:shadow-lg transition-all flex items-center justify-center cursor-pointer shrink-0">
+        <FontAwesomeIcon icon={faComments} className="text-[18px]" />
       </button>
     </div>
   );

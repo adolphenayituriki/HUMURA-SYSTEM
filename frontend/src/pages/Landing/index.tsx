@@ -25,22 +25,6 @@ export default function Landing() {
   const { t } = useI18nStore();
   const trans = t();
 
-  const heroSlides = [
-    '/healing community.png',
-    '/light to commemorate.jpg',
-    '/Rwanda development.jpg',
-  ];
-
-  const [currentSlide, setCurrentSlide] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide(prev => (prev + 1) % heroSlides.length);
-    }, 5500);
-    return () => clearInterval(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const navItems = [
     { label: trans.landing.home, href: '#hero' },
     { label: trans.landing.about, href: '#about' },
@@ -329,25 +313,10 @@ export default function Landing() {
               <div className="relative min-h-[450px] max-w-[600px] mx-auto w-full">
                 <div className="absolute inset-0 rounded-2xl overflow-hidden shadow-2xl">
                   <video autoPlay muted loop playsInline
-                    poster={heroSlides[currentSlide]}
                     className="absolute inset-0 w-full h-full object-cover"
                   >
                     <source src="/hero.mp4" type="video/mp4" />
                   </video>
-                  <AnimatePresence mode="popLayout">
-                    <motion.div
-                      key={currentSlide}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 0.6 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 1.2, ease: 'easeInOut' }}
-                      className="absolute inset-0"
-                    >
-                      <img src={heroSlides[currentSlide]} alt=""
-                        className="w-full h-full object-contain" />
-                    </motion.div>
-                  </AnimatePresence>
-
                   <div className="absolute inset-0 bg-brand-900/20" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                 </div>
@@ -374,7 +343,7 @@ export default function Landing() {
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-4 p-4 mb-25 rounded-2xl bg-white/10 border border-white/10 backdrop-blur-sm">
+                  <div className="grid grid-cols-3 gap-4 p-4 rounded-2xl bg-white/10 border border-white/10 backdrop-blur-sm">
                     {[
                       { val: '2,847+', label: trans.landing.statsBeneficiaries },
                       { val: '128', label: trans.landing.statsGroups },
@@ -387,16 +356,6 @@ export default function Landing() {
                     ))}
                   </div>
                 </div>
-              </div>
-              <div className="flex mt-25 items-center justify-center gap-2 mt-5">
-                {heroSlides.map((_, i) => (
-                  <button key={i} onClick={() => setCurrentSlide(i)}
-                    className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${
-                      i === currentSlide
-                        ? 'bg-brand-500 w-5'
-                        : 'bg-ink-300 hover:bg-ink-400'
-                    }`} />
-                ))}
               </div>
             </motion.div>
           </div>
@@ -411,7 +370,7 @@ export default function Landing() {
             {[
               { value: '2,847+', label: trans.landing.statsBeneficiaries, icon: <FontAwesomeIcon icon={faUsers} className="text-[22px] text-brand-500" /> },
               { value: '128', label: trans.landing.statsGroups, icon: <FontAwesomeIcon icon={faHandshake} className="text-[22px] text-brand-500" /> },
-              { value: '34', label: trans.landing.statsCooperatives, icon: <FontAwesomeIcon icon={faChartBar} className="text-[22px] text-brand-500" /> },
+              { value: '24', label: trans.landing.statsYouthPrograms, icon: <FontAwesomeIcon icon={faUsers} className="text-[22px] text-brand-500" /> },
               { value: '97%', label: trans.landing.statsEngagement, icon: <FontAwesomeIcon icon={faHeartPulse} className="text-[22px] text-brand-500" /> },
             ].map(s => (
               <div key={s.label} className="relative bg-white rounded-2xl border border-ink-200/60 p-8 text-center shadow-sm hover:shadow-2xl hover:-translate-y-[3px] hover:border-brand-200/50 transition-all duration-300 group overflow-hidden h-full">
@@ -429,10 +388,10 @@ export default function Landing() {
       {/* ═══════════════ PARTNERS CAROUSEL ═══════════════ */}
       <section className="py-24 bg-white border-b border-ink-100/60 mt-32">
         <div className="container">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
-            <p className="text-[11px] font-semibold text-ink-400 uppercase tracking-[.12em] text-center mb-10">
-              {trans.landing.partnershipLabel}
-            </p>
+           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+             <p className="text-[11px] font-semibold text-ink-400 uppercase tracking-[.12em] text-center mb-16">
+               {trans.landing.partnershipLabel}
+             </p>
             <div className="relative overflow-hidden">
               <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white/50 to-transparent z-10 pointer-events-none" />
               <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white/50 to-transparent z-10 pointer-events-none" />
@@ -547,15 +506,15 @@ export default function Landing() {
                       </div>
                     </div>
 
-                    {/* Cooperatives stat */}
+                    {/* Youth stat */}
                     <div className="p-5 rounded-2xl bg-white/10 border border-white/10 backdrop-blur-sm">
                       <div className="flex items-center gap-3 mb-3">
                         <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-white border border-white/10">
-                          <FontAwesomeIcon icon={faChartBar} className="text-[20px]" />
+                          <FontAwesomeIcon icon={faGraduationCap} className="text-[20px]" />
                         </div>
                         <div>
-                          <p className="text-white font-bold text-lg leading-none">34</p>
-                          <p className="text-white/50 text-[11px] font-semibold uppercase tracking-[.06em] mt-1">{trans.landing.statsCooperatives}</p>
+                          <p className="text-white font-bold text-lg leading-none">24</p>
+                          <p className="text-white/50 text-[11px] font-semibold uppercase tracking-[.06em] mt-1">{trans.landing.statsYouthPrograms}</p>
                         </div>
                       </div>
                       <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
@@ -741,7 +700,7 @@ export default function Landing() {
             {[
               { role: trans.landing.communityChws, count: '640+', desc: trans.landing.communityChwsDesc, icon: <FontAwesomeIcon icon={faHandshake} className="text-[18px]" /> },
               { role: trans.landing.communityFacilitators, count: '180+', desc: trans.landing.communityFacilitatorsDesc, icon: <FontAwesomeIcon icon={faUsers} className="text-[18px]" /> },
-              { role: trans.landing.communityCooperatives, count: '34', desc: trans.landing.communityCooperativesDesc, icon: <FontAwesomeIcon icon={faChartBar} className="text-[18px]" /> },
+              { role: trans.landing.communityYouthPrograms, count: '24', desc: trans.landing.communityYouthProgramsDesc, icon: <FontAwesomeIcon icon={faGraduationCap} className="text-[18px]" /> },
               { role: trans.landing.communityCounselors, count: '95+', desc: trans.landing.communityCounselorsDesc, icon: <FontAwesomeIcon icon={faShield} className="text-[18px]" /> },
               ].map((item, i) => (
               <motion.div key={item.role} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06, duration: 0.35 }}
@@ -890,7 +849,7 @@ export default function Landing() {
                   { value: '2,847+', label: 'Beneficiaries Served', icon: faUsers },
                   { value: '12', label: 'Districts Reached', icon: faGlobe },
                   { value: '128', label: 'Support Groups', icon: faHandshake },
-                  { value: '34', label: 'Cooperatives', icon: faChartBar },
+                  { value: '24', label: 'Youth Clubs', icon: faGraduationCap },
                 ].map((stat, i) => (
                   <motion.div key={stat.label}
                     initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}

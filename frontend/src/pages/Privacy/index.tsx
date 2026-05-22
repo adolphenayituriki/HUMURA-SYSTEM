@@ -20,7 +20,7 @@ export default function PrivacyPage() {
   const p = trans.privacy;
 
   return (
-    <div className="space-y-8 md:space-y-10 max-w-4xl">
+    <div className="max-w-4xl mx-auto px-5 md:px-6 xl:px-8 py-6 md:py-8 lg:py-10">
       <div className="text-center pb-2">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-200/60 text-brand-700 text-[10px] font-semibold tracking-wide mb-4">
           <FontAwesomeIcon icon={faLock} className="text-[11px]" />
@@ -62,7 +62,7 @@ export default function PrivacyPage() {
                   <FontAwesomeIcon icon={icon} className="text-[15px]" />
                 </div>
                 <h2 className="text-sm font-bold text-ink-800">
-                  {p[key === 'dataCollection' ? 'dataCollection' : key === 'dataUse' ? 'dataUse' : key === 'dataSharing' ? 'dataSharing' : key === 'youthPrivacy' ? 'youthPrivacy' : key === 'dataSecurity' ? 'dataSecurity' : key === 'dataRetention' ? 'dataRetention' : key === 'yourRights' ? 'yourRights' : key === 'multiChannel' ? 'multiChannel' : key]}
+                  {p[key === 'dataCollection' ? 'dataCollection' : key === 'dataUse' ? 'dataUse' : key === 'dataSharing' ? 'dataSharing' : key === 'youthPrivacy' ? 'youthPrivacy' : key === 'dataSecurity' ? 'dataSecurity' : key === 'dataRetention' ? 'dataRetention' : key === 'yourRights' ? 'yourRights' : key === 'multiChannel' ? 'multiChannel' : key as keyof typeof p]}
                 </h2>
               </div>
               <div className="px-6 py-5 space-y-4">

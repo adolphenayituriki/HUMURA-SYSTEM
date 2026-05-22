@@ -7,7 +7,7 @@ import {
   faWallet, faTriangleExclamation, faChartBar, faUser, faCamera, faGear, faRightFromBracket,
   faChevronLeft, faChevronRight, faCircleUser, faMagnifyingGlass,
   faBell, faChevronDown, faBars, faXmark, faCheck, faShield,
-  faPlus, faArrowRightFromBracket,
+  faPlus, faArrowRightFromBracket, faLeaf, faBookOpen,
 } from '@fortawesome/free-solid-svg-icons';
 import { useAuthStore } from '../../store/authStore';
 import { useSidebarStore } from '../../store/sidebarStore';
@@ -29,7 +29,7 @@ const DENY: Record<UserRole, string[]> = {
   cooperative_leader:     ['referrals', 'emergencies', 'reports'],
   youth_counselor:        ['cooperatives', 'emergencies', 'referrals'],
   emergency_responder:    ['cooperatives', 'reports', 'cooperatives'],
-  community_member:       ['cooperatives', 'emergencies', 'reports', 'youth', 'admin', 'referrals'],
+  community_member:       ['beneficiaries', 'referrals', 'sociotherapy', 'cooperatives', 'emergencies', 'reports', 'admin'],
 };
 
 const ROLE_LABEL: Record<UserRole, string> = {
@@ -57,6 +57,8 @@ const NAV_ICONS: Record<string, React.ReactNode> = {
   cooperatives: <FontAwesomeIcon icon={faWallet} className="text-[16px]" />,
   emergencies: <FontAwesomeIcon icon={faTriangleExclamation} className="text-[16px]" />,
   youth: <FontAwesomeIcon icon={faCircleUser} className="text-[16px]" />,
+  wellness: <FontAwesomeIcon icon={faLeaf} className="text-[16px]" />,
+  healingMedia: <FontAwesomeIcon icon={faBookOpen} className="text-[16px]" />,
   reports: <FontAwesomeIcon icon={faChartBar} className="text-[16px]" />,
   admin: <FontAwesomeIcon icon={faGear} className="text-[16px]" />,
 };
@@ -106,6 +108,8 @@ export default function DashboardLayout() {
     { to: '/dashboard',    label: navTrans.dashboard,      icon: NAV_ICONS.dashboard,     key: 'dashboard'      },
     { to: '/beneficiaries',label: navTrans.beneficiaries,   icon: NAV_ICONS.beneficiaries, key: 'beneficiaries'  },
     { to: '/screening',    label: navTrans.screening,       icon: NAV_ICONS.screening,     key: 'screening'      },
+    { to: '/wellness',     label: navTrans.wellness,        icon: NAV_ICONS.wellness,      key: 'wellness'       },
+    { to: '/healing-media',label: navTrans.healingMedia,    icon: NAV_ICONS.healingMedia,  key: 'healingMedia'   },
     { to: '/referrals',    label: navTrans.referrals,       icon: NAV_ICONS.referrals,     key: 'referrals'      },
     { to: '/sociotherapy', label: navTrans.sociotherapy,    icon: NAV_ICONS.sociotherapy,  key: 'sociotherapy'   },
     { to: '/cooperatives', label: navTrans.cooperatives,    icon: NAV_ICONS.cooperatives,  key: 'cooperatives'   },
@@ -477,7 +481,7 @@ export default function DashboardLayout() {
         </header>
 
         <main className="flex-1 overflow-y-auto overflow-x-hidden">
-          <div className="max-w-[1400px] mx-auto px-5 md:px-6 xl:px-8 py-6 md:py-8 lg:py-10">
+          <div className="max-w-[1400px] mx-auto px-5 py-6 md:py-8 lg:py-10">
             <Outlet />
           </div>
         </main>

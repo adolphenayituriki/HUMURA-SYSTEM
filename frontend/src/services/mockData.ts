@@ -4,13 +4,22 @@ import type {
   Referral,
   SociotherapyGroup,
   SociotherapySession,
-  Cooperative,
   EmergencyAlert,
   YouthParticipant,
   User,
   UserRole,
   SupportPlan,
   SupportStep,
+  Counselor,
+  CounselingSession,
+  PeerSupportGroup,
+  CopingSession,
+  DailyTip,
+  YouthResource,
+  HealingStory,
+  HealingVideo,
+  HealingAudio,
+  SupportRequest,
 } from '../types';
 import { CATEGORY_TO_ROLES } from '../types';
 
@@ -35,7 +44,6 @@ const EMERGENCY_TYPES = [
   'Suicidal ideation', 'Self-harm risk', 'Severe panic episode',
   'Psychotic episode', 'Trauma flashback crisis', 'Emotional breakdown',
 ];
-const COOP_TYPES = ['SACCO', 'Agribusiness', 'Livestock', 'Tailoring', 'Retail', 'Other'];
 const PHASES = ['Safety', 'Trust', 'Care', 'Respect', 'New Orientation', 'Memory and Reconciliation'] satisfies SociotherapyGroup['phase'][];
 const YOUTH_PROGRAMS = ['School Counseling', 'Peace Education', 'Leadership Training', 'Life Skills', 'Dialogue Forums', 'Youth Club'];
 
@@ -119,8 +127,8 @@ export const mockSupportPlans: SupportPlan[] = Array.from({ length: 6 }, (_, i) 
     status: rnd(['active', 'active', 'on_hold', 'closed'] as const),
     summary: rnd(REFERRAL_REASONS),
     steps: [
-      { id: `${ref.id}-s1`, action: 'Initial assessment & intake', assignedTo: NAMES[rndInt(0, NAMES.length - 1)], status: rnd(['completed', 'in_progress', 'pending'] as const) },
-      { id: `${ref.id}-s2`, action: 'Develop personalized care plan', assignedTo: NAMES[rndInt(0, NAMES.length - 1)], status: rnd(['completed', 'in_progress', 'pending'] as const) },
+      { id: `${ref.id}-s1`, action: 'Initial assessment & intake', assignedTo: NAMES[rndInt(0, NAMES.length - 1)], status: rnd(['done', 'in_progress', 'pending'] as const) },
+      { id: `${ref.id}-s2`, action: 'Develop personalized care plan', assignedTo: NAMES[rndInt(0, NAMES.length - 1)], status: rnd(['done', 'in_progress', 'pending'] as const) },
       { id: `${ref.id}-s3`, action: 'Schedule first follow-up session', assignedTo: NAMES[rndInt(0, NAMES.length - 1)], status: rnd(['in_progress', 'pending'] as const) },
       { id: `${ref.id}-s4`, action: 'Connect to relevant support services', assignedTo: NAMES[rndInt(0, NAMES.length - 1)], status: rnd(['pending'] as const) },
       { id: `${ref.id}-s5`, action: 'Monthly progress review', assignedTo: NAMES[rndInt(0, NAMES.length - 1)], status: rnd(['pending'] as const) },
@@ -155,20 +163,6 @@ export const mockSessions: SociotherapySession[] = mockSociotherapyGroups.flatMa
   }))
 );
 
-export const mockCooperatives: Cooperative[] = Array.from({ length: 10 }, (_, i) => ({
-  id: `COOP-${String(i + 1).padStart(3, '0')}`,
-  name: `Unity Cooperative ${i + 1}`,
-  type: rnd(COOP_TYPES) as Cooperative['type'],
-  district: rnd(DISTRICTS),
-  leaderId: `LD-${String(i + 1).padStart(3, '0')}`,
-  leaderName: NAMES[rndInt(0, NAMES.length - 1)],
-  memberCount: rndInt(12, 50),
-  femaleMembers: rndInt(8, 30),
-  totalCapital: rndInt(300000, 5000000),
-  status: rnd(['active', 'forming', 'dormant'] as const),
-  registeredAt: date(rndInt(60, 1000)),
-}));
-
 export const mockEmergencies: EmergencyAlert[] = Array.from({ length: 18 }, (_, i) => ({
   id: `EMG-${String(i + 1).padStart(4, '0')}`,
   beneficiaryId: mockBeneficiaries[i % mockBeneficiaries.length].id,
@@ -196,17 +190,113 @@ export const mockYouth: YouthParticipant[] = Array.from({ length: 40 }, (_, i) =
   counselorId: `CNS-${String(rndInt(1, 6)).padStart(3, '0')}`,
 }));
 
+export const mockCounselors: Counselor[] = [
+  { id: 'C-001', fullName: 'Marie Uwimana', title: 'Licensed Counselor', specialty: 'Trauma & Grief', district: 'Gasabo', available: true, rating: 4.8, sessionCount: 127, languages: ['English', 'Kinyarwanda'] },
+  { id: 'C-002', fullName: 'Jean-Pierre Habimana', title: 'Clinical Psychologist', specialty: 'Anxiety & Depression', district: 'Kicukiro', available: true, rating: 4.9, sessionCount: 203, languages: ['English', 'French', 'Kinyarwanda'] },
+  { id: 'C-003', fullName: 'Claudine Nyiraneza', title: 'Youth Counselor', specialty: 'Adolescent Mental Health', district: 'Nyarugenge', available: false, rating: 4.7, sessionCount: 89, languages: ['English', 'Kinyarwanda'] },
+  { id: 'C-004', fullName: 'Emmanuel Ndayisenga', title: 'Sociotherapy Facilitator', specialty: 'Group Therapy & Reconciliation', district: 'Musanze', available: true, rating: 4.6, sessionCount: 156, languages: ['Kinyarwanda'] },
+  { id: 'C-005', fullName: 'Alice Mugabo', title: 'Trauma Specialist', specialty: 'PTSD & Crisis Intervention', district: 'Huye', available: true, rating: 4.9, sessionCount: 211, languages: ['English', 'French', 'Kinyarwanda'] },
+  { id: 'C-006', fullName: 'David Hakizimana', title: 'Peer Support Coach', specialty: 'Substance Abuse & Recovery', district: 'Rubavu', available: true, rating: 4.5, sessionCount: 73, languages: ['Kinyarwanda'] },
+];
+export const mockCounselingSessions: CounselingSession[] = [
+  {
+    id: 'CS-001', counselorId: 'C-001', counselorName: 'Marie Uwimana', userId: 'U-009',
+    lastMessage: 'I have been practicing the breathing exercises you recommended', lastMessageAt: date(0),
+    status: 'active', unreadCount: 2,
+    messages: [
+      { id: 'm1', from: 'counselor', text: 'Hello! How are you feeling today?', sentAt: date(2) },
+      { id: 'm2', from: 'user', text: 'A bit anxious, but better than yesterday.', sentAt: date(2) },
+      { id: 'm3', from: 'counselor', text: 'That is good progress. Have you tried the grounding exercise?', sentAt: date(1) },
+      { id: 'm4', from: 'user', text: 'I have been practicing the breathing exercises you recommended', sentAt: date(0) },
+    ],
+  },
+  {
+    id: 'CS-002', counselorId: 'C-003', counselorName: 'Claudine Nyiraneza', userId: 'U-009',
+    lastMessage: 'Your next session is scheduled for Friday at 3 PM', lastMessageAt: date(1),
+    status: 'active', unreadCount: 0,
+    messages: [
+      { id: 'm5', from: 'counselor', text: 'Your next session is scheduled for Friday at 3 PM', sentAt: date(1) },
+    ],
+  },
+  {
+    id: 'CS-003', counselorId: 'C-004', counselorName: 'Emmanuel Ndayisenga', userId: 'U-009',
+    lastMessage: 'Thank you for sharing your story in group today', lastMessageAt: date(3),
+    status: 'resolved', unreadCount: 0,
+    messages: [
+      { id: 'm6', from: 'counselor', text: 'Thank you for sharing your story in group today', sentAt: date(3) },
+      { id: 'm7', from: 'user', text: 'It was difficult but I feel better now', sentAt: date(3) },
+    ],
+  },
+];
+export const mockPeerSupportGroups: PeerSupportGroup[] = [
+  { id: 'PSG-001', name: 'Young Mothers Circle', description: 'A safe space for young mothers to share experiences and support each other', topic: 'Parenting & Emotional Support', memberCount: 12, maxMembers: 20, meetingSchedule: 'Saturdays, 10 AM', district: 'Gasabo', facilitatorName: 'Marie Uwimana', isJoined: true },
+  { id: 'PSG-002', name: 'Men\'s Healing Group', description: 'Open discussion for men navigating trauma, work stress, and family relationships', topic: 'Men\'s Mental Health', memberCount: 8, maxMembers: 15, meetingSchedule: 'Wednesdays, 5 PM', district: 'Kicukiro', facilitatorName: 'Jean-Pierre Habimana', isJoined: false },
+  { id: 'PSG-003', name: 'Youth Resilience Network', description: 'Peer-led group for young people (16-25) building coping skills and community', topic: 'Youth Empowerment', memberCount: 18, maxMembers: 25, meetingSchedule: 'Tuesdays & Thursdays, 4 PM', district: 'Nyarugenge', facilitatorName: 'Claudine Nyiraneza', isJoined: false },
+  { id: 'PSG-004', name: 'Grief & Loss Support', description: 'Compassionate peer support for those processing loss and bereavement', topic: 'Grief Support', memberCount: 9, maxMembers: 15, meetingSchedule: 'Mondays, 6 PM', district: 'Musanze', facilitatorName: 'Emmanuel Ndayisenga', isJoined: true },
+  { id: 'PSG-005', name: 'Healing Through Art', description: 'Express yourself through art, music, and creative writing in a supportive group', topic: 'Creative Healing', memberCount: 14, maxMembers: 20, meetingSchedule: 'Fridays, 3 PM', district: 'Huye', facilitatorName: 'Alice Mugabo', isJoined: false },
+  { id: 'PSG-006', name: 'Substance Recovery Circle', description: 'Peer support for individuals on a recovery journey from substance use', topic: 'Recovery Support', memberCount: 7, maxMembers: 12, meetingSchedule: 'Daily, 7 PM (Online)', district: 'Rubavu', facilitatorName: 'David Hakizimana', isJoined: false },
+];
+export const mockCopingSessions: CopingSession[] = [
+  { id: 'CP-001', type: 'breathing', duration: 16, completedAt: date(0), moodBefore: 3, moodAfter: 4 },
+  { id: 'CP-002', type: 'meditation', duration: 300, completedAt: date(1), moodBefore: 2, moodAfter: 4 },
+  { id: 'CP-003', type: 'grounding', duration: 40, completedAt: date(2), moodBefore: 3, moodAfter: 5 },
+  { id: 'CP-004', type: 'breathing', duration: 16, completedAt: date(3), moodBefore: 2, moodAfter: 3 },
+  { id: 'CP-005', type: 'journaling', duration: 600, completedAt: date(4), moodBefore: 3, moodAfter: 4 },
+  { id: 'CP-006', type: 'breathing', duration: 16, completedAt: date(5), moodBefore: 4, moodAfter: 4 },
+  { id: 'CP-007', type: 'meditation', duration: 600, completedAt: date(6), moodBefore: 2, moodAfter: 5 },
+  { id: 'CP-008', type: 'breathing', duration: 16, completedAt: date(7), moodBefore: 3, moodAfter: 4 },
+  { id: 'CP-009', type: 'grounding', duration: 40, completedAt: date(8), moodBefore: 1, moodAfter: 3 },
+  { id: 'CP-010', type: 'breathing', duration: 16, completedAt: date(9), moodBefore: 3, moodAfter: 5 },
+];
+export const mockDailyTips: DailyTip[] = [
+  { id: 'DT-001', title: 'Take a Breathing Break', content: 'Pause for 60 seconds. Inhale deeply for 4 counts, hold for 4, exhale for 4. Notice how your body feels afterward.', category: 'coping' },
+  { id: 'DT-002', title: 'Name Your Emotions', content: 'Identify what you are feeling right now. Is it sadness, anxiety, anger, or something else? Naming emotions reduces their intensity.', category: 'mindfulness' },
+  { id: 'DT-003', title: 'One Thing You Are Grateful For', content: 'Write down one thing that went well today, no matter how small. Gratitude rewires the brain for positivity.', category: 'gratitude' },
+  { id: 'DT-004', title: 'You Have Overcome Before', content: 'Think of a difficult moment you got through in the past. That strength is still within you. You are more resilient than you know.', category: 'resilience' },
+  { id: 'DT-005', title: 'Ground Yourself', content: 'Look around and name 5 things you can see, 4 you can touch, 3 you can hear, 2 you can smell, and 1 you can taste.', category: 'mindfulness' },
+  { id: 'DT-006', title: 'Reach Out', content: 'You are not alone. Send a message to a friend, family member, or counselor. Connection is a powerful medicine.', category: 'resilience' },
+  { id: 'DT-007', title: 'Rest is Productive', content: 'Your brain needs rest to process emotions. Taking a break is not laziness — it is self-care.', category: 'coping' },
+];
+export const mockYouthResources: YouthResource[] = [
+  { id: 'YR-001', topic: 'identity', title: 'Who Am I?', summary: 'Explore your identity, values, and what makes you unique.', icon: 'faPeopleArrows', color: 'brand', practices: ['Journaling prompts for self-reflection', 'Values clarification exercises', 'Strength-based personal mapping', 'Cultural identity exploration'] },
+  { id: 'YR-002', topic: 'inheritedTrauma', title: 'Understanding Inherited Trauma', summary: 'Learn how past experiences can affect us across generations.', icon: 'faBrain', color: 'warm', practices: ['Psychoeducation on intergenerational trauma', 'Family history storytelling', 'Normalizing emotional responses', 'Building resilience across generations'] },
+  { id: 'YR-003', topic: 'emotionalAwareness', title: 'Emotional Awareness', summary: 'Build your emotional vocabulary and learn to express feelings healthily.', icon: 'faHandHoldingHeart', color: 'rose', practices: ['Emotion identification and naming', 'Trigger awareness and management', 'Healthy emotional expression', 'Peer support and validation'] },
+  { id: 'YR-004', topic: 'peerPressure', title: 'Peer Pressure & Social Stress', summary: 'Tools to navigate social expectations, peer pressure, and relationship challenges.', icon: 'faUserGroup', color: 'blue', practices: ['Assertiveness and boundary-setting', 'Social media awareness', 'Academic stress management', 'Building healthy friendships'] },
+];
+
+export const mockHealingStories: HealingStory[] = [
+  { id: 'HS-001', title: 'Finding Peace After Loss', author: 'Jeannette I.', age: 34, district: 'Gasabo', excerpt: 'After losing my husband in the genocide, I carried the weight alone for years. Humura helped me find a community that understood my pain.', content: '', image: '/healing community.png', tags: ['grief', 'community', 'resilience'], featured: true },
+  { id: 'HS-002', title: 'A Young Mans Journey to Healing', author: 'Olivier H.', age: 22, district: 'Musanze', excerpt: 'I used to think asking for help was a sign of weakness. The youth program taught me that true strength is in reaching out.', content: '', image: '/light to commemorate.jpg', tags: ['youth', 'courage', 'growth'], featured: true },
+  { id: 'HS-003', title: 'From Silence to Speaking Out', author: 'Claire N.', age: 45, district: 'Kicukiro', excerpt: 'For decades I kept my trauma hidden. Through the healing circles, I found my voice again. Now I help other women do the same.', content: '', image: '/Rwanda development.jpg', tags: ['women', 'healing circles', 'empowerment'], featured: false },
+  { id: 'HS-004', title: 'Rebuilding Trust in Community', author: 'Fidele B.', age: 52, district: 'Huye', excerpt: 'The sociotherapy groups taught me that healing happens together. I learned to trust again — not just others, but myself.', content: '', image: '/MINUBUMWE.jpg', tags: ['trust', 'sociotherapy', 'reconciliation'], featured: true },
+  { id: 'HS-005', title: 'Learning to Breathe Again', author: 'Sonia U.', age: 28, district: 'Nyarugenge', excerpt: 'The breathing exercises and coping tools saved me during my darkest moments. Now I practice them every morning.', content: '', image: '/ibuka.jpg', tags: ['coping', 'daily practice', 'anxiety'], featured: false },
+];
+export const mockHealingVideos: HealingVideo[] = [
+  { id: 'HV-001', title: 'Guided Breathing for Anxiety', description: 'A 10-minute guided breathing exercise to calm your nervous system', duration: '10:00', thumbnail: '/healing community.png', category: 'guided' },
+  { id: 'HV-002', title: 'Body Scan Meditation', description: 'Relax every part of your body with this guided meditation', duration: '15:00', thumbnail: '/light to commemorate.jpg', category: 'guided' },
+  { id: 'HV-003', title: 'Community Healing Documentary', description: 'Stories of healing and resilience from across Rwanda', duration: '24:15', thumbnail: '/Rwanda development.jpg', src: '/video auto play.mp4', category: 'story' },
+  { id: 'HV-004', title: 'Understanding Your Emotions', description: 'Learn to identify and name your emotions in Kinyarwanda', duration: '8:30', thumbnail: '/ibuka.jpg', category: 'educational' },
+];
+export const mockHealingAudio: HealingAudio[] = [
+  { id: 'HA-001', title: 'Calm Morning Meditation', description: 'Start your day with peace and clarity', duration: '12:00', category: 'meditation' },
+  { id: 'HA-002', title: 'Ocean Waves for Sleep', description: 'Soothing ocean sounds to help you fall asleep', duration: '30:00', category: 'calming' },
+  { id: 'HA-003', title: 'Forest Rain Relaxation', description: 'The sound of gentle rain in a Rwandan forest', duration: '20:00', category: 'calming' },
+  { id: 'HA-004', title: 'Box Breathing Guide', description: 'Step-by-step guided box breathing exercise', duration: '5:00', category: 'breathing' },
+  { id: 'HA-005', title: 'Gratitude Meditation', description: 'A guided meditation focusing on gratitude and hope', duration: '10:00', category: 'meditation' },
+];
+
 export const mockUsers: Array<{ id: string; role: UserRole; fullName: string; email: string; facility?: string; district?: string; avatar?: string }> = [
   { id: 'U-001', role: 'admin', fullName: 'Dr. Alice Mugabo', email: 'alice@humura.gov.rw', avatar: '/adolphe profile.jpg' },
   { id: 'U-002', role: 'district_hospital', fullName: 'Dr. Eric Ndayisenga', email: 'eric@hospital.gov.rw', facility: 'Musanze District Hospital', district: 'Musanze', avatar: '/adolphe profile.jpg' },
   { id: 'U-003', role: 'health_center', fullName: 'Nurse Esperance Uwibuteye', email: 'esperance@hc.gov.rw', facility: 'Gasabo Health Center', district: 'Gasabo', avatar: '/adolphe profile.jpg' },
   { id: 'U-004', role: 'chw', fullName: 'Muhire Claude', email: 'claude@chw.gov.rw', facility: 'Kicukiro Health Center', district: 'Kicukiro', avatar: '/adolphe profile.jpg' },
   { id: 'U-005', role: 'sociotherapy_facilitator', fullName: 'Ineza Jeannette', email: 'jeannette@humura.gov.rw', district: 'Huye', avatar: '/adolphe profile.jpg' },
-  { id: 'U-006', role: 'cooperative_leader', fullName: 'Mukamana Angelique', email: 'angelique@coop.gov.rw', district: 'Rubavu', avatar: '/adolphe profile.jpg' },
   { id: 'U-007', role: 'youth_counselor', fullName: 'Kamanzi Didier', email: 'didier@youth.gov.rw', district: 'Nyagatare', avatar: '/adolphe profile.jpg' },
   { id: 'U-008', role: 'emergency_responder', fullName: 'Response Team Lead', email: 'emergency@humura.gov.rw', facility: 'Mobile Emergency Unit', district: 'Nyarugenge', avatar: '/adolphe profile.jpg' },
   { id: 'U-009', role: 'community_member', fullName: 'Habimana Eric', email: 'eric@humura.gov.rw', district: 'Muhanga', avatar: '/adolphe profile.jpg' },
 ];
+
+export const mockSupportRequests: SupportRequest[] = [];
 
 export const service = {
   getBeneficiaries: (filters?: { district?: string; status?: string }) => {
@@ -303,6 +393,13 @@ export const service = {
     plan.updatedAt = date(0);
     return plan;
   },
+  updateSupportPlan: (planId: string, data: Partial<SupportPlan>) => {
+    const plan = mockSupportPlans.find(p => p.id === planId);
+    if (!plan) return null;
+    Object.assign(plan, data);
+    plan.updatedAt = date(0);
+    return plan;
+  },
   closeSupportPlan: (planId: string) => {
     const plan = mockSupportPlans.find(p => p.id === planId);
     if (!plan) return null;
@@ -332,18 +429,6 @@ export const service = {
   deleteSession(id: string) {
     const idx = mockSessions.findIndex((s) => s.id === id);
     if (idx !== -1) mockSessions.splice(idx, 1);
-    return idx !== -1;
-  },
-  getCooperatives: () => mockCooperatives,
-  addCooperative(c: Cooperative) { mockCooperatives.push(c); return c; },
-  updateCooperative(id: string, data: Partial<Cooperative>) {
-    const c = mockCooperatives.find((c) => c.id === id);
-    if (c) Object.assign(c, data);
-    return c;
-  },
-  deleteCooperative(id: string) {
-    const idx = mockCooperatives.findIndex((c) => c.id === id);
-    if (idx !== -1) mockCooperatives.splice(idx, 1);
     return idx !== -1;
   },
   getEmergencies: (filters?: { status?: string }) => {
@@ -396,15 +481,45 @@ export const service = {
     if (idx !== -1) mockUsers.splice(idx, 1);
     return idx !== -1;
   },
+  getCounselors: (district?: string) => district ? mockCounselors.filter(c => c.district === district) : mockCounselors,
+  getCounselingSessions: (userId: string) => mockCounselingSessions.filter(s => s.userId === userId),
+  sendCounselingMessage: (sessionId: string, text: string) => {
+    const session = mockCounselingSessions.find(s => s.id === sessionId);
+    if (session) {
+      session.messages.push({ id: `m${Date.now()}`, from: 'user', text, sentAt: date(0) });
+      session.lastMessage = text;
+      session.lastMessageAt = date(0);
+    }
+    return session;
+  },
+  getPeerSupportGroups: (district?: string) => district ? mockPeerSupportGroups.filter(g => g.district === district) : mockPeerSupportGroups,
+  toggleJoinGroup: (id: string) => {
+    const group = mockPeerSupportGroups.find(g => g.id === id);
+    if (group) { group.isJoined = !group.isJoined; group.memberCount += group.isJoined ? 1 : -1; }
+    return group;
+  },
+  getCopingSessions: (userId?: string) => userId ? mockCopingSessions : mockCopingSessions,
+  addCopingSession: (s: CopingSession) => { mockCopingSessions.unshift(s); return s; },
+  getDailyTip: () => mockDailyTips[Math.floor(Math.random() * mockDailyTips.length)],
+  getYouthResources: () => mockYouthResources,
+  getHealingStories: (featuredOnly?: boolean) => featuredOnly ? mockHealingStories.filter(s => s.featured) : mockHealingStories,
+  getHealingVideos: (category?: string) => category ? mockHealingVideos.filter(v => v.category === category) : mockHealingVideos,
+  getHealingAudio: (category?: string) => category ? mockHealingAudio.filter(a => a.category === category) : mockHealingAudio,
   getStats: () => ({
     totalBeneficiaries: mockBeneficiaries.length,
     screeningsDone: mockScreenings.length,
     activeGroups: mockSociotherapyGroups.filter(g => g.status === 'active').length,
-    cooperativesActive: mockCooperatives.filter(c => c.status === 'active').length,
     emergencyCases: mockEmergencies.filter(e => e.status !== 'resolved' && e.status !== 'false_alarm').length,
     treatmentComplete: mockBeneficiaries.filter(b => b.status === 'recovered').length,
     totalCHWs: 10,
     totalSurveyedBy: NAMES.length,
     activeEmergencies: mockEmergencies.filter(e => e.status === 'new' || e.status === 'dispatched').length,
   }),
+  getSupportRequests: () => mockSupportRequests,
+  addSupportRequest: (r: SupportRequest) => { mockSupportRequests.unshift(r); return r; },
+  updateSupportRequest: (id: string, data: Partial<SupportRequest>) => {
+    const r = mockSupportRequests.find(s => s.id === id);
+    if (r) Object.assign(r, data);
+    return r;
+  },
 };

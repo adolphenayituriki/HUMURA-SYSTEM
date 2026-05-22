@@ -10,7 +10,7 @@ import Beneficiaries from './pages/Beneficiaries';
 import Screening from './pages/Screening';
 import Referrals from './pages/Referrals';
 import Sociotherapy from './pages/Sociotherapy';
-import Cooperatives from './pages/Cooperatives';
+import Coping from './pages/Coping';
 import Emergencies from './pages/Emergencies';
 import Youth from './pages/Youth';
 import Reports from './pages/Reports';
@@ -18,6 +18,7 @@ import Admin from './pages/Admin';
 import Landing from './pages/Landing';
 import Media from './pages/Media';
 import Privacy from './pages/Privacy';
+import HealingMedia from './pages/HealingMedia';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isAuth = useAuthStore((s) => s.isAuthenticated);
@@ -60,7 +61,8 @@ export default function App() {
           <Route path="/screening" element={<Screening />} />
           <Route path="/referrals" element={<Referrals />} />
           <Route path="/sociotherapy" element={<Sociotherapy />} />
-          <Route path="/cooperatives" element={<Cooperatives />} />
+          <Route path="/wellness" element={<Coping />} />
+          <Route path="/healing-media" element={<HealingMedia />} />
           <Route path="/emergencies" element={<Emergencies />} />
           <Route path="/youth" element={<Youth />} />
           <Route path="/reports" element={<Reports />} />

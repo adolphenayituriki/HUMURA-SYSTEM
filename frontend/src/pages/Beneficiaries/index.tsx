@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faChevronLeft, faChevronRight, faFilter, faUsers, faPlus, faPenToSquare, faTrashCan, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faChevronLeft, faChevronRight, faFilter, faUsers, faPlus, faPenToSquare, faTrashCan, faEye, faMapPin, faVenusMars, faTag } from '@fortawesome/free-solid-svg-icons';
 import { service } from '../../services/mockData';
 import { useToastStore } from '../../store/toastStore';
 import { Badge } from '../../components/shared/Badge';
@@ -11,6 +11,7 @@ import { useAuthStore } from '../../store/authStore';
 import Modal from '../../components/shared/Modal';
 import ConfirmDialog from '../../components/shared/ConfirmDialog';
 import type { Beneficiary, UserRole } from '../../types';
+import { CATEGORY_TO_ROLES } from '../../types';
 
 const CAN_MANAGE_BENEFICIARIES: UserRole[] = ['admin', 'district_hospital', 'health_center', 'chw'];
 
@@ -114,6 +115,7 @@ export default function BeneficiariesPage() {
       chwName: form.chwName,
       registeredAt: editId ? (beneficiaries.find(b => b.id === editId)?.registeredAt || new Date().toISOString().split('T')[0]) : new Date().toISOString().split('T')[0],
       status: form.status as Beneficiary['status'],
+      managedByRole: CATEGORY_TO_ROLES[form.category as Beneficiary['category']] || [],
       traumaLevel: form.traumaLevel as Beneficiary['traumaLevel'],
       notes: form.notes || '',
     };
@@ -188,7 +190,7 @@ export default function BeneficiariesPage() {
       </div>
 
       <div className="rounded-xl border border-ink-200/60 overflow-hidden bg-white shadow-sm">
-        <div className="overflow-x-auto">
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-sm table-modern">
             <thead>
               <tr>
@@ -241,14 +243,54 @@ export default function BeneficiariesPage() {
               ))}
             </tbody>
           </table>
-          {paged.length === 0 && (
-            <div className="text-center py-16">
-              <FontAwesomeIcon icon={faUsers} className="text-[22px] text-ink-300 mx-auto mb-4" />
-              <p className="text-sm font-semibold text-ink-500">{trans.beneficiaries.noResults}</p>
-              <p className="text-xs text-ink-300 mt-1">Try adjusting your search or filter criteria</p>
-            </div>
-          )}
         </div>
+        <div className="md:hidden divide-y divide-ink-100">
+          {paged.map((b) => (
+            <div key={b.id} className="p-4 space-y-3 hover:bg-ink-50/30 transition-colors">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-bold text-ink-800">{b.fullName}</p>
+                  <p className="text-[11px] text-ink-400 font-mono">{b.id}</p>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  {canManage ? (
+                    <>
+                      <button onClick={() => openEdit(b)}
+                        className="w-7 h-7 rounded-lg flex items-center justify-center text-ink-300 hover:text-brand-500 hover:bg-brand-50 transition-all">
+                        <FontAwesomeIcon icon={faPenToSquare} className="text-[12px]" />
+                      </button>
+                      <button onClick={() => setDeleteTarget(b)}
+                        className="w-7 h-7 rounded-lg flex items-center justify-center text-ink-300 hover:text-rose-500 hover:bg-rose-50 transition-all">
+                        <FontAwesomeIcon icon={faTrashCan} className="text-[12px]" />
+                      </button>
+                    </>
+                  ) : (
+                    <button onClick={() => openEdit(b)}
+                      className="w-7 h-7 rounded-lg flex items-center justify-center text-ink-300 hover:text-brand-500 hover:bg-brand-50 transition-all">
+                      <FontAwesomeIcon icon={faEye} className="text-[12px]" />
+                    </button>
+                  )}
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-[11px] text-ink-500">
+                <span className="flex items-center gap-1"><FontAwesomeIcon icon={faVenusMars} className="text-[10px] text-ink-300" /> {b.sex}, {b.age} yrs</span>
+                <span className="flex items-center gap-1"><FontAwesomeIcon icon={faMapPin} className="text-[10px] text-ink-300" /> {b.district}</span>
+                <span className="flex items-center gap-1"><FontAwesomeIcon icon={faTag} className="text-[10px] text-ink-300" /> {b.category}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <Badge color={b.traumaLevel === 'high' ? 'rose' : b.traumaLevel === 'medium' ? 'blue' : 'forest'}>{b.traumaLevel}</Badge>
+                <Badge color={b.status === 'active' ? 'forest' : b.status === 'recovered' ? 'brand' : b.status === 'in_treatment' ? 'warm' : 'slate'}>{b.status === 'active' ? trans.beneficiaries.statusActive : b.status === 'referred' ? trans.beneficiaries.statusReferred : b.status === 'in_treatment' ? trans.beneficiaries.statusInTreatment : b.status === 'recovered' ? trans.beneficiaries.statusRecovered : b.status}</Badge>
+              </div>
+            </div>
+          ))}
+        </div>
+        {paged.length === 0 && (
+          <div className="text-center py-16">
+            <FontAwesomeIcon icon={faUsers} className="text-[22px] text-ink-300 mx-auto mb-4" />
+            <p className="text-sm font-semibold text-ink-500">{trans.beneficiaries.noResults}</p>
+            <p className="text-xs text-ink-300 mt-1">Try adjusting your search or filter criteria</p>
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-1">

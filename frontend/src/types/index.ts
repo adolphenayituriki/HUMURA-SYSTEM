@@ -21,7 +21,7 @@ export interface User {
 
 export const CATEGORY_TO_ROLES: Record<Beneficiary['category'], UserRole[]> = {
   'Genocide Survivor': ['sociotherapy_facilitator', 'district_hospital'],
-  'Widow': ['cooperative_leader', 'health_center'],
+  'Widow': ['health_center', 'chw'],
   'Orphan': ['youth_counselor', 'chw'],
   'Former Perpetrator': ['sociotherapy_facilitator'],
   'Vulnerable Youth': ['youth_counselor', 'chw'],
@@ -82,6 +82,7 @@ export interface SupportPlan {
   status: 'active' | 'on_hold' | 'closed';
   steps: SupportStep[];
   summary: string;
+  followUpNotes?: string;
 }
 
 export interface Referral {
@@ -124,20 +125,6 @@ export interface SociotherapySession {
   notes: string;
 }
 
-export interface Cooperative {
-  id: string;
-  name: string;
-  type: 'SACCO' | 'Agribusiness' | 'Livestock' | 'Tailoring' | 'Retail' | 'Other';
-  district: string;
-  leaderId: string;
-  leaderName: string;
-  memberCount: number;
-  femaleMembers: number;
-  totalCapital: number;
-  status: 'active' | 'forming' | 'dormant';
-  registeredAt: string;
-}
-
 export interface EmergencyAlert {
   id: string;
   beneficiaryId: string;
@@ -150,6 +137,7 @@ export interface EmergencyAlert {
   status: 'new' | 'dispatched' | 'resolved' | 'false_alarm';
   createdAt: string;
   resolvedAt?: string;
+  followUpNotes?: string;
 }
 
 export interface YouthParticipant {
@@ -169,7 +157,120 @@ export interface ReportData {
   totalBeneficiaries: number;
   screeningsDone: number;
   activeGroups: number;
-  cooperativesActive: number;
   emergencyCases: number;
   treatmentComplete: number;
+}
+
+export interface Counselor {
+  id: string;
+  fullName: string;
+  title: string;
+  specialty: string;
+  district: string;
+  available: boolean;
+  rating: number;
+  sessionCount: number;
+  languages: string[];
+  avatar?: string;
+}
+
+export interface CounselingSession {
+  id: string;
+  counselorId: string;
+  counselorName: string;
+  userId: string;
+  lastMessage: string;
+  lastMessageAt: string;
+  status: 'active' | 'resolved' | 'pending';
+  unreadCount: number;
+  messages: Array<{
+    id: string;
+    from: 'user' | 'counselor';
+    text: string;
+    sentAt: string;
+  }>;
+}
+
+export interface PeerSupportGroup {
+  id: string;
+  name: string;
+  description: string;
+  topic: string;
+  memberCount: number;
+  maxMembers: number;
+  meetingSchedule: string;
+  district: string;
+  facilitatorName: string;
+  isJoined: boolean;
+}
+
+export interface CopingSession {
+  id: string;
+  type: 'breathing' | 'meditation' | 'grounding' | 'journaling';
+  duration: number;
+  completedAt: string;
+  moodBefore?: number;
+  moodAfter?: number;
+}
+
+export interface HealingStory {
+  id: string;
+  title: string;
+  author: string;
+  age: number;
+  district: string;
+  excerpt: string;
+  content: string;
+  image: string;
+  tags: string[];
+  featured: boolean;
+}
+
+export interface HealingVideo {
+  id: string;
+  title: string;
+  description: string;
+  duration: string;
+  thumbnail: string;
+  src?: string;
+  category: 'guided' | 'story' | 'educational';
+}
+
+export interface HealingAudio {
+  id: string;
+  title: string;
+  description: string;
+  duration: string;
+  category: 'meditation' | 'breathing' | 'calming' | 'guidance';
+}
+
+export interface DailyTip {
+  id: string;
+  title: string;
+  content: string;
+  category: 'coping' | 'mindfulness' | 'gratitude' | 'resilience';
+}
+
+export interface SupportRequest {
+  id: string;
+  userId: string;
+  userName: string;
+  district: string;
+  supportType: 'counseling' | 'sociotherapy' | 'youth' | 'emergency' | 'other';
+  message: string;
+  preferredContact: string;
+  status: 'pending' | 'accepted' | 'completed' | 'cancelled';
+  createdAt: string;
+  assignedTo?: string;
+  assignedToRole?: string;
+}
+
+export interface YouthResource {
+  id: string;
+  topic: 'identity' | 'inheritedTrauma' | 'emotionalAwareness' | 'peerPressure';
+  title: string;
+  summary: string;
+  icon: string;
+  color: string;
+  practices: string[];
 }
