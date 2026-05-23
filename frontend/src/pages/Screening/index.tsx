@@ -357,8 +357,8 @@ export default function ScreeningPage() {
           </h1>
           <p className="text-sm text-ink-400 mt-2">{trans.screening.subtitle}</p>
         </div>
-        <Button onClick={() => { setShowForm(!showForm); if (!showForm) resetForm(); }} variant="primary" className="shrink-0">
-          <FontAwesomeIcon icon={faPlus} className="text-[14px]" /> {trans.screening.newAssessment}
+        <Button onClick={() => { setShowForm(!showForm); if (!showForm) resetForm(); }} variant="primary" className="shrink-0 !bg-gradient-to-r !from-brand-600 !to-brand-500 !text-white !border-0 !shadow-md hover:!shadow-lg !h-10 !px-5">
+          <FontAwesomeIcon icon={faPlus} className="text-[13px]" /> {trans.screening.newAssessment}
         </Button>
       </div>
 
@@ -409,7 +409,7 @@ export default function ScreeningPage() {
                       {trans.screening.next} <FontAwesomeIcon icon={faChevronRight} className="text-[14px]" />
                     </Button>
                   ) : (
-                    <Button onClick={() => { handleSubmitAssessment(); setShowForm(false); }} variant="success" size="sm">
+                    <Button onClick={() => { handleSubmitAssessment(); setShowForm(false); }} variant="success" size="sm" className="!bg-gradient-to-r !from-brand-600 !to-brand-500 !text-white !border-0 !shadow-md">
                       <FontAwesomeIcon icon={faCheck} className="text-[14px]" /> {trans.screening.submitAssessment}
                     </Button>
                   )}
@@ -457,7 +457,7 @@ export default function ScreeningPage() {
                   )}
 
                   <div className="flex items-center gap-3 mt-5">
-                    <Button onClick={() => { setShowSuccess(false); resetForm(); }} variant="primary" size="sm">
+                    <Button onClick={() => { setShowSuccess(false); resetForm(); }} variant="primary" size="sm" className="!bg-gradient-to-r !from-brand-600 !to-brand-500 !text-white !border-0 !shadow-md">
                       <FontAwesomeIcon icon={faPlus} className="text-[11px]" /> New Assessment
                     </Button>
                     <Button onClick={() => { setShowSuccess(false); resetForm(); }} variant="ghost" size="sm">

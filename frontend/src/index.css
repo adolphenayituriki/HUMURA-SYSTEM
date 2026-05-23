@@ -125,6 +125,7 @@
 }
 
 *,*::before,*::after { box-sizing:border-box; margin:5px; padding:0; }
+button { padding:5px; }
 footer,footer * { margin-bottom:0; }
 header { margin-top:0; }
 header * { margin:0; }

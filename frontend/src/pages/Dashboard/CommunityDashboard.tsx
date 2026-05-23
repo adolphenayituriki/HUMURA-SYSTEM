@@ -278,7 +278,7 @@ export default function CommunityDashboard() {
                 onClick={() => navigate('/screening')}
                 variant="primary"
                 size="sm"
-                className="!bg-white !text-brand-700 !shadow-md hover:!shadow-lg !border-0 !font-bold !h-9 !px-4"
+                className="!bg-gradient-to-r !from-brand-600 !to-brand-500 !text-white !shadow-md hover:!shadow-lg !border-0 !font-bold !h-9 !px-4"
               >
                 <FontAwesomeIcon icon={faPlus} className="text-[11px]" /> {cd.startAssessment}
               </Button>
@@ -410,7 +410,7 @@ export default function CommunityDashboard() {
             {screenings.length === 0 ? (
               <div className="text-center py-6">
                 <p className="text-xs text-ink-400">{cd.noScreenings}</p>
-                <Button onClick={() => navigate('/screening')} variant="primary" size="sm" className="mt-3">
+                <Button onClick={() => navigate('/screening')} variant="primary" size="sm" className="mt-3 !bg-gradient-to-r !from-brand-600 !to-brand-500 !text-white !border-0 !shadow-md">
                   <FontAwesomeIcon icon={faStethoscope} className="text-[11px]" /> {cd.startAssessment}
                 </Button>
               </div>

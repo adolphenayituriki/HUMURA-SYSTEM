@@ -132,7 +132,7 @@ export default function Dashboard() {
                 onClick={() => navigate('/screening')}
                 variant="primary"
                 size="md"
-                className="!bg-white !text-brand-700 !shadow-lg hover:!shadow-xl !border-0 !font-bold"
+                className="!bg-gradient-to-r !from-brand-600 !to-brand-500 !text-white !shadow-lg hover:!shadow-xl !border-0 !font-bold !h-10 !px-5"
               >
                 <FontAwesomeIcon icon={faPlus} className="text-[12px]" /> New Assessment
               </Button>

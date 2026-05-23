@@ -228,7 +228,7 @@ export default function DashboardLayout() {
           )}
         </div>
 
-        <nav className="flex-1 overflow-y-auto py-4 overscroll-contain scrollbar-thin">
+        <nav className="flex-1 py-4">
           <div className={showLabels ? 'px-3 space-y-1' : 'px-2 space-y-0.5'}>
           {items.map(({ to, label, icon }) => {
             const isActive = location.pathname === to || (to !== '/dashboard' && location.pathname.startsWith(to));
@@ -322,7 +322,7 @@ export default function DashboardLayout() {
         </div>
       </motion.aside>
 
-      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden md:pl-[32px]">
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
         <header className="h-16 flex items-center gap-4 px-6 shrink-0 border-b border-ink-100/60 bg-white/90 backdrop-blur-lg sticky top-0 z-30">
           <button onClick={() => { if (isMobile) setMobileOpen(true); else toggleSidebar(); }}
             className="w-9 h-9 rounded-xl flex items-center justify-center text-ink-500 hover:text-brand-600 hover:bg-brand-50 transition-all shrink-0">
@@ -338,7 +338,7 @@ export default function DashboardLayout() {
             ))}
           </div>
 
-          <div className="flex items-center gap-3 shrink-0 ml-auto">
+          <div className="flex items-center gap-[5px] shrink-0 ml-auto">
             <div className={clsx(
               'relative transition-all duration-200',
               searchFocused ? 'w-52 md:w-64' : 'w-36 md:w-44 xl:w-56',
