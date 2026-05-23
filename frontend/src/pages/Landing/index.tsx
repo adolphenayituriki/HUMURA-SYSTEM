@@ -273,7 +273,7 @@ export default function Landing() {
         <div className="absolute top-1/3 right-[20%] w-3 h-3 rounded-full bg-warm-300/30 blur-[3px]" />
         <div className="absolute bottom-1/3 left-1/3 w-1.5 h-1.5 rounded-full bg-brand-400/30 blur-[2px]" />
 
-        <div className="container mt-5 pt-32 pb-32 md:pt-44 md:pb-44 lg:pt-52 lg:pb-52 relative w-full">
+        <div className="container pt-32 pb-32 md:pt-44 md:pb-44 lg:pt-52 lg:pb-52 relative w-full">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-start">
             <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}>
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-50 border border-brand-200/60 text-brand-700 text-xs font-semibold uppercase tracking-[.08em] mb-6 shadow-sm">
@@ -301,7 +301,7 @@ export default function Landing() {
                   </Button>
                 </a>
               </div>
-              <div className="mt-10 flex flex-wrap items-center gap-5  text-xs text-ink-400">
+              <div className="mt-5 flex flex-wrap items-center gap-5  text-xs text-ink-400">
                 <span className="flex items-center gap-1.5"><FontAwesomeIcon icon={faCircleCheck} className="text-[14px] text-brand-500" /> {trans.landing.trustHipaa}</span>
                 <span className="flex items-center gap-1.5"><FontAwesomeIcon icon={faCircleCheck} className="text-[14px] text-brand-500" /> {trans.landing.trustRbac}</span>
                 <span className="flex items-center gap-1.5"><FontAwesomeIcon icon={faCircleCheck} className="text-[14px] text-brand-500" /> {trans.landing.trustAes}</span>
@@ -363,7 +363,7 @@ export default function Landing() {
       </section>
 
       {/* ═══════════════ STATS ═══════════════ */}
-      <section className="py-24 bg-ink-50/20 mt-32">
+      <section className="py-24 bg-ink-50/20 mt-10">
         <div className="container">
           <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="grid grid-cols-2 lg:grid-cols-4 gap-6">
@@ -386,7 +386,7 @@ export default function Landing() {
       </section>
 
       {/* ═══════════════ PARTNERS CAROUSEL ═══════════════ */}
-      <section className="py-24 bg-white border-b border-ink-100/60 mt-32">
+      <section className="py-24 bg-white border-b border-ink-100/60 mt-10">
         <div className="container">
            <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
              <p className="text-[11px] font-semibold text-ink-400 uppercase tracking-[.12em] text-center mb-16">
@@ -402,11 +402,11 @@ export default function Landing() {
               >
                 {[...partners, ...partners].map((p, i) => (
                   <div key={`${p.name}-${i}`}
-                    className="flex items-center gap-3 shrink-0 px-6 py-3 rounded-xl bg-white border border-ink-200/60 shadow-sm hover:shadow-md hover:border-brand-200/50 transition-all">
+                    className="flex items-center gap-4 shrink-0 px-6 py-4 rounded-xl bg-white border border-ink-200/60 shadow-sm hover:shadow-md hover:border-brand-200/50 transition-all">
                     {p.logo ? (
-                      <img src={p.logo} alt={p.name} className="w-8 h-8 rounded-lg object-contain" />
+                      <img src={p.logo} alt={p.name} className="w-12 h-12 rounded-lg object-contain" />
                     ) : (
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs">
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center font-bold text-sm bg-ink-50 text-ink-500">
                         {p.name.charAt(0)}
                       </div>
                     )}
@@ -420,7 +420,7 @@ export default function Landing() {
       </section>
 
       {/* ═══════════════ ABOUT ═══════════════ */}
-      <section id="about" className="py-24 bg-white mt-32">
+      <section id="about" className="py-24 bg-white mt-10">
         <div className="container">
           <div className="grid lg:grid-cols-2 gap-20 lg:gap-28 items-start">
             <motion.div {...fadeUp}>
@@ -541,7 +541,7 @@ export default function Landing() {
       </section>
 
       {/* ═══════════════ SERVICES ═══════════════ */}
-      <section id="services" className="py-24 bg-ink-50/20 mt-32">
+      <section id="services" className="py-24 bg-ink-50/20 mt-10">
         <div className="container">
           <motion.div {...fadeUp} className="text-center mb-20">
             <span className="inline-block px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/60 text-brand-700 text-xs font-semibold uppercase tracking-[.08em] mb-8">{trans.landing.servicesBadge}</span>
@@ -578,7 +578,7 @@ export default function Landing() {
       </section>
 
       {/* ═══════════════ YOUTH + TESTIMONIAL ═══════════════ */}
-      <section id="youth" className="py-24 bg-white mt-32">
+      <section id="youth" className="py-24 bg-white mt-10">
         <div className="container">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-start">
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
@@ -653,7 +653,7 @@ export default function Landing() {
       </section>
 
       {/* ═══════════════ COMMUNITY ═══════════════ */}
-      <section id="community" className="py-24 bg-ink-50/20 relative overflow-hidden mt-32">
+      <section id="community" className="py-24 bg-ink-50/20 relative overflow-hidden mt-10">
         <div className="absolute -top-20 left-1/4 w-80 h-80 rounded-full bg-brand-50/30 blur-3xl pointer-events-none" />
         <div className="absolute -bottom-20 right-1/4 w-80 h-80 rounded-full bg-warm-50/20 blur-3xl pointer-events-none" />
         <div className="container relative">
@@ -747,7 +747,7 @@ export default function Landing() {
       </section>
 
       {/* ═══════════════ CONTACT ═══════════════ */}
-      <section id="contact" className="py-24 bg-white mt-32">
+      <section id="contact" className="py-24 bg-white mt-10">
         <div className="container">
           <motion.div {...fadeUp} className="text-center mb-20">
             <span className="inline-block px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/60 text-brand-700 text-xs font-semibold uppercase tracking-[.08em] mb-8">{trans.landing.contactBadge}</span>
@@ -802,7 +802,7 @@ export default function Landing() {
       </section>
 
       {/* ═══════════════ CTA ═══════════════ */}
-      <section className="relative overflow-hidden py-24 lg:py-28 mt-32"
+      <section className="relative overflow-hidden py-[100px] mt-10"
         style={{ background: 'linear-gradient(165deg, #000c0a 0%, #003128 35%, #007A64 70%, #33a38f 100%)' }}>
         {/* Decorative orbs */}
         <div className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-brand-400/10 blur-[120px]" />
@@ -813,29 +813,34 @@ export default function Landing() {
         <div className="absolute inset-0 opacity-[.04]"
           style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,.6) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
 
-        {/* Top separator */}
-        <div className="container relative mb-8">
-          <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+        {/* Floating particles */}
+        <div className="absolute top-20 left-[10%] w-2 h-2 rounded-full bg-brand-300/20 blur-sm" />
+        <div className="absolute bottom-32 right-[15%] w-3 h-3 rounded-full bg-brand-200/15 blur-sm" />
+        <div className="absolute top-1/3 right-[25%] w-1.5 h-1.5 rounded-full bg-white/10 blur-sm" />
+
+        {/* Max width container */}
+        <div className="max-w-[1400px] mx-auto px-10 relative">
+          <div className="grid lg:grid-cols-2 gap-8 xl:gap-12 items-center">
             {/* Left: text */}
             <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: '-80px' }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}>
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white/70 text-xs font-semibold uppercase tracking-[.08em] border border-white/10 mb-6">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white/60 text-xs font-semibold uppercase tracking-[.08em] border border-white/10 mb-8">
                 <FontAwesomeIcon icon={faWandSparkles} className="text-[11px]" />
                 {trans.landing.ctaHeading.split(' ').slice(0, 2).join(' ')}
               </div>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-[-.02em] leading-[1.1] mb-5">
+              <h2 className="text-4xl sm:text-5xl lg:text-[64px] font-extrabold text-white tracking-[-.02em] leading-[1.1] mb-6">
                 {trans.landing.ctaHeading}
               </h2>
-              <p className="text-white/60 max-w-[520px] mb-10 text-sm sm:text-base lg:text-lg leading-[1.8]">
+              <p className="text-white/50 max-w-[520px] mb-10 text-base sm:text-lg xl:text-xl leading-[1.8]">
                 {trans.landing.ctaText}
               </p>
               <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-5">
                 <a href="/register">
-                  <Button variant="primary" size="lg" className="!h-13 !px-8 !text-sm sm:!text-base !bg-white !text-brand-700 hover:!bg-brand-50 !shadow-[0_4px_24px_rgba(0,0,0,.2)] hover:!shadow-[0_8px_32px_rgba(0,0,0,.25)] w-full sm:w-auto">
-                    {trans.landing.ctaCreateAccount} <FontAwesomeIcon icon={faArrowRight} className="text-[15px] sm:text-[17px]" />
+                  <Button variant="primary" size="lg" className="!h-14 !px-10 !text-sm sm:!text-base !bg-gradient-to-r !from-brand-600 !to-brand-500 hover:!from-brand-500 hover:!to-brand-400 !text-white !shadow-[0_8px_32px_rgba(0,122,100,.35)] hover:!shadow-[0_12px_40px_rgba(0,122,100,.45)] hover:!-translate-y-0.5 !transition-all !duration-300 w-full sm:w-auto !border-0">
+                    {trans.landing.ctaCreateAccount} <FontAwesomeIcon icon={faArrowRight} className="text-[15px] sm:text-[17px] ml-1" />
                   </Button>
                 </a>
                 <a href="/login">
-                  <Button variant="secondary" size="lg" className="!h-13 !px-8 !text-sm sm:!text-base !bg-white/10 !text-white !border-white/20 hover:!bg-white/20 !backdrop-blur-sm w-full sm:w-auto">
+                  <Button variant="secondary" size="lg" className="!h-14 !px-10 !text-sm sm:!text-base !bg-white/[0.06] !text-white !border-white/[0.15] hover:!bg-white/[0.12] !backdrop-blur-md hover:!-translate-y-0.5 !transition-all !duration-300 w-full sm:w-auto">
                     {trans.landing.ctaSignIn}
                   </Button>
                 </a>
@@ -844,7 +849,7 @@ export default function Landing() {
 
             {/* Right: stat cards */}
             <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: '-80px' }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-6">
                 {[
                   { value: '2,847+', label: 'Beneficiaries Served', icon: faUsers },
                   { value: '12', label: 'Districts Reached', icon: faGlobe },
@@ -852,31 +857,34 @@ export default function Landing() {
                   { value: '24', label: 'Youth Clubs', icon: faGraduationCap },
                 ].map((stat, i) => (
                   <motion.div key={stat.label}
-                    initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }} transition={{ delay: 0.2 + i * 0.08 }}
-                    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-5 sm:p-6 hover:bg-white/10 hover:border-white/20 transition-all duration-300 group">
-                    <FontAwesomeIcon icon={stat.icon} className="text-[16px] text-brand-500 shrink-0" />
-                    <p className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-0.5">{stat.value}</p>
-                    <p className="text-[11px] font-medium text-white/50 uppercase tracking-[.06em]">{stat.label}</p>
+                    initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }} transition={{ delay: 0.3 + i * 0.1 }}
+                    className="group bg-white/[0.06] backdrop-blur-md border border-white/[0.08] rounded-3xl p-8 hover:bg-white/[0.1] hover:border-white/[0.15] hover:-translate-y-1.5 hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)] transition-all duration-300 text-center">
+                    <div className="w-12 h-12 rounded-2xl bg-brand-500/15 flex items-center justify-center mx-auto mb-5 group-hover:bg-brand-500/25 transition-colors duration-300">
+                      <FontAwesomeIcon icon={stat.icon} className="text-xl text-brand-400" />
+                    </div>
+                    <p className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-1.5">{stat.value}</p>
+                    <p className="text-xs font-medium text-white/45 uppercase tracking-[.06em]">{stat.label}</p>
                   </motion.div>
                 ))}
               </div>
             </motion.div>
           </div>
         </div>
-
-        {/* Bottom glow */}
       </section>
 
       {/* ═══════════════ FOOTER ═══════════════ */}
       <footer className="relative overflow-hidden text-ink-400"
         style={{ background: 'linear-gradient(170deg, #0f242a 0%, #132e36 30%, #1a3f49 60%, #1f525f 100%)' }}>
+        {/* Dark overlay for depth */}
+        <div className="absolute inset-0 bg-black/10" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,.04)_0%,transparent_50%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(43,139,156,.08)_0%,transparent_50%)]" />
-        <div className="container relative py-20 sm:py-24">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-16">
-            {/* ─── Brand ─── */}
-            <div className="sm:col-span-2 lg:col-span-4">
+
+        <div className="max-w-[1400px] mx-auto px-10 relative pt-20 pb-0">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-12 xl:gap-16">
+            {/* Brand */}
+            <div className="sm:col-span-2 lg:col-span-1 xl:col-span-2">
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
                 <div className="flex items-center gap-3 mb-5">
                   <div className="relative">
@@ -891,7 +899,7 @@ export default function Landing() {
                 <p className="text-sm leading-relaxed text-ink-400 max-w-[320px] mb-8">
                   {trans.landing.footerDesc}
                 </p>
-                <div className="flex items-center gap-3 mb-10">
+                <div className="flex items-center gap-3 mb-6">
                   {[
                     { icon: faGlobe, href: '#', label: 'Website' },
                     { icon: faArrowUpRightFromSquare, href: '#', label: 'Portal' },
@@ -903,21 +911,11 @@ export default function Landing() {
                     </a>
                   ))}
                 </div>
-                <div className="hidden lg:block">
-                  <p className="text-xs font-semibold text-white/40 uppercase tracking-[.1em] mb-3">{trans.landing.ctaHeading.split(' ').slice(0, 3).join(' ')}</p>
-                  <div className="flex gap-2">
-                    <input type="email" placeholder="your@email.com"
-                      className="h-10 flex-1 min-w-0 px-4 rounded-lg text-xs bg-white/5 border border-white/10 focus:border-brand-400/50 focus:ring-2 focus:ring-brand-400/20 outline-none transition-all placeholder:text-ink-500 text-white" />
-                    <button className="h-10 px-4 rounded-lg bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold transition-colors shrink-0">
-                      <FontAwesomeIcon icon={faPaperPlane} className="text-[11px]" />
-                    </button>
-                  </div>
-                </div>
               </motion.div>
             </div>
 
-            {/* ─── Quick Links ─── */}
-            <div className="lg:col-span-2">
+            {/* Quick Links */}
+            <div>
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
                 <p className="text-[11px] font-bold text-white/50 uppercase tracking-[.14em] mb-6 flex items-center gap-2">
                   <span className="w-5 h-px bg-brand-400/40" />
@@ -937,8 +935,8 @@ export default function Landing() {
               </motion.div>
             </div>
 
-            {/* ─── Programs ─── */}
-            <div className="lg:col-span-2">
+            {/* Programs */}
+            <div>
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}>
                 <p className="text-[11px] font-bold text-white/50 uppercase tracking-[.14em] mb-6 flex items-center gap-2">
                   <span className="w-5 h-px bg-brand-400/40" />
@@ -957,8 +955,8 @@ export default function Landing() {
               </motion.div>
             </div>
 
-            {/* ─── Partners ─── */}
-            <div className="lg:col-span-2">
+            {/* Partners */}
+            <div>
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }}>
                 <p className="text-[11px] font-bold text-white/50 uppercase tracking-[.14em] mb-6 flex items-center gap-2">
                   <span className="w-5 h-px bg-brand-400/40" />
@@ -977,14 +975,14 @@ export default function Landing() {
               </motion.div>
             </div>
 
-            {/* ─── Contact ─── */}
-            <div className="lg:col-span-2">
+            {/* Contact */}
+            <div>
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.4 }}>
                 <p className="text-[11px] font-bold text-white/50 uppercase tracking-[.14em] mb-6 flex items-center gap-2">
                   <span className="w-5 h-px bg-brand-400/40" />
                   {trans.landing.footerContact}
                 </p>
-                <ul className="space-y-4">
+                <ul className="space-y-5">
                   <li className="flex items-start gap-3 group cursor-default">
                     <FontAwesomeIcon icon={faLocationDot} className="text-[13px] text-brand-400/60 mt-0.5 shrink-0" />
                     <span className="text-sm text-ink-400">{trans.landing.footerContactAddress}</span>
@@ -1002,29 +1000,31 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* ─── Newsletter (mobile) ─── */}
-          <div className="lg:hidden mt-16 pt-8 border-t border-white/5">
-            <p className="text-xs font-semibold text-white/40 uppercase tracking-[.1em] mb-3 text-center">Stay Connected</p>
-            <div className="flex gap-2 max-w-sm mx-auto">
-              <input type="email" placeholder="your@email.com"
-                className="h-10 flex-1 min-w-0 px-4 rounded-lg text-xs bg-white/5 border border-white/10 focus:border-brand-400/50 focus:ring-2 focus:ring-brand-400/20 outline-none transition-all placeholder:text-ink-500 text-white" />
-              <button className="h-10 px-4 rounded-lg bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold transition-colors shrink-0">
-                <FontAwesomeIcon icon={faPaperPlane} className="text-[11px]" />
-              </button>
+          {/* Newsletter */}
+          <div className="mt-16 pt-8 border-t border-white/5">
+            <div className="max-w-md mx-auto text-center">
+              <p className="text-xs font-semibold text-white/40 uppercase tracking-[.1em] mb-4">Stay Connected</p>
+              <div className="flex gap-3">
+                <input type="email" placeholder="your@email.com"
+                  className="h-11 flex-1 min-w-0 px-5 rounded-xl text-sm bg-white/[0.05] border border-white/10 focus:border-brand-400/50 focus:ring-2 focus:ring-brand-400/20 outline-none transition-all placeholder:text-ink-500 text-white" />
+                <button className="h-11 px-6 rounded-xl bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white text-sm font-bold transition-all duration-300 shrink-0 shadow-lg shadow-brand-600/20">
+                  <FontAwesomeIcon icon={faPaperPlane} className="text-[13px]" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* ─── Bottom bar ─── */}
-        <div className="relative border-t border-white/5">
+        {/* Bottom bar */}
+        <div className="relative border-t border-white/5 mt-16">
           <div className="absolute inset-0 bg-black/20" />
-          <div className="container relative py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-ink-500">
+          <div className="max-w-[1400px] mx-auto px-10 relative py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-ink-500">
             <span>{trans.landing.footerCopyright.replace('{year}', String(new Date().getFullYear()))}</span>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-5">
               <Link to="/privacy" className="hover:text-brand-300 transition-colors">{trans.privacy.footer}</Link>
-              <span className="hidden sm:inline w-1 h-1 rounded-full bg-ink-600" />
+              <span className="w-1 h-1 rounded-full bg-ink-600" />
               <span className="flex items-center gap-1.5">{trans.landing.footerCredit} <FontAwesomeIcon icon={faHeartPulse} className="text-[11px] text-brand-400/60" /></span>
-              <span className="hidden sm:inline w-1 h-1 rounded-full bg-ink-600" />
+              <span className="w-1 h-1 rounded-full bg-ink-600" />
               <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 className="flex items-center gap-1.5 text-ink-500 hover:text-brand-300 transition-colors">
                 <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[10px]" />
