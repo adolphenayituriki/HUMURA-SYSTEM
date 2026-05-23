@@ -124,8 +124,10 @@
   h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); }
 }
 
-*,*::before,*::after { box-sizing:border-box; margin-bottom:10px; margin-top:10px; padding:5px; }
+*,*::before,*::after { box-sizing:border-box; margin:5px; padding:0; }
 footer,footer * { margin-bottom:0; }
+header { margin-top:0; }
+header * { margin:0; }
 
 html {
   -webkit-font-smoothing: antialiased;

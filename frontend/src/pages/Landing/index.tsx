@@ -327,7 +327,7 @@ export default function Landing() {
                   <div className="self-start">
                     <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/10 backdrop-blur-sm text-white/80 text-[11px] font-semibold uppercase tracking-[.08em]">
                       <FontAwesomeIcon icon={faHeartPulse} className="text-[12px]" />
-                      Live Impact
+                      Accessible Care
                     </div>
                   </div>
 
@@ -336,18 +336,18 @@ export default function Landing() {
                       <FontAwesomeIcon icon={faHandshake} className="text-[28px] text-white" />
                     </div>
                     <p className="text-white text-center font-bold text-lg leading-snug drop-shadow-sm mb-1">
-                      Healing Communities
+                      Mental Health For All
                     </p>
                     <p className="text-white/70 text-sm text-center max-w-[260px] drop-shadow-sm">
-                      Connecting survivors to care across Rwanda
+                      Accessible care through every channel
                     </p>
                   </div>
 
                   <div className="grid grid-cols-3 gap-4 p-4 rounded-2xl bg-white/10 border border-white/10 backdrop-blur-sm">
                     {[
-                      { val: '2,847+', label: trans.landing.statsBeneficiaries },
-                      { val: '128', label: trans.landing.statsGroups },
-                      { val: '97%', label: trans.landing.statsEngagement },
+                      { val: '26%', label: trans.landing.statsBeneficiaries },
+                      { val: '30', label: trans.landing.statsGroups },
+                      { val: '1M+', label: trans.landing.statsEngagement },
                     ].map(stat => (
                       <div key={stat.label} className="text-center">
                         <p className="text-white font-extrabold text-lg leading-none drop-shadow-sm">{stat.val}</p>
@@ -368,10 +368,10 @@ export default function Landing() {
           <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { value: '2,847+', label: trans.landing.statsBeneficiaries, icon: <FontAwesomeIcon icon={faUsers} className="text-[22px] text-brand-500" /> },
-              { value: '128', label: trans.landing.statsGroups, icon: <FontAwesomeIcon icon={faHandshake} className="text-[22px] text-brand-500" /> },
-              { value: '24', label: trans.landing.statsYouthPrograms, icon: <FontAwesomeIcon icon={faUsers} className="text-[22px] text-brand-500" /> },
-              { value: '97%', label: trans.landing.statsEngagement, icon: <FontAwesomeIcon icon={faHeartPulse} className="text-[22px] text-brand-500" /> },
+              { value: '26%', label: trans.landing.statsBeneficiaries, icon: <FontAwesomeIcon icon={faUsers} className="text-[22px] text-brand-500" /> },
+              { value: '30', label: trans.landing.statsGroups, icon: <FontAwesomeIcon icon={faHandshake} className="text-[22px] text-brand-500" /> },
+              { value: '16-25', label: trans.landing.statsYouthPrograms, icon: <FontAwesomeIcon icon={faUsers} className="text-[22px] text-brand-500" /> },
+              { value: '1M+', label: trans.landing.statsEngagement, icon: <FontAwesomeIcon icon={faHeartPulse} className="text-[22px] text-brand-500" /> },
             ].map(s => (
               <div key={s.label} className="relative bg-white rounded-2xl border border-ink-200/60 p-8 text-center shadow-sm hover:shadow-2xl hover:-translate-y-[3px] hover:border-brand-200/50 transition-all duration-300 group overflow-hidden h-full">
                 <div className="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center mb-4 group-hover:scale-105 transition-all duration-300">
@@ -477,7 +477,7 @@ export default function Landing() {
                           <FontAwesomeIcon icon={faUsers} className="text-[20px]" />
                         </div>
                         <div>
-                          <p className="text-white font-bold text-lg leading-none">2,847+</p>
+                          <p className="text-white font-bold text-lg leading-none">26%</p>
                           <p className="text-white/50 text-[11px] font-semibold uppercase tracking-[.06em] mt-1">{trans.landing.statsBeneficiaries}</p>
                         </div>
                       </div>
@@ -495,7 +495,7 @@ export default function Landing() {
                           <FontAwesomeIcon icon={faHandshake} className="text-[20px]" />
                         </div>
                         <div>
-                          <p className="text-white font-bold text-lg leading-none">128</p>
+                          <p className="text-white font-bold text-lg leading-none">30</p>
                           <p className="text-white/50 text-[11px] font-semibold uppercase tracking-[.06em] mt-1">{trans.landing.statsGroups}</p>
                         </div>
                       </div>
@@ -513,7 +513,7 @@ export default function Landing() {
                           <FontAwesomeIcon icon={faGraduationCap} className="text-[20px]" />
                         </div>
                         <div>
-                          <p className="text-white font-bold text-lg leading-none">24</p>
+                          <p className="text-white font-bold text-lg leading-none">16-25</p>
                           <p className="text-white/50 text-[11px] font-semibold uppercase tracking-[.06em] mt-1">{trans.landing.statsYouthPrograms}</p>
                         </div>
                       </div>
@@ -851,10 +851,10 @@ export default function Landing() {
             <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: '-80px' }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}>
               <div className="grid grid-cols-2 gap-6">
                 {[
-                  { value: '2,847+', label: 'Beneficiaries Served', icon: faUsers },
-                  { value: '12', label: 'Districts Reached', icon: faGlobe },
-                  { value: '128', label: 'Support Groups', icon: faHandshake },
-                  { value: '24', label: 'Youth Clubs', icon: faGraduationCap },
+                  { value: '26%', label: 'PTSD Prevalence', icon: faUsers },
+                  { value: '30', label: 'Districts Nationwide', icon: faGlobe },
+                  { value: '16-25', label: 'Youth Age Focus', icon: faGraduationCap },
+                  { value: 'Multi-Channel', label: 'App \u2022 Web \u2022 USSD \u2022 SMS', icon: faHandshake },
                 ].map((stat, i) => (
                   <motion.div key={stat.label}
                     initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
