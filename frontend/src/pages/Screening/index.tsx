@@ -481,13 +481,13 @@ export default function ScreeningPage() {
         ))}
       </div>
 
-      <div className="rounded-xl border border-ink-200/60 overflow-hidden bg-white shadow-sm">
+      <div className="rounded-xl border border-ink-200/40 overflow-hidden bg-white shadow-sm">
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-sm table-modern">
             <thead>
               <tr>
                 {[trans.screening.beneficiary, 'PHQ-9', 'GAD-7', 'PCL-5', trans.screening.total, trans.screening.riskLevel, trans.screening.recommendation, ''].map(h => (
-                  <th key={h}>{h}</th>
+                  <th key={h} className="text-left text-[11px] font-semibold text-ink-400 uppercase tracking-[.06em] px-6 py-4 whitespace-nowrap bg-ink-50/80 border-b border-ink-100">{h}</th>
                 ))}
               </tr>
             </thead>

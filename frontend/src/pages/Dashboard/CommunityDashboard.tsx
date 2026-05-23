@@ -20,6 +20,7 @@ import { SectionTitle } from './SectionTitle';
 import { service } from '../../services/mockData';
 import { useI18nStore } from '../../i18n';
 import { useAuthStore } from '../../store/authStore';
+import { useToastStore } from '../../store/toastStore';
 
 const MOOD_OPTIONS = [
   { label: 'Very Low', emoji: '😔', color: 'rose', value: 1 },
@@ -48,6 +49,9 @@ export default function CommunityDashboard() {
   const cd = trans.communityDashboard;
   const user = useAuthStore(s => s.user);
   const [playingMedia, setPlayingMedia] = useState<{ src: string; title: string } | null>(null);
+  const [showSupportRequest, setShowSupportRequest] = useState(false);
+  const [supportForm, setSupportForm] = useState({ supportType: 'counseling', message: '', preferredContact: '' });
+  const addToast = useToastStore(s => s.addToast);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const playVideo = (src: string, title: string) => {
@@ -168,6 +172,23 @@ export default function CommunityDashboard() {
     setMessageText('');
   }
 
+  function handleSubmitSupportRequest() {
+    service.addSupportRequest({
+      id: `SR-${Date.now()}`,
+      userId: user?.id ?? 'U-009',
+      userName: user?.fullName ?? 'Unknown',
+      district: user?.district ?? '',
+      supportType: supportForm.supportType as 'counseling' | 'sociotherapy' | 'youth' | 'emergency' | 'other',
+      message: supportForm.message,
+      preferredContact: supportForm.preferredContact,
+      status: 'pending',
+      createdAt: new Date().toISOString().split('T')[0],
+    });
+    setShowSupportRequest(false);
+    setSupportForm({ supportType: 'counseling', message: '', preferredContact: '' });
+    addToast('Support request submitted. A counselor will reach out to you soon.', 'success');
+  }
+
   const totalMood = moodAnswers.length > 0 ? moodAnswers.reduce((a, b) => a + b, 0) / moodAnswers.length : 0;
   const avgMood = totalMood;
   const streakDays = copingSessions.length;
@@ -218,20 +239,20 @@ export default function CommunityDashboard() {
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-600 via-brand-500 to-brand-400 p-6 md:p-8 lg:p-10"
+        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-600 via-brand-500 to-brand-400 p-5 md:p-6 lg:p-7"
       >
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2" />
         <div className="relative z-10">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div className="flex-1">
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight">
+              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-white leading-tight">
                 {cd.welcomeTitle.replace('{name}', firstName)}
               </h1>
-              <p className="text-white/80 text-sm md:text-base mt-2 max-w-xl leading-relaxed">
+              <p className="text-white/70 text-sm max-w-xl leading-relaxed">
                 {cd.welcomeSubtitle}
               </p>
-              <div className="flex flex-wrap items-center gap-3 mt-4">
+              <div className="flex flex-wrap items-center gap-2 mt-3">
                 {screenings[0] && (
                   <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/10">
                     <span className={`w-2 h-2 rounded-full ${
@@ -252,22 +273,22 @@ export default function CommunityDashboard() {
                 )}
               </div>
             </div>
-            <div className="flex flex-wrap gap-3 shrink-0">
+            <div className="flex flex-wrap gap-2 shrink-0">
               <Button
                 onClick={() => navigate('/screening')}
                 variant="primary"
-                size="md"
-                className="!bg-white !text-brand-700 !shadow-lg hover:!shadow-xl !border-0 !font-bold"
+                size="sm"
+                className="!bg-white !text-brand-700 !shadow-md hover:!shadow-lg !border-0 !font-bold !h-9 !px-4"
               >
-                <FontAwesomeIcon icon={faPlus} className="text-[12px]" /> {cd.startAssessment}
+                <FontAwesomeIcon icon={faPlus} className="text-[11px]" /> {cd.startAssessment}
               </Button>
               <Button
                 onClick={() => navigate('/wellness')}
                 variant="secondary"
-                size="md"
-                className="!bg-white/15 !text-white !border-white/20 hover:!bg-white/25 !backdrop-blur-sm"
+                size="sm"
+                className="!bg-white/15 !text-white !border-white/20 hover:!bg-white/25 !backdrop-blur-sm !h-9 !px-4"
               >
-                <FontAwesomeIcon icon={faLeaf} className="text-[12px]" /> {cd.breatheNow}
+                <FontAwesomeIcon icon={faLeaf} className="text-[11px]" /> {cd.breatheNow}
               </Button>
             </div>
           </div>
@@ -275,21 +296,21 @@ export default function CommunityDashboard() {
       </motion.div>
 
       {/* Crisis Helpline Banner */}
-      <div className="rounded-2xl bg-gradient-to-br from-rose-50 to-rose-100/50 border border-rose-200/60 p-4 md:p-5">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-          <span className="w-10 h-10 flex items-center justify-center text-rose-500 shrink-0">
-            <FontAwesomeIcon icon={faPhone} className="text-[18px]" />
+      <div className="rounded-2xl bg-gradient-to-br from-rose-50 to-rose-100/50 border border-rose-200/40 p-5 md:p-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <span className="w-11 h-11 rounded-xl bg-rose-100 flex items-center justify-center text-rose-500 shrink-0">
+            <FontAwesomeIcon icon={faPhone} className="text-[20px]" />
           </span>
           <div className="flex-1">
             <h3 className="text-sm font-bold text-rose-900">{cd.crisisHelpline}</h3>
-            <p className="text-xs text-rose-700/80 mt-0.5">
+            <p className="text-xs text-rose-700/70 mt-0.5 leading-relaxed">
               {cd.crisisHelplineDesc}
             </p>
           </div>
-          <a href="tel:116" className="shrink-0">
-            <Button variant="danger" size="sm">
-              <FontAwesomeIcon icon={faPhone} className="text-[11px]" /> {cd.callNow}
-            </Button>
+          <a href="tel:116"
+            className="shrink-0 inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-sm hover:shadow-md transition-all"
+          >
+            <FontAwesomeIcon icon={faPhone} className="text-[12px]" /> {cd.callNow}
           </a>
         </div>
       </div>
@@ -319,7 +340,7 @@ export default function CommunityDashboard() {
 
       {/* ========== SECTION 1: Self-Assessment & Awareness ========== */}
       <div>
-        <SectionTitle icon={<FontAwesomeIcon icon={faStethoscope} className="text-[13px]" />} label={cd.sectionAssessment} />
+        <SectionTitle icon={<FontAwesomeIcon icon={faStethoscope} />} label={cd.sectionAssessment} />
         <p className="text-xs text-ink-400 mt-1 mb-4">{cd.sectionAssessmentDesc}</p>
 
         <div className="grid lg:grid-cols-5 gap-5 md:gap-6">
@@ -443,12 +464,12 @@ export default function CommunityDashboard() {
 
       {/* ========== SECTION 2: Coping & Support Tools ========== */}
       <div>
-        <SectionTitle icon={<FontAwesomeIcon icon={faLeaf} className="text-[13px]" />} label={cd.sectionCoping} />
+        <SectionTitle icon={<FontAwesomeIcon icon={faLeaf} />} label={cd.sectionCoping} />
         <p className="text-xs text-ink-400 mt-1 mb-4">{cd.sectionCopingDesc}</p>
 
         <div className="grid lg:grid-cols-3 gap-5 md:gap-6">
           {/* Daily Tip */}
-          <Card className="!p-5">
+          <Card className="!p-5 h-full">
             <div className="flex items-center gap-2 mb-3">
               <span className="w-7 h-7 flex items-center justify-center text-warm-600 shrink-0">
                 <FontAwesomeIcon icon={faLightbulb} className="text-[13px]" />
@@ -520,7 +541,7 @@ export default function CommunityDashboard() {
           </Card>
 
           {/* Coping Tools Grid */}
-          <Card className="!p-5">
+          <Card className="!p-5 h-full">
             <div className="flex items-center gap-2 mb-3">
               <span className="w-7 h-7 flex items-center justify-center text-brand-600 shrink-0">
                 <FontAwesomeIcon icon={faBrain} className="text-[13px]" />
@@ -534,7 +555,7 @@ export default function CommunityDashboard() {
                 { icon: faHeadphones, label: cd.audioGuidance, href: '/wellness', color: 'warm' },
               ].map((tool, i) => (
                 <button key={i} onClick={() => navigate(tool.href)}
-                  className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-ink-50/50 transition-all text-left"
+                  className="flex items-center gap-3 p-3 rounded-xl hover:bg-ink-50/50 transition-all text-left"
                 >
                   <span className={`w-7 h-7 flex items-center justify-center text-${tool.color}-600 shrink-0`}>
                     <FontAwesomeIcon icon={tool.icon} className="text-[12px]" />
@@ -657,7 +678,7 @@ export default function CommunityDashboard() {
 
       {/* ========== SECTION 3: Counselling & Human Support ========== */}
       <div>
-        <SectionTitle icon={<FontAwesomeIcon icon={faMessage} className="text-[13px]" />} label={cd.sectionCounseling} />
+        <SectionTitle icon={<FontAwesomeIcon icon={faMessage} />} label={cd.sectionCounseling} />
         <p className="text-xs text-ink-400 mt-1 mb-4">{cd.sectionCounselingDesc}</p>
 
         <div className="grid lg:grid-cols-3 gap-5 md:gap-6">
@@ -762,6 +783,22 @@ export default function CommunityDashboard() {
 
             <Card className="!p-5">
               <div className="flex items-center gap-2 mb-3">
+                <span className="w-7 h-7 flex items-center justify-center text-brand-600 shrink-0">
+                  <FontAwesomeIcon icon={faHandHoldingHeart} className="text-[13px]" />
+                </span>
+                <h3 className="text-sm font-bold text-ink-800">Request Support</h3>
+              </div>
+              <p className="text-[11px] text-ink-500 leading-relaxed mb-3">
+                Need to talk to someone? Submit a request and a counselor or support worker will reach out to you.
+              </p>
+              <button onClick={() => setShowSupportRequest(true)}
+                className="w-full h-9 rounded-xl bg-brand-500 hover:bg-brand-600 text-white text-xs font-semibold transition-all cursor-pointer shadow-sm hover:shadow-md">
+                <FontAwesomeIcon icon={faPlus} className="text-[11px] mr-1.5" /> Request Connection
+              </button>
+            </Card>
+
+            <Card className="!p-5">
+              <div className="flex items-center gap-2 mb-3">
                 <span className="w-7 h-7 flex items-center justify-center text-forest-600 shrink-0">
                   <FontAwesomeIcon icon={faPeopleGroup} className="text-[13px]" />
                 </span>
@@ -809,7 +846,7 @@ export default function CommunityDashboard() {
 
       {/* ========== SECTION 4: Youth-Focused Module (16-25) ========== */}
       <div>
-        <SectionTitle icon={<FontAwesomeIcon icon={faGraduationCap} className="text-[13px]" />} label={cd.sectionYouth} />
+        <SectionTitle icon={<FontAwesomeIcon icon={faGraduationCap} />} label={cd.sectionYouth} />
         <p className="text-xs text-ink-400 mt-1 mb-4">{cd.sectionYouthDesc}</p>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
@@ -851,7 +888,7 @@ export default function CommunityDashboard() {
 
       {/* ========== Getting Started Guide ========== */}
       <Card className="!p-5">
-        <SectionTitle icon={<FontAwesomeIcon icon={faShield} className="text-[13px]" />} label={cd.gettingStarted} />
+        <SectionTitle icon={<FontAwesomeIcon icon={faShield} />} label={cd.gettingStarted} />
         <div className="grid md:grid-cols-3 gap-4 mt-4">
           {[
             { step: 1, icon: faStethoscope, text: cd.step1, color: 'brand', href: '/screening' },
@@ -907,6 +944,73 @@ export default function CommunityDashboard() {
                   className="w-full aspect-video"
                   playsInline
                 />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Support Request Modal */}
+      <AnimatePresence>
+        {showSupportRequest && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[300] flex items-center justify-center bg-black/30 p-4"
+            onClick={() => setShowSupportRequest(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden"
+            >
+              <div className="flex items-center justify-between px-6 pt-6 pb-0">
+                <div className="flex items-center gap-3">
+                  <span className="w-10 h-10 rounded-xl bg-brand-50 flex items-center justify-center text-brand-600 shrink-0">
+                    <FontAwesomeIcon icon={faHandHoldingHeart} className="text-[18px]" />
+                  </span>
+                  <div>
+                    <h3 className="text-lg font-bold text-ink-800">Request Support</h3>
+                    <p className="text-xs text-ink-400">A counselor will reach out to you</p>
+                  </div>
+                </div>
+                <button onClick={() => setShowSupportRequest(false)}
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-ink-300 hover:text-ink-600 hover:bg-ink-50 transition-all cursor-pointer shrink-0">
+                  <FontAwesomeIcon icon={faXmark} className="text-[18px]" />
+                </button>
+              </div>
+
+              <div className="px-6 pt-5 pb-6 space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-ink-500 mb-1.5">Type of Support</label>
+                  <select value={supportForm.supportType} onChange={e => setSupportForm(f => ({ ...f, supportType: e.target.value }))}
+                    className="w-full h-10 px-3.5 rounded-xl text-sm border border-ink-200 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/30 outline-none bg-white transition-all appearance-none cursor-pointer">
+                    <option value="counseling">Counseling</option>
+                    <option value="sociotherapy">Sociotherapy</option>
+                    <option value="youth">Youth Programs</option>
+                    <option value="emergency">Emergency Support</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-ink-500 mb-1.5">Message (optional)</label>
+                  <textarea value={supportForm.message} onChange={e => setSupportForm(f => ({ ...f, message: e.target.value }))} rows={3} placeholder="Tell us a bit about what you need..."
+                    className="w-full px-3.5 py-2.5 rounded-xl text-sm border border-ink-200 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/30 outline-none bg-white transition-all resize-none placeholder:text-ink-300" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-ink-500 mb-1.5">Preferred Contact</label>
+                  <input type="text" value={supportForm.preferredContact} onChange={e => setSupportForm(f => ({ ...f, preferredContact: e.target.value }))} placeholder="Phone number or email"
+                    className="w-full h-10 px-3.5 rounded-xl text-sm border border-ink-200 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/30 outline-none bg-white transition-all placeholder:text-ink-300" />
+                </div>
+                <div className="flex items-center gap-3 pt-2">
+                  <button onClick={() => setShowSupportRequest(false)}
+                    className="flex-1 h-10 rounded-xl text-sm font-medium text-ink-600 bg-ink-50 hover:bg-ink-100 transition-all cursor-pointer">Cancel</button>
+                  <button onClick={handleSubmitSupportRequest}
+                    className="flex-1 h-10 rounded-xl text-sm font-semibold text-white bg-brand-500 hover:bg-brand-600 transition-all shadow-sm cursor-pointer">Submit Request</button>
+                </div>
               </div>
             </motion.div>
           </motion.div>

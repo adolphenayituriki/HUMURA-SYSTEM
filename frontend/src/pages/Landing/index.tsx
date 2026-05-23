@@ -315,9 +315,9 @@ export default function Landing() {
                   <video autoPlay muted loop playsInline
                     className="absolute inset-0 w-full h-full object-cover"
                   >
-                    <source src="/hero.mp4" type="video/mp4" />
+                    <source src="/video auto play.mp4" type="video/mp4" />
                   </video>
-                  <div className="absolute inset-0 bg-brand-900/20" />
+                  <div className="absolute inset-0 bg-black/30" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                 </div>
 

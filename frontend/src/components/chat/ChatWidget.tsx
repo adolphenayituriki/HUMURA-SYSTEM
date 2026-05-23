@@ -185,8 +185,8 @@ export default function ChatWidget() {
       </AnimatePresence>
 
       <button onClick={() => setOpen(!open)}
-        className="w-12 h-12 rounded-full bg-brand-500 hover:bg-brand-600 text-white shadow-md hover:shadow-lg transition-all flex items-center justify-center cursor-pointer shrink-0">
-        <FontAwesomeIcon icon={faComments} className="text-[18px]" />
+        className="w-11 h-11 rounded-full bg-brand-500 hover:bg-brand-600 text-white shadow-md hover:shadow-lg transition-all flex items-center justify-center cursor-pointer shrink-0">
+        <FontAwesomeIcon icon={faComments} className="text-[16px]" />
       </button>
     </div>
   );

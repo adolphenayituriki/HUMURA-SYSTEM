@@ -185,19 +185,22 @@ button:disabled, input:disabled, select:disabled, textarea:disabled {
     z-index: 10;
   }
   th {
-    @apply text-left text-[11px] font-semibold text-ink-500 uppercase tracking-[.06em] px-5 py-4 whitespace-nowrap bg-ink-50 border-b border-ink-100;
+    @apply text-left text-[11px] font-semibold text-ink-400 uppercase tracking-[.06em] px-6 py-4 whitespace-nowrap bg-ink-50/80 border-b border-ink-100;
   }
   td {
-    @apply px-5 py-4;
+    @apply px-6 py-4;
   }
   tbody tr {
-    @apply transition-all duration-150;
+    @apply transition-all duration-150 border-b border-ink-100/30;
+  }
+  tbody tr:last-child {
+    @apply border-b-0;
   }
   tbody tr:nth-child(even) {
-    background-color: rgba(248, 250, 252, 0.5);
+    background-color: rgba(248, 250, 252, 0.3);
   }
   tbody tr:hover {
-    background-color: rgba(57, 181, 74, 0.06);
+    background-color: rgba(57, 181, 74, 0.04);
   }
 }
 

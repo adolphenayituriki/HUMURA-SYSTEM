@@ -172,7 +172,7 @@ export default function DashboardLayout() {
       <motion.aside
         initial={false}
         animate={{
-          width: isMobile ? (mobileOpen ? 280 : 0) : (sidebarOpen ? 240 : 64),
+          width: isMobile ? (mobileOpen ? 280 : 0) : (sidebarOpen ? 220 : 64),
         }}
         transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
         className={clsx(
@@ -228,8 +228,8 @@ export default function DashboardLayout() {
           )}
         </div>
 
-        <nav className="flex-1 overflow-y-auto py-5 overscroll-contain scrollbar-thin">
-          <div className={showLabels ? 'px-3 space-y-1.5' : 'px-2 space-y-1'}>
+        <nav className="flex-1 overflow-y-auto py-4 overscroll-contain scrollbar-thin">
+          <div className={showLabels ? 'px-3 space-y-1' : 'px-2 space-y-0.5'}>
           {items.map(({ to, label, icon }) => {
             const isActive = location.pathname === to || (to !== '/dashboard' && location.pathname.startsWith(to));
             return (
@@ -237,16 +237,16 @@ export default function DashboardLayout() {
                 <div className={clsx(
                   'flex items-center text-sm font-medium transition-all duration-150 cursor-pointer select-none',
                   showLabels ? 'gap-3 px-3 py-[9px] rounded-xl' : 'gap-0 px-0 py-2.5 justify-center',
-                  isActive && showLabels && 'bg-brand-50 border-l-2 border-l-forest-500 rounded-none rounded-r-xl ml-0 pl-[9px]',
+                  isActive && showLabels && 'bg-brand-50/70 border-l-[3px] border-l-brand-500 rounded-none rounded-r-xl ml-0 pl-[calc(0.75rem-3px)]',
                   isActive && !showLabels && 'bg-brand-500/10 rounded-xl',
-                  isActive ? 'text-brand-700' : 'text-ink-500 hover:text-ink-800 hover:bg-ink-50'
+                  isActive ? 'text-brand-700 font-semibold' : 'text-ink-500 hover:text-ink-800 hover:bg-ink-50'
                 )}>
                   <div className={clsx(
                     'flex items-center justify-center w-9 h-9 rounded-xl shrink-0',
                     isActive && 'bg-brand-500/10',
                     !isActive && 'group-hover:bg-ink-50'
                   )}>
-                    <span className={clsx(isActive ? 'text-brand-500' : 'text-ink-400')}>{icon}</span>
+                    <span className={clsx(isActive ? 'text-brand-600' : 'text-ink-400')}>{icon}</span>
                   </div>
                   {showLabels && (
                     <>
@@ -266,13 +266,15 @@ export default function DashboardLayout() {
         </nav>
 
         {showLabels && (
-          <div className="mx-3 mb-3 p-3 rounded-xl bg-gradient-to-br from-rose-50 to-rose-100/50 border border-rose-200/60">
-            <div className="flex items-center gap-2 mb-1">
-              <FontAwesomeIcon icon={faTriangleExclamation} className="text-[12px] text-rose-500" />
-              <p className="text-[11px] font-bold text-rose-700">Need Help?</p>
+          <div className="mx-3 mb-3 p-3 rounded-xl bg-rose-50/70 border border-rose-200/50">
+            <div className="flex items-center gap-2 mb-0.5">
+              <span className="w-5 h-5 rounded-full bg-rose-100 flex items-center justify-center shrink-0">
+                <FontAwesomeIcon icon={faTriangleExclamation} className="text-[9px] text-rose-500" />
+              </span>
+              <p className="text-[11px] font-semibold text-rose-700">Need Help?</p>
             </div>
-            <p className="text-[10px] text-rose-600/80 leading-relaxed">Emergency Support 24/7 Available</p>
-            <p className="text-[10px] font-semibold text-rose-700 mt-1 tracking-wide">116 — Toll Free</p>
+            <p className="text-[10px] text-rose-500/80 leading-relaxed ml-7">Emergency Support 24/7</p>
+            <p className="text-[11px] font-bold text-rose-600 ml-7 mt-0.5">116 — Toll Free</p>
           </div>
         )}
 
@@ -321,7 +323,7 @@ export default function DashboardLayout() {
       </motion.aside>
 
       <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden md:pl-[32px]">
-        <header className="h-16 flex items-center gap-3 md:gap-4 px-5 md:px-6 xl:px-8 shrink-0 border-b border-ink-100/60 bg-white/90 backdrop-blur-lg sticky top-0 z-30">
+        <header className="h-16 flex items-center gap-4 px-6 shrink-0 border-b border-ink-100/60 bg-white/90 backdrop-blur-lg sticky top-0 z-30">
           <button onClick={() => { if (isMobile) setMobileOpen(true); else toggleSidebar(); }}
             className="w-9 h-9 rounded-xl flex items-center justify-center text-ink-500 hover:text-brand-600 hover:bg-brand-50 transition-all shrink-0">
             <FontAwesomeIcon icon={faBars} className="text-[17px]" />
@@ -349,10 +351,10 @@ export default function DashboardLayout() {
                 onFocus={() => setSearchFocused(true)}
                 onBlur={() => setSearchFocused(false)}
                 className={clsx(
-                  'w-full h-10 pl-10 pr-4 rounded-xl text-xs placeholder:text-ink-300 bg-ink-50/80 border transition-all outline-none',
+                  'w-full h-10 pl-10 pr-4 rounded-xl text-xs placeholder:text-ink-400 bg-ink-50 border transition-all outline-none',
                   searchFocused
-                    ? 'bg-white border-brand-400 ring-2 ring-brand-200/30'
-                    : 'border-ink-200/60 hover:border-ink-300',
+                    ? 'bg-white border-brand-400 ring-2 ring-brand-200/30 shadow-sm'
+                    : 'border-ink-200 hover:border-ink-300 shadow-sm',
                 )} />
             </div>
 
@@ -481,7 +483,7 @@ export default function DashboardLayout() {
         </header>
 
         <main className="flex-1 overflow-y-auto overflow-x-hidden">
-          <div className="max-w-[1400px] mx-auto px-5 py-6 md:py-8 lg:py-10">
+          <div className="max-w-7xl mx-auto px-6 py-6">
             <Outlet />
           </div>
         </main>
