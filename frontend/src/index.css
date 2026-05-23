@@ -125,6 +125,7 @@
 }
 
 *,*::before,*::after { box-sizing:border-box; /* margin:0; */ margin-bottom:10px; margin-top:10px; padding:0; }
+footer,footer * { margin-bottom:0; }
 
 html {
   -webkit-font-smoothing: antialiased;
