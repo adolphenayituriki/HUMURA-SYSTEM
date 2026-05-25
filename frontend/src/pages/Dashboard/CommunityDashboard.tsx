@@ -239,7 +239,7 @@ export default function CommunityDashboard() {
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-600 via-brand-500 to-brand-400 p-5 md:p-6 lg:p-7"
+        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-navy-900 via-navy-800 to-navy-700 p-5 md:p-6 lg:p-7"
       >
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2" />
@@ -317,11 +317,11 @@ export default function CommunityDashboard() {
 
       {/* Stats Row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-6">
-        {[
-          { icon: faStethoscope, label: cd.assessmentsTaken, value: screenings.length, color: 'brand' },
-          { icon: faLeaf, label: cd.copingSessions, value: copingSessions.length, color: 'brand' },
-          { icon: faPeopleGroup, label: cd.peerGroups, value: peerGroups.filter(g => g.isJoined).length, color: 'forest' },
-          { icon: faFire, label: cd.streak, value: `${streakDays} ${cd.days}`, color: 'warm' },
+          {[
+            { icon: faStethoscope, label: cd.assessmentsTaken, value: screenings.length, color: 'gold' },
+            { icon: faLeaf, label: cd.copingSessions, value: copingSessions.length, color: 'gold' },
+            { icon: faPeopleGroup, label: cd.peerGroups, value: peerGroups.filter(g => g.isJoined).length, color: 'gold' },
+            { icon: faFire, label: cd.streak, value: `${streakDays} ${cd.days}`, color: 'gold' },
         ].map((stat, i) => (
           <motion.div key={i}
             initial={{ opacity: 0, y: 10 }}
@@ -347,8 +347,8 @@ export default function CommunityDashboard() {
           {/* Mood Check-in */}
           <Card className="lg:col-span-2 !p-5">
             <div className="flex items-center gap-2 mb-4">
-              <span className="w-7 h-7 flex items-center justify-center text-brand-600 shrink-0">
-                <FontAwesomeIcon icon={faHeart} className="text-[13px]" />
+                <span className="w-7 h-7 flex items-center justify-center text-brand-600 shrink-0">
+                  <FontAwesomeIcon icon={faHeart} className="text-[13px]" />
               </span>
               <h3 className="text-sm font-bold text-ink-800">{cd.moodCheckTitle}</h3>
             </div>

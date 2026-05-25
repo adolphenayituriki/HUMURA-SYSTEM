@@ -47,7 +47,7 @@ const monthlyTrend = [
 ];
 
 const riskDistribution = [
-  { name: 'Low', value: 38, fill: '#10b981' },
+  { name: 'Low', value: 38, fill: '#2D963C' },
   { name: 'Medium', value: 24, fill: '#F97316' },
   { name: 'High', value: 14, fill: '#EF4444' },
   { name: 'Critical', value: 5, fill: '#dc2626' },
@@ -97,7 +97,7 @@ export default function Dashboard() {
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-600 via-brand-500 to-brand-400 p-6 md:p-8 lg:p-10"
+        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-navy-900 via-navy-800 to-navy-700 p-6 md:p-8 lg:p-10"
       >
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2" />
@@ -246,10 +246,10 @@ export default function Dashboard() {
         <Card className="lg:col-span-2">
           <div className="flex items-center justify-between mb-6">
             <SectionTitle icon={<FontAwesomeIcon icon={faChartBar} className="text-[13px]" />} label="Monthly Activity Overview" />
-            <div className="flex items-center gap-3 text-[11px] text-ink-400">
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-brand-500" /> Screenings</span>
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-warm-500" /> Referrals</span>
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-forest-500" /> Recoveries</span>
+              <div className="flex items-center gap-3 text-[11px] text-ink-400">
+                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-brand-500" /> Screenings</span>
+                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-warm-500" /> Referrals</span>
+                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-forest-500" /> Recoveries</span>
             </div>
           </div>
           <ResponsiveContainer width="100%" height={260}>
@@ -258,7 +258,7 @@ export default function Dashboard() {
               <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#64748B' }} axisLine={{ stroke: '#f1f5f9' }} tickLine={false} />
               <YAxis tick={{ fontSize: 11, fill: '#64748B' }} axisLine={false} tickLine={false} />
               <Tooltip contentStyle={{ fontSize: 12, borderRadius: 12, border: '1px solid #e2e8f0', background: '#fff', boxShadow: '0 4px 16px rgba(0,0,0,.06)' }} />
-              <Bar dataKey="screenings" fill="#0F766E" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="screenings" fill="#2D963C" radius={[4, 4, 0, 0]} />
               <Bar dataKey="referrals" fill="#F97316" radius={[4, 4, 0, 0]} />
               <Bar dataKey="recoveries" fill="#10b981" radius={[4, 4, 0, 0]} />
             </BarChart>
@@ -410,14 +410,14 @@ export default function Dashboard() {
             <div className="hidden md:block bg-white rounded-xl shadow-sm border border-ink-100/60 overflow-hidden">
               <table className="w-full">
                 <thead>
-                  <tr className="bg-ink-50/80">
-                    <th className="text-left text-xs font-semibold text-ink-500 uppercase tracking-[.05em] px-5 py-4">Beneficiary</th>
-                    <th className="text-left text-xs font-semibold text-ink-500 uppercase tracking-[.05em] px-5 py-4">PHQ-9</th>
-                    <th className="text-left text-xs font-semibold text-ink-500 uppercase tracking-[.05em] px-5 py-4">GAD-7</th>
-                    <th className="text-left text-xs font-semibold text-ink-500 uppercase tracking-[.05em] px-5 py-4">PCL-5</th>
-                    <th className="text-left text-xs font-semibold text-ink-500 uppercase tracking-[.05em] px-5 py-4">Progress</th>
-                    <th className="text-left text-xs font-semibold text-ink-500 uppercase tracking-[.05em] px-5 py-4">Risk Level</th>
-                    <th className="text-left text-xs font-semibold text-ink-500 uppercase tracking-[.05em] px-5 py-4">Date</th>
+                  <tr className="bg-navy-800">
+                    <th className="text-left text-xs font-semibold text-white/80 uppercase tracking-[.05em] px-5 py-4">Beneficiary</th>
+                    <th className="text-left text-xs font-semibold text-white/80 uppercase tracking-[.05em] px-5 py-4">PHQ-9</th>
+                    <th className="text-left text-xs font-semibold text-white/80 uppercase tracking-[.05em] px-5 py-4">GAD-7</th>
+                    <th className="text-left text-xs font-semibold text-white/80 uppercase tracking-[.05em] px-5 py-4">PCL-5</th>
+                    <th className="text-left text-xs font-semibold text-white/80 uppercase tracking-[.05em] px-5 py-4">Progress</th>
+                    <th className="text-left text-xs font-semibold text-white/80 uppercase tracking-[.05em] px-5 py-4">Risk Level</th>
+                    <th className="text-left text-xs font-semibold text-white/80 uppercase tracking-[.05em] px-5 py-4">Date</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-ink-100/50">

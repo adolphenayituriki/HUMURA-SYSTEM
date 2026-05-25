@@ -45,14 +45,17 @@ export default function ForgotPassword() {
       )}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:gap-5">
-        <div className="relative group">
-          <FontAwesomeIcon icon={faEnvelope} className="absolute left-3 sm:left-3.5 top-1/2 -translate-y-1/2 text-ink-400 pointer-events-none transition-colors group-focus-within:text-brand-500 text-[16px] sm:text-[18px]" />
-          <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-            className="w-full h-10 sm:h-12 pl-9 sm:pl-10 pr-3 sm:pr-3.5 rounded-lg text-xs sm:text-sm text-ink-800 placeholder:text-ink-400 bg-ink-50/40 border border-ink-200 focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-200/25 transition-all outline-none"
-            placeholder={trans.auth.emailPlaceholder} required autoComplete="email" />
+        <div>
+          <label className="text-xs font-semibold text-ink-500 mb-1.5 block">Email Address</label>
+          <div className="flex items-center gap-3 w-full h-12 sm:h-14 px-4 rounded-lg text-sm bg-white border border-ink-200 focus-within:border-gold-400 focus-within:ring-2 focus-within:ring-gold-200/30 transition-all shadow-sm">
+            <FontAwesomeIcon icon={faEnvelope} className="text-ink-300 shrink-0 text-sm" />
+            <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+              className="flex-1 bg-transparent border-none outline-none text-ink-800 placeholder:text-ink-400 h-full min-w-0"
+              placeholder={trans.auth.emailPlaceholder} required autoComplete="email" />
+          </div>
         </div>
 
-        <Button type="submit" variant="primary" size="lg" className="w-full">
+        <Button type="submit" variant="primary" size="lg" className="w-full !bg-gold-400 hover:!bg-gold-500 !shadow-lg !shadow-gold-200/30">
           {trans.auth.sendResetLink}
         </Button>
       </form>

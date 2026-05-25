@@ -2,8 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom
 import { useAuthStore } from './store/authStore';
 import AuthLayout from './components/layout/AuthLayout';
 import DashboardLayout from './components/layout/DashboardLayout';
-import Login from './pages/Auth/Login';
-import Register from './pages/Auth/Register';
+import AuthPage from './pages/Auth/AuthPage';
 import ForgotPassword from './pages/Auth/ForgotPassword';
 import Dashboard from './pages/Dashboard';
 import Beneficiaries from './pages/Beneficiaries';
@@ -42,8 +41,8 @@ export default function App() {
         {/* Auth routes */}
         <Route element={<AuthLayout />}>
           <Route element={<AuthRoute />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<AuthPage />} />
+            <Route path="/register" element={<AuthPage />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
           </Route>
         </Route>

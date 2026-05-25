@@ -2,15 +2,13 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faArrowRight, faShield, faHandshake, faChartBar, faUsers, faStethoscope,
-  faWandSparkles, faBars, faXmark, faGlobe, faLocationDot, faPhone, faEnvelope,
-  faGraduationCap, faHeartPulse, faBullseye, faCircleCheck, faQuoteLeft,
-  faArrowUpRightFromSquare, faHandHoldingHeart, faPaperPlane, faChevronRight, faStar,
-  faVolumeUp, faNewspaper,
+  faArrowRight, faShield, faHandshake, faUsers, faStethoscope,
+  faBars, faXmark, faGlobe, faLocationDot, faPhone, faEnvelope,
+  faGraduationCap, faHeartPulse, faCircleCheck, faQuoteLeft,
+  faChevronRight, faStar, faNewspaper, faMessage, faMobile, faWind, faMoon, faHeadphones,
 } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '../../components/shared/Button';
 import { LanguageSwitcher } from '../../components/shared/LanguageSwitcher';
-import ChatWidget from '../../components/chat/ChatWidget';
 import { Link } from 'react-router-dom';
 import { useI18nStore } from '../../i18n';
 
@@ -40,13 +38,6 @@ export default function Landing() {
     { name: 'MINUBUMWE', logo: '/MINUBUMWE.jpg' },
     { name: 'WHO', logo: '/WHO.png' },
     { name: 'Ibuka', logo: '/ibuka.jpg' },
-  ];
-
-  const testimonials = [
-    { quote: trans.landing.testimonialQuotes[0], name: trans.landing.testimonialNames[0], age: 19, role: trans.landing.testimonialRoles[0] },
-    { quote: trans.landing.testimonialQuotes[1], name: trans.landing.testimonialNames[1], age: null, role: trans.landing.testimonialRoles[1] },
-    { quote: trans.landing.testimonialQuotes[2], name: trans.landing.testimonialNames[2], age: 34, role: trans.landing.testimonialRoles[2] },
-    { quote: trans.landing.testimonialQuotes[3], name: trans.landing.testimonialNames[3], age: 41, role: trans.landing.testimonialRoles[3] },
   ];
 
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -167,7 +158,7 @@ export default function Landing() {
           />
         </svg>
       </div>
-      <header className={`sticky top-0 z-50 transition-all duration-500 ${
+      <header className={`reset-margin sticky top-0 z-50 transition-all duration-500 ${
         scrolled
           ? 'bg-white/80 backdrop-blur-2xl shadow-[0_1px_0_rgba(0,0,0,.04)]'
           : 'bg-white/95'
@@ -179,7 +170,7 @@ export default function Landing() {
               <span className="text-lg md:text-xl font-bold text-ink-900 tracking-tight">HUMURA</span>
             </a>
 
-            <nav className="hidden lg:flex items-center gap-x-5 mx-auto">
+            <nav className="reset-margin hidden lg:flex items-center gap-x-5 mx-auto">
               {navItems.map(item => (
                 <a
                   key={item.label}
@@ -267,58 +258,50 @@ export default function Landing() {
           <img src="/bg svg.avif" alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-br from-brand-50/60 via-white/50 to-ink-50/30" />
         </div>
-        <div className="absolute -top-40 -right-20 w-[500px] h-[500px] rounded-full bg-brand-100/30 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-40 -left-20 w-[400px] h-[400px] rounded-full bg-warm-100/20 blur-3xl pointer-events-none" />
-        <div className="absolute top-1/4 left-[15%] w-2 h-2 rounded-full bg-brand-300/40 blur-[2px]" />
-        <div className="absolute top-1/3 right-[20%] w-3 h-3 rounded-full bg-warm-300/30 blur-[3px]" />
-        <div className="absolute bottom-1/3 left-1/3 w-1.5 h-1.5 rounded-full bg-brand-400/30 blur-[2px]" />
-
         <div className="container pt-32 pb-32 md:pt-44 md:pb-44 lg:pt-52 lg:pb-52 relative w-full">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-start">
             <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}>
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-50 border border-brand-200/60 text-brand-700 text-xs font-semibold uppercase tracking-[.08em] mb-6 shadow-sm">
-                <FontAwesomeIcon icon={faWandSparkles} className="text-[12px]" />
-                {trans.landing.heroBadge}
+                <FontAwesomeIcon icon={faHeartPulse} className="text-[12px]" />
+                Mental Health Support
               </div>
               <h1 className="text-[40px] sm:text-[48px] lg:text-[64px] font-extrabold text-ink-900 leading-[1.08] tracking-[-.03em] mb-6">
-                {trans.landing.heroHeading1}
+                Accessible to All
                 <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 via-brand-500 to-brand-400">{trans.landing.heroHeading2}</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 via-brand-500 to-brand-400">Rwandans</span>
               </h1>
-              <p className="text-base lg:text-lg text-ink-500 leading-[1.8] max-w-[580px] mb-10">
-                {trans.landing.heroText}
+              <p className="text-base lg:text-lg text-ink-500 leading-[1.8] max-w-[580px] mb-6">
+                Mental health is an increasingly critical yet underserved aspect of healthcare in Rwanda. Humura is a multi-channel digital platform providing accessible, low-cost, and culturally relevant mental health support across the country.
               </p>
               <div className="flex flex-wrap gap-5">
                 <a href="/register">
                   <Button variant="primary" size="lg" className="!h-13 !px-8 !text-sm !shadow-[0_4px_20px_rgba(43,139,156,.3)] hover:!shadow-[0_6px_28px_rgba(43,139,156,.4)]">
-                    {trans.landing.heroCtaJoin} <FontAwesomeIcon icon={faArrowRight} className="text-[16px]" />
+                    Join Humura <FontAwesomeIcon icon={faArrowRight} className="text-[16px]" />
                   </Button>
                 </a>
                 <a href="#services" onClick={e => scrollTo(e, '#services')}>
                   <Button variant="secondary" size="lg" className="!h-13 !px-8 !text-sm !shadow-sm">
                     <FontAwesomeIcon icon={faChevronRight} className="text-[16px] opacity-50" />
-                    {trans.landing.heroCtaExplore}
+                    Explore Services
                   </Button>
                 </a>
               </div>
-              <div className="mt-5 flex flex-wrap items-center gap-5  text-xs text-ink-400">
-                <span className="flex items-center gap-1.5"><FontAwesomeIcon icon={faCircleCheck} className="text-[14px] text-brand-500" /> {trans.landing.trustHipaa}</span>
-                <span className="flex items-center gap-1.5"><FontAwesomeIcon icon={faCircleCheck} className="text-[14px] text-brand-500" /> {trans.landing.trustRbac}</span>
-                <span className="flex items-center gap-1.5"><FontAwesomeIcon icon={faCircleCheck} className="text-[14px] text-brand-500" /> {trans.landing.trustAes}</span>
+              <div className="mt-5 flex flex-wrap items-center gap-5 text-xs text-ink-400">
+                <span className="flex items-center gap-1.5"><FontAwesomeIcon icon={faCircleCheck} className="text-[14px] text-brand-500" /> Private &amp; Secure</span>
+                <span className="flex items-center gap-1.5"><FontAwesomeIcon icon={faCircleCheck} className="text-[14px] text-brand-500" /> Culturally Relevant</span>
+                <span className="flex items-center gap-1.5"><FontAwesomeIcon icon={faCircleCheck} className="text-[14px] text-brand-500" /> Community-Integrated</span>
               </div>
+              <p className="text-sm text-ink-400 leading-relaxed max-w-[580px] mt-8 pt-6 border-t border-ink-100/60">
+                A multi-channel digital platform combining technology, community systems, and cultural understanding to create a scalable and inclusive mental health support system for all Rwandans.
+              </p>
             </motion.div>
 
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
               className="relative hidden lg:block">
               <div className="relative min-h-[450px] max-w-[600px] mx-auto w-full">
                 <div className="absolute inset-0 rounded-2xl overflow-hidden shadow-2xl">
-                  <video autoPlay muted loop playsInline
-                    className="absolute inset-0 w-full h-full object-cover"
-                  >
-                    <source src="/video auto play.mp4" type="video/mp4" />
-                  </video>
-                  <div className="absolute inset-0 bg-black/30" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                  <img src="/healing community.png" alt="" className="absolute inset-0 w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" />
                 </div>
 
                 <div className="absolute -top-4 -right-4 w-[calc(100%+32px)] h-[calc(100%+32px)] rounded-2xl border border-brand-200/20" />
@@ -326,14 +309,14 @@ export default function Landing() {
                 <div className="absolute inset-0 flex flex-col p-10">
                   <div className="self-start">
                     <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/10 backdrop-blur-sm text-white/80 text-[11px] font-semibold uppercase tracking-[.08em]">
-                      <FontAwesomeIcon icon={faHeartPulse} className="text-[12px]" />
-                      Accessible Care
+                      <FontAwesomeIcon icon={faLocationDot} className="text-[12px]" />
+                      Across Rwanda
                     </div>
                   </div>
 
                   <div className="flex-1 flex flex-col items-center justify-center my-5">
                     <div className="w-16 h-16 rounded-2xl bg-white/15 backdrop-blur-sm border border-white/10 flex items-center justify-center shadow-lg mb-5">
-                      <FontAwesomeIcon icon={faHandshake} className="text-[28px] text-white" />
+                      <FontAwesomeIcon icon={faHeartPulse} className="text-[28px] text-white" />
                     </div>
                     <p className="text-white text-center font-bold text-lg leading-snug drop-shadow-sm mb-1">
                       Mental Health For All
@@ -344,16 +327,18 @@ export default function Landing() {
                   </div>
 
                   <div className="grid grid-cols-3 gap-4 p-4 rounded-2xl bg-white/10 border border-white/10 backdrop-blur-sm">
-                    {[
-                      { val: '26%', label: trans.landing.statsBeneficiaries },
-                      { val: '30', label: trans.landing.statsGroups },
-                      { val: '1M+', label: trans.landing.statsEngagement },
-                    ].map(stat => (
-                      <div key={stat.label} className="text-center">
-                        <p className="text-white font-extrabold text-lg leading-none drop-shadow-sm">{stat.val}</p>
-                        <p className="text-white/50 text-[10px] font-semibold uppercase tracking-[.06em] mt-1">{stat.label}</p>
-                      </div>
-                    ))}
+                    <div className="text-center">
+                      <p className="text-white font-extrabold text-lg leading-none drop-shadow-sm">26%</p>
+                      <p className="text-white/50 text-[10px] font-semibold uppercase tracking-[.06em] mt-1">PTSD Prevalence</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-white font-extrabold text-lg leading-none drop-shadow-sm">30</p>
+                      <p className="text-white/50 text-[10px] font-semibold uppercase tracking-[.06em] mt-1">Districts Covered</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-white font-extrabold text-lg leading-none drop-shadow-sm">1M+</p>
+                      <p className="text-white/50 text-[10px] font-semibold uppercase tracking-[.06em] mt-1">Expected Reach</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -362,288 +347,49 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ═══════════════ STATS ═══════════════ */}
-      <section className="py-24 bg-ink-50/20 mt-10">
+      {/* ═══════════════ SELF-ASSESSMENT ═══════════════ */}
+      <section id="self-assessment" className="py-16 bg-white">
         <div className="container">
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { value: '26%', label: trans.landing.statsBeneficiaries, icon: <FontAwesomeIcon icon={faUsers} className="text-[22px] text-brand-500" /> },
-              { value: '30', label: trans.landing.statsGroups, icon: <FontAwesomeIcon icon={faHandshake} className="text-[22px] text-brand-500" /> },
-              { value: '16-25', label: trans.landing.statsYouthPrograms, icon: <FontAwesomeIcon icon={faUsers} className="text-[22px] text-brand-500" /> },
-              { value: '1M+', label: trans.landing.statsEngagement, icon: <FontAwesomeIcon icon={faHeartPulse} className="text-[22px] text-brand-500" /> },
-            ].map(s => (
-              <div key={s.label} className="relative bg-white rounded-2xl border border-ink-200/60 p-8 text-center shadow-sm hover:shadow-2xl hover:-translate-y-[3px] hover:border-brand-200/50 transition-all duration-300 group overflow-hidden h-full">
-                <div className="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center mb-4 group-hover:scale-105 transition-all duration-300">
-                  {s.icon}
-                </div>
-                <p className="text-4xl font-extrabold text-ink-900">{s.value}</p>
-                <p className="text-sm text-ink-500 mt-1.5">{s.label}</p>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ═══════════════ PARTNERS CAROUSEL ═══════════════ */}
-      <section className="py-24 bg-white border-b border-ink-100/60 mt-10">
-        <div className="container">
-           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
-             <p className="text-[11px] font-semibold text-ink-400 uppercase tracking-[.12em] text-center mb-16">
-               {trans.landing.partnershipLabel}
-             </p>
-            <div className="relative overflow-hidden">
-              <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white/50 to-transparent z-10 pointer-events-none" />
-              <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white/50 to-transparent z-10 pointer-events-none" />
-              <motion.div
-                className="flex gap-12 md:gap-16 items-center"
-                animate={{ x: ['0%', '-50%'] }}
-                transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
-              >
-                {[...partners, ...partners].map((p, i) => (
-                  <div key={`${p.name}-${i}`}
-                    className="flex items-center gap-4 shrink-0 px-6 py-4 rounded-xl bg-white border border-ink-200/60 shadow-sm hover:shadow-md hover:border-brand-200/50 transition-all">
-                    {p.logo ? (
-                      <img src={p.logo} alt={p.name} className="w-12 h-12 rounded-lg object-contain" />
-                    ) : (
-                      <div className="w-12 h-12 rounded-xl flex items-center justify-center font-bold text-sm bg-ink-50 text-ink-500">
-                        {p.name.charAt(0)}
-                      </div>
-                    )}
-                    <span className="text-sm font-bold text-ink-600 whitespace-nowrap tracking-wide">{p.name}</span>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ═══════════════ ABOUT ═══════════════ */}
-      <section id="about" className="py-24 bg-white mt-10">
-        <div className="container">
-          <div className="grid lg:grid-cols-2 gap-20 lg:gap-28 items-start">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
             <motion.div {...fadeUp}>
-              <span className="inline-block px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/60 text-brand-700 text-xs font-semibold uppercase tracking-[.08em] mb-8">{trans.landing.aboutBadge}</span>
-              <h2 className="text-[34px] lg:text-[44px] font-extrabold text-ink-900 tracking-[-.02em] mb-10 leading-[1.1]">
-                {trans.landing.aboutHeading}
-              </h2>
-              <p className="text-ink-600 text-base lg:text-lg leading-[1.8] max-w-[580px] mb-20">
-                {trans.landing.aboutText}
-              </p>
-              <div className="grid sm:grid-cols-2 gap-6">
-                {[
-                  { icon: <FontAwesomeIcon icon={faBullseye} className="text-[18px]" />, title: trans.landing.missionTitle, desc: trans.landing.missionDesc },
-                  { icon: <FontAwesomeIcon icon={faShield} className="text-[18px]" />, title: trans.landing.valuesTitle, desc: trans.landing.valuesDesc },
-                  { icon: <FontAwesomeIcon icon={faUsers} className="text-[18px]" />, title: trans.landing.approachTitle, desc: trans.landing.approachDesc },
-                  { icon: <FontAwesomeIcon icon={faHeartPulse} className="text-[18px]" />, title: trans.landing.impactTitle, desc: trans.landing.impactDesc },
-                  ].map((item, i) => (
-                  <motion.div key={item.title} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06, duration: 0.35 }}
-                    className="relative rounded-xl border border-ink-200/60 p-7 hover:border-brand-200/50 hover:shadow-xl hover:-translate-y-[3px] transition-all duration-300 group overflow-hidden bg-white">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3 group-hover:scale-105 transition-all duration-300">{item.icon}</div>
-                    <h3 className="text-sm font-bold text-ink-900 mb-1.5">{item.title}</h3>
-                    <p className="text-xs text-ink-500 leading-relaxed">{item.desc}</p>
-                  </motion.div>
-                ))}
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 border border-brand-200/60 text-brand-700 text-xs font-semibold uppercase tracking-[.08em] mb-5">
+                <FontAwesomeIcon icon={faStethoscope} className="text-[11px]" />
+                Self-Assessment
               </div>
-            </motion.div>
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
-              className="relative">
-              <div className="relative overflow-hidden rounded-3xl aspect-[4/5] shadow-2xl"
-                style={{ background: 'linear-gradient(160deg, #001814 0%, #007A64 40%, #33a38f 100%)' }}>
-                <video autoPlay muted loop playsInline
-                  poster="/healing community.png"
-                  className="absolute right-0 top-0 h-full w-3/5 object-cover opacity-20 pointer-events-none"
-                >
-                  <source src="/about.mp4" type="video/mp4" />
-                </video>
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,rgba(255,255,255,.1)_0%,transparent_50%)]" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,.06)_0%,transparent_40%)]" />
-                <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-white/5 blur-2xl" />
-                <div className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full bg-white/5 blur-xl" />
-                <div className="absolute inset-0 flex flex-col p-10">
-                  {/* Top badge */}
-                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/10 backdrop-blur-sm text-white/80 text-[11px] font-semibold uppercase tracking-[.08em] self-start mb-6">
-                    <FontAwesomeIcon icon={faLocationDot} className="text-[12px]" />
-                    {trans.landing.communityImageLabel}
-                  </div>
-
-                  {/* Stats visualization */}
-                  <div className="flex-1 flex flex-col justify-center gap-6">
-                    {/* District stat */}
-                    <div className="p-5 rounded-2xl bg-white/10 border border-white/10 backdrop-blur-sm">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-white border border-white/10">
-                          <FontAwesomeIcon icon={faUsers} className="text-[20px]" />
-                        </div>
-                        <div>
-                          <p className="text-white font-bold text-lg leading-none">26%</p>
-                          <p className="text-white/50 text-[11px] font-semibold uppercase tracking-[.06em] mt-1">{trans.landing.statsBeneficiaries}</p>
-                        </div>
-                      </div>
-                      <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
-                        <motion.div className="h-full rounded-full bg-white/40"
-                          initial={{ width: 0 }} whileInView={{ width: '88%' }} viewport={{ once: true }}
-                          transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }} />
-                      </div>
-                    </div>
-
-                    {/* Groups stat */}
-                    <div className="p-5 rounded-2xl bg-white/10 border border-white/10 backdrop-blur-sm">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-white border border-white/10">
-                          <FontAwesomeIcon icon={faHandshake} className="text-[20px]" />
-                        </div>
-                        <div>
-                          <p className="text-white font-bold text-lg leading-none">30</p>
-                          <p className="text-white/50 text-[11px] font-semibold uppercase tracking-[.06em] mt-1">{trans.landing.statsGroups}</p>
-                        </div>
-                      </div>
-                      <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
-                        <motion.div className="h-full rounded-full bg-white/40"
-                          initial={{ width: 0 }} whileInView={{ width: '72%' }} viewport={{ once: true }}
-                          transition={{ duration: 1.2, delay: 0.6, ease: [0.16, 1, 0.3, 1] }} />
-                      </div>
-                    </div>
-
-                    {/* Youth stat */}
-                    <div className="p-5 rounded-2xl bg-white/10 border border-white/10 backdrop-blur-sm">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-white border border-white/10">
-                          <FontAwesomeIcon icon={faGraduationCap} className="text-[20px]" />
-                        </div>
-                        <div>
-                          <p className="text-white font-bold text-lg leading-none">16-25</p>
-                          <p className="text-white/50 text-[11px] font-semibold uppercase tracking-[.06em] mt-1">{trans.landing.statsYouthPrograms}</p>
-                        </div>
-                      </div>
-                      <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
-                        <motion.div className="h-full rounded-full bg-white/40"
-                          initial={{ width: 0 }} whileInView={{ width: '60%' }} viewport={{ once: true }}
-                          transition={{ duration: 1.2, delay: 0.9, ease: [0.16, 1, 0.3, 1] }} />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Bottom tags */}
-                  <div className="mt-auto pt-6 flex flex-wrap gap-2">
-                    {trans.landing.tags.map(tag => (
-                      <span key={tag} className="px-3.5 py-1.5 rounded-full text-[11px] font-medium text-white bg-white/10 border border-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════ SERVICES ═══════════════ */}
-      <section id="services" className="py-24 bg-ink-50/20 mt-10">
-        <div className="container">
-          <motion.div {...fadeUp} className="text-center mb-20">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/60 text-brand-700 text-xs font-semibold uppercase tracking-[.08em] mb-8">{trans.landing.servicesBadge}</span>
-            <h2 className="text-[34px] lg:text-[44px] font-extrabold text-ink-900 tracking-[-.02em] mb-8">
-              {trans.landing.servicesHeading}
-            </h2>
-            <p className="text-ink-600 max-w-[600px] mx-auto text-base leading-[1.8]">
-              {trans.landing.servicesText}
-            </p>
-          </motion.div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { icon: <FontAwesomeIcon icon={faStethoscope} className="text-[24px]" />, title: trans.landing.serviceScreening, desc: trans.landing.serviceScreeningDesc, accent: 'from-brand-400 to-brand-500' },
-              { icon: <FontAwesomeIcon icon={faHandshake} className="text-[24px]" />, title: trans.landing.serviceReferral, desc: trans.landing.serviceReferralDesc, accent: 'from-warm-400 to-warm-500' },
-              { icon: <FontAwesomeIcon icon={faUsers} className="text-[24px]" />, title: trans.landing.serviceSociotherapy, desc: trans.landing.serviceSociotherapyDesc, accent: 'from-brand-400 to-brand-500' },
-              { icon: <FontAwesomeIcon icon={faChartBar} className="text-[24px]" />, title: trans.landing.serviceReports, desc: trans.landing.serviceReportsDesc, accent: 'from-forest-400 to-forest-500' },
-              { icon: <FontAwesomeIcon icon={faShield} className="text-[24px]" />, title: trans.landing.serviceRbac, desc: trans.landing.serviceRbacDesc, accent: 'from-warm-400 to-warm-500' },
-              { icon: <FontAwesomeIcon icon={faWandSparkles} className="text-[24px]" />, title: trans.landing.serviceEmergency, desc: trans.landing.serviceEmergencyDesc, accent: 'from-rose-400 to-rose-500' },
-            ].map((f, i) => (
-              <motion.div key={f.title} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-50px' }} transition={{ delay: i * 0.06, duration: 0.4 }}
-                className="relative bg-white rounded-2xl border border-ink-200/60 shadow-sm hover:shadow-2xl hover:-translate-y-[4px] hover:border-brand-200/50 transition-all duration-300 cursor-pointer group overflow-hidden">
-                <div className="px-8 pb-10 pt-8">
-                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-105 transition-all duration-300">
-                    {f.icon}
-                  </div>
-                  <h3 className="text-base font-bold text-ink-900 mb-2">{f.title}</h3>
-                  <p className="text-sm text-ink-500 leading-[1.8]">{f.desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════ YOUTH + TESTIMONIAL ═══════════════ */}
-      <section id="youth" className="py-24 bg-white mt-10">
-        <div className="container">
-          <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-start">
-            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-              <span className="inline-block px-4 py-1.5 rounded-full bg-warm-50 border border-warm-200/60 text-warm-700 text-xs font-semibold uppercase tracking-[.08em] mb-8">{trans.landing.youthBadge}</span>
-              <h2 className="text-[34px] lg:text-[42px] font-extrabold text-ink-900 tracking-[-.02em] mb-8 leading-[1.1] pt-2">
-                {trans.landing.youthHeading}<br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-warm-600 to-warm-400">{trans.landing.youthHeadingAccent}</span>
+              <h2 className="text-[30px] lg:text-[40px] font-extrabold text-ink-900 tracking-[-.02em] mb-5 leading-[1.15]">
+                Self-Assessment &amp; Awareness
               </h2>
-              <p className="text-ink-600 text-base lg:text-lg leading-[1.8] max-w-[580px] mb-20">
-                {trans.landing.youthText}
+              <p className="text-ink-600 text-base leading-relaxed max-w-[540px] mb-8">
+                Users can answer simple questions to understand their emotional state and receive explanations in Kinyarwanda. Early detection of mental health issues helps connect users to the right support.
               </p>
               <div className="flex flex-col gap-4">
                 {[
-                  { icon: <FontAwesomeIcon icon={faGraduationCap} className="text-[18px]" />, title: trans.landing.youthSchool, desc: trans.landing.youthSchoolDesc },
-                  { icon: <FontAwesomeIcon icon={faHandshake} className="text-[18px]" />, title: trans.landing.youthPeace, desc: trans.landing.youthPeaceDesc },
-                  { icon: <FontAwesomeIcon icon={faUsers} className="text-[18px]" />, title: trans.landing.youthClubs, desc: trans.landing.youthClubsDesc },
-                  { icon: <FontAwesomeIcon icon={faWandSparkles} className="text-[18px]" />, title: trans.landing.youthLeadership, desc: trans.landing.youthLeadershipDesc },
-                ].map((p, i) => (
-                  <motion.div key={p.title} initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}
-                    className="flex items-start gap-4 p-7 rounded-xl bg-white border border-ink-200/60 hover:border-warm-200/50 hover:shadow-md hover:-translate-y-[1px] transition-all duration-300">
-                    <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0">{p.icon}</div>
-                    <div className="pl-2">
-                      <p className="text-sm font-bold text-ink-800">{p.title}</p>
-                      <p className="text-xs text-ink-500 mt-1.5">{p.desc}</p>
+                  { icon: faCircleCheck, title: 'Emotional State Check', desc: 'Simple questions to evaluate your current wellbeing and emotional state in a private, safe environment.' },
+                  { icon: faCircleCheck, title: 'Risk Assessment', desc: 'Identify potential mental health concerns early through validated screening tools and receive appropriate guidance.' },
+                  { icon: faCircleCheck, title: 'Personalized Feedback', desc: 'Receive explanations and recommendations in Kinyarwanda, tailored to your responses and needs.' },
+                ].map((item, i) => (
+                  <motion.div key={item.title} initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}
+                    className="flex items-start gap-3 p-5 rounded-xl bg-ink-50/40 border border-ink-100/60">
+                    <div className="w-8 h-8 rounded-lg bg-brand-50 flex items-center justify-center text-brand-600 shrink-0 mt-0.5">
+                      <FontAwesomeIcon icon={item.icon} className="text-[14px]" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-ink-800">{item.title}</p>
+                      <p className="text-xs text-ink-500 mt-1 leading-relaxed">{item.desc}</p>
                     </div>
                   </motion.div>
                 ))}
               </div>
-              <div className="mt-6">
-                <a href="/register"><Button variant="primary" className="!h-11 !px-7">
-                  {trans.landing.youthCta} <FontAwesomeIcon icon={faArrowRight} className="text-[15px]" />
-                </Button></a>
-              </div>
             </motion.div>
-
             <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-              className="relative self-stretch flex flex-col justify-center">
-              <div className="rounded-3xl p-10 lg:p-12 text-white overflow-hidden relative shadow-xl"
-                style={{ background: 'linear-gradient(160deg, #001814 0%, #007A64 40%, #33a38f 100%)' }}>
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(255,255,255,.08)_0%,transparent_50%)]" />
-                <div className="absolute -top-6 -right-6 w-32 h-32 rounded-full bg-white/5 blur-2xl" />
-                <div className="absolute -bottom-4 -left-4 w-24 h-24 rounded-full bg-white/5 blur-xl" />
-                <div className="relative">
-                  <div className="flex items-center gap-3 mb-8">
-                    <FontAwesomeIcon icon={faGraduationCap} className="text-[30px] text-white/30" />
-                    <span className="text-sm font-semibold text-white/50 uppercase tracking-[.08em]">{trans.landing.youthImpactBadge}</span>
-                  </div>
-                  <div className="relative px-2">
-                    <FontAwesomeIcon icon={faQuoteLeft} className="text-[40px] text-white/20 absolute -top-2 -left-3" />
-                    <p className="text-base lg:text-lg leading-relaxed italic relative z-10 pl-8 pr-4">
-                      "The youth club gave me a place to belong. I learned that my story matters, 
-                      and that I can be part of building a future where no one suffers in silence."
-                    </p>
-                  </div>
-                  <div className="mt-8 pt-6 border-t border-white/20">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-white/15 flex items-center justify-center text-white font-bold text-base backdrop-blur-sm border-2 border-white/20 shrink-0">M</div>
-                      <div>
-                        <p className="text-base font-bold">Marie, 19</p>
-                        <p className="text-xs text-white/60">Youth Club Participant, Gasabo</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-1 mt-4">
-                      {[1,2,3,4,5].map(s => <FontAwesomeIcon key={s} icon={faStar} className="text-[13px] text-warm-300" />)}
-                    </div>
+              className="relative">
+              <div className="rounded-2xl overflow-hidden shadow-lg">
+                <img src="/light to commemorate.jpg" alt="" className="w-full h-64 lg:h-80 object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-2xl" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 border border-white/10 backdrop-blur-sm text-white text-[11px] font-semibold">
+                    <FontAwesomeIcon icon={faLocationDot} className="text-[10px]" />
+                    Private &amp; Confidential
                   </div>
                 </div>
               </div>
@@ -652,144 +398,331 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ═══════════════ COMMUNITY ═══════════════ */}
-      <section id="community" className="py-24 bg-ink-50/20 relative overflow-hidden mt-10">
-        <div className="absolute -top-20 left-1/4 w-80 h-80 rounded-full bg-brand-50/30 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-20 right-1/4 w-80 h-80 rounded-full bg-warm-50/20 blur-3xl pointer-events-none" />
-        <div className="container relative">
-          <motion.div {...fadeUp} className="text-center mb-20">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/60 text-brand-700 text-xs font-semibold uppercase tracking-[.08em] mb-8">{trans.landing.communityBadge}</span>
-            <h2 className="text-[34px] lg:text-[44px] font-extrabold text-ink-900 tracking-[-.02em] mb-8">
-              {trans.landing.communityHeading}
+      {/* ═══════════════ YOUTH MODULE ═══════════════ */}
+      <section id="youth" className="py-16 bg-ink-50/20" style={{ marginTop: '50px' }}>
+        <div className="container">
+          <motion.div {...fadeUp} className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-warm-50 border border-warm-200/60 text-warm-700 text-xs font-semibold uppercase tracking-[.08em] mb-5">
+              <FontAwesomeIcon icon={faGraduationCap} className="text-[11px]" />
+              Youth Support
+            </div>
+            <h2 className="text-[30px] lg:text-[40px] font-extrabold text-ink-900 tracking-[-.02em] mb-4 leading-[1.15]">
+              Youth-Focused Module
             </h2>
-            <p className="text-ink-600 max-w-[640px] mx-auto text-base leading-[1.8]">
-              {trans.landing.communityText}
+            <p className="text-ink-600 max-w-[640px] mx-auto text-base leading-relaxed">
+              A dedicated section for users aged 16&ndash;25 that focuses on identity and self-understanding, inherited trauma, emotional awareness, and peer pressure &mdash; ensuring the platform is relevant to a generation that lives with the effects of history but experiences different challenges.
             </p>
           </motion.div>
-
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { label: trans.landing.photoLabels[0], icon: <FontAwesomeIcon icon={faHandshake} className="text-[26px]" />, count: '2,847+' },
-              { label: trans.landing.photoLabels[1], icon: <FontAwesomeIcon icon={faUsers} className="text-[26px]" />, count: '640+' },
-              { label: trans.landing.photoLabels[2], icon: <FontAwesomeIcon icon={faGraduationCap} className="text-[26px]" />, count: '180+' },
-              { label: trans.landing.photoLabels[3], icon: <FontAwesomeIcon icon={faHandHoldingHeart} className="text-[26px]" />, count: '95+' },
-            ].map((p, i) => (
-              <motion.div key={p.label} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
-                className="relative overflow-hidden rounded-2xl aspect-[4/3] group cursor-pointer shadow-lg hover:shadow-2xl hover:-translate-y-[5px] transition-all duration-500"
-                style={{ backgroundImage: 'url(/healing community.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2.5 p-6 z-10">
-                  <div className="w-16 h-16 rounded-2xl bg-white/15 flex items-center justify-center text-white group-hover:bg-white/25 group-hover:scale-110 group-hover:rotate-3 transition-all duration-400 backdrop-blur-sm border border-white/10 shadow-lg">
-                    {p.icon}
-                  </div>
-                  <p className="text-sm md:text-base font-bold text-white text-center leading-tight mt-1 opacity-90 group-hover:opacity-100 transition-opacity drop-shadow-sm">
-                    {p.label}
-                  </p>
-                  <p className="text-2xl font-extrabold text-white/90 group-hover:text-white transition-colors drop-shadow-sm">
-                    {p.count}
-                  </p>
+              { icon: faUsers, title: 'Identity & Self-Understanding', desc: 'Explore who you are beyond your circumstances and build a strong sense of self in a supportive environment.' },
+              { icon: faHeartPulse, title: 'Inherited Trauma', desc: 'Understand and process the psychological legacy of past events that continue to influence younger generations.' },
+              { icon: faStar, title: 'Emotional Awareness', desc: 'Learn to identify, name, and express your emotions safely through guided exercises and peer connection.' },
+              { icon: faHandshake, title: 'Peer Pressure & Social Stress', desc: 'Build resilience against modern social pressures including academic stress, unemployment, and social expectations.' },
+            ].map((item, i) => (
+              <motion.div key={item.title} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}
+                className="bg-white rounded-xl border border-ink-100/60 p-6 shadow-sm hover:shadow-md hover:-translate-y-[2px] transition-all duration-300">
+                <div className="w-10 h-10 rounded-lg bg-warm-50 flex items-center justify-center text-warm-600 mb-4">
+                  <FontAwesomeIcon icon={item.icon} className="text-[16px]" />
                 </div>
-                <div className="absolute inset-0 ring-1 ring-inset ring-white/10 group-hover:ring-white/30 rounded-2xl transition-all duration-300" />
-                <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-black/10" />
-              </motion.div>
-            ))}
-          </motion.div>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
-            {[
-              { role: trans.landing.communityChws, count: '640+', desc: trans.landing.communityChwsDesc, icon: <FontAwesomeIcon icon={faHandshake} className="text-[18px]" /> },
-              { role: trans.landing.communityFacilitators, count: '180+', desc: trans.landing.communityFacilitatorsDesc, icon: <FontAwesomeIcon icon={faUsers} className="text-[18px]" /> },
-              { role: trans.landing.communityYouthPrograms, count: '24', desc: trans.landing.communityYouthProgramsDesc, icon: <FontAwesomeIcon icon={faGraduationCap} className="text-[18px]" /> },
-              { role: trans.landing.communityCounselors, count: '95+', desc: trans.landing.communityCounselorsDesc, icon: <FontAwesomeIcon icon={faShield} className="text-[18px]" /> },
-              ].map((item, i) => (
-              <motion.div key={item.role} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06, duration: 0.35 }}
-                className="relative bg-white rounded-2xl border border-ink-200/60 p-8 text-center shadow-sm hover:shadow-2xl hover:-translate-y-[3px] hover:border-brand-200/50 transition-all duration-300 group overflow-hidden">
-                <div className="w-11 h-11 mx-auto rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                  {item.icon}
-                </div>
-                <p className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-400">{item.count}</p>
-                <p className="text-sm font-bold text-ink-800 mt-2">{item.role}</p>
-                <p className="text-xs text-ink-400 mt-2 leading-[1.8]">{item.desc}</p>
+                <h3 className="text-sm font-bold text-ink-900 mb-2">{item.title}</h3>
+                <p className="text-xs text-ink-500 leading-relaxed">{item.desc}</p>
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div className="relative">
-            <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-0.5 h-10 bg-gradient-to-b from-transparent to-brand-200/40" />
-            <div className="grid sm:grid-cols-2 gap-6">
-              {testimonials.map((t, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06, duration: 0.35 }}
-                  className="relative bg-white rounded-2xl border border-ink-200/60 p-8 shadow-sm hover:shadow-2xl hover:-translate-y-[3px] hover:border-brand-200/50 transition-all duration-300 group">
-                  <FontAwesomeIcon icon={faQuoteLeft} className="text-[20px] text-brand-300 mb-4 opacity-60 group-hover:opacity-100 transition-opacity" />
-                  <p className="text-sm text-ink-600 leading-[1.8] mb-5 italic">
-                    &ldquo;{t.quote}&rdquo;
-                  </p>
-                  <div className="flex items-center gap-3 pt-4 border-t border-ink-100/60">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white font-bold text-xs shrink-0 shadow-sm group-hover:shadow-md group-hover:scale-105 transition-all duration-300">
-                      {t.name.charAt(0)}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs font-bold text-ink-800">{t.name}{t.age ? `, ${t.age}` : ''}</p>
-                      <p className="text-[11px] text-ink-400 truncate">{t.role}</p>
-                    </div>
-                    <button type="button"
-                      className="w-8 h-8 rounded-full bg-ink-50 border border-ink-200/60 flex items-center justify-center text-ink-400 hover:text-brand-600 hover:border-brand-200 hover:bg-brand-50 transition-all shrink-0"
-                      title="Play audio testimonial">
-                      <FontAwesomeIcon icon={faVolumeUp} className="text-[13px]" />
-                    </button>
+      {/* ═══════════════ COUNSELING ═══════════════ */}
+      <section id="services" className="py-16 bg-white" style={{ marginTop: '50px' }}>
+        <div className="container">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
+              className="relative order-2 lg:order-1">
+              <div className="rounded-2xl overflow-hidden shadow-lg">
+                <img src="/healing community.png" alt="" className="w-full h-64 lg:h-80 object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-2xl" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 border border-white/10 backdrop-blur-sm text-white text-[11px] font-semibold">
+                    <FontAwesomeIcon icon={faUsers} className="text-[10px]" />
+                    Professional &amp; Peer Support
                   </div>
-                </motion.div>
-              ))}
+                </div>
+              </div>
+            </motion.div>
+            <motion.div {...fadeUp} className="order-1 lg:order-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 border border-brand-200/60 text-brand-700 text-xs font-semibold uppercase tracking-[.08em] mb-5">
+                <FontAwesomeIcon icon={faHeartPulse} className="text-[11px]" />
+                Human Support
+              </div>
+              <h2 className="text-[30px] lg:text-[40px] font-extrabold text-ink-900 tracking-[-.02em] mb-5 leading-[1.15]">
+                Counseling &amp; Human Support
+              </h2>
+              <p className="text-ink-600 text-base leading-relaxed max-w-[540px] mb-8">
+                Text-based counselling that is affordable and scalable, referrals to nearby mental health professionals, and peer/community support systems to ensure no one faces their struggles alone.
+              </p>
+              <div className="flex flex-col gap-4">
+                {[
+                  { icon: faMessage, title: 'Text-Based Counselling', desc: 'Affordable, scalable, and private counselling via text &mdash; one counsellor can support many users asynchronously.' },
+                  { icon: faLocationDot, title: 'Professional Referrals', desc: 'Connect with nearby mental health professionals and specialists when higher-level care is needed.' },
+                  { icon: faUsers, title: 'Peer Support Networks', desc: 'Community-based support through shared experiences, group healing, and guided peer connections.' },
+                ].map((item, i) => (
+                  <motion.div key={item.title} initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}
+                    className="flex items-start gap-3 p-5 rounded-xl bg-ink-50/40 border border-ink-100/60">
+                    <div className="w-8 h-8 rounded-lg bg-brand-50 flex items-center justify-center text-brand-600 shrink-0 mt-0.5">
+                      <FontAwesomeIcon icon={item.icon} className="text-[14px]" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-ink-800">{item.title}</p>
+                      <p className="text-xs text-ink-500 mt-1 leading-relaxed">{item.desc}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ MULTI-CHANNEL ═══════════════ */}
+      <section className="py-16 bg-ink-50/20" style={{ marginTop: '50px' }}>
+        <div className="container">
+          <motion.div {...fadeUp} className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 border border-brand-200/60 text-brand-700 text-xs font-semibold uppercase tracking-[.08em] mb-5">
+              <FontAwesomeIcon icon={faGlobe} className="text-[11px]" />
+              Access Anywhere
             </div>
+            <h2 className="text-[30px] lg:text-[40px] font-extrabold text-ink-900 tracking-[-.02em] mb-4 leading-[1.15]">
+              Multi-Channel Access
+            </h2>
+            <p className="text-ink-600 max-w-[640px] mx-auto text-base leading-relaxed">
+              To ensure accessibility across Rwanda, urban users can access the mobile app, web platform, and WhatsApp chatbot, while rural users are reached via USSD, SMS-based interaction, and offline audio content.
+            </p>
+          </motion.div>
+          <div className="flex flex-wrap justify-center gap-8 mb-10">
+            {[
+              { icon: faMobile, label: 'Mobile App' },
+              { icon: faGlobe, label: 'Web Platform' },
+              { icon: faPhone, label: 'USSD' },
+              { icon: faEnvelope, label: 'SMS' },
+            ].map((item, i) => (
+              <motion.div key={item.label} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}
+                className="flex flex-col items-center gap-2 px-6 py-5 rounded-xl bg-white border border-ink-100/60 shadow-sm">
+                <div className="w-12 h-12 rounded-xl bg-brand-50 flex items-center justify-center text-brand-600">
+                  <FontAwesomeIcon icon={item.icon} className="text-[22px]" />
+                </div>
+                <span className="text-sm font-bold text-ink-700">{item.label}</span>
+              </motion.div>
+            ))}
+          </div>
+          <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+            className="max-w-2xl mx-auto bg-white rounded-xl border border-ink-100/60 p-6 shadow-sm">
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-lg bg-brand-50 flex items-center justify-center text-brand-600 shrink-0">
+                <FontAwesomeIcon icon={faEnvelope} className="text-[16px]" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-ink-900 mb-1">Prompted SMS System</h3>
+                <p className="text-xs text-ink-500 leading-relaxed">
+                  Daily check-ins asking &ldquo;How are you feeling today?&rdquo;, weekly mental health tips, and reminders for coping exercises &mdash; delivered directly to your phone, no smartphone required.
+                </p>
+                <div className="flex flex-wrap gap-2 mt-3">
+                  <span className="px-2.5 py-1 rounded-md bg-brand-50 text-brand-700 text-[10px] font-semibold">Daily mood check-ins via SMS</span>
+                  <span className="px-2.5 py-1 rounded-md bg-brand-50 text-brand-700 text-[10px] font-semibold">Weekly mental health tips</span>
+                  <span className="px-2.5 py-1 rounded-md bg-brand-50 text-brand-700 text-[10px] font-semibold">Coping exercise reminders</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ═══════════════ COPING TOOLS ═══════════════ */}
+      <section className="py-16 bg-white" style={{ marginTop: '50px' }}>
+        <div className="container">
+          <motion.div {...fadeUp} className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 border border-brand-200/60 text-brand-700 text-xs font-semibold uppercase tracking-[.08em] mb-5">
+              <FontAwesomeIcon icon={faHeartPulse} className="text-[11px]" />
+              Wellbeing Tools
+            </div>
+            <h2 className="text-[30px] lg:text-[40px] font-extrabold text-ink-900 tracking-[-.02em] mb-4 leading-[1.15]">
+              Coping &amp; Wellbeing Tools
+            </h2>
+            <p className="text-ink-600 max-w-[600px] mx-auto text-base leading-relaxed">
+              Practical tools for daily mental wellness including breathing exercises, stress management techniques, sleep support, and audio guidance that works offline.
+            </p>
+          </motion.div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {[
+              { icon: faWind, title: 'Breathing Exercises', desc: 'Guided breathing techniques to calm your nervous system and reduce anxiety in moments of stress.' },
+              { icon: faShield, title: 'Stress Management', desc: 'Practical techniques to manage daily stress effectively, built on evidence-based approaches.' },
+              { icon: faMoon, title: 'Sleep Support', desc: 'Tools and audio content designed to improve sleep quality and establish healthy sleep routines.' },
+              { icon: faHeadphones, title: 'Audio Guidance', desc: 'Offline-friendly guided sessions and exercises that work without an internet connection.' },
+            ].map((item, i) => (
+              <motion.div key={item.title} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}
+                className="bg-ink-50/30 rounded-xl border border-ink-100/60 p-6 shadow-sm hover:shadow-md hover:-translate-y-[2px] transition-all duration-300">
+                <div className="w-10 h-10 rounded-lg bg-brand-50 flex items-center justify-center text-brand-600 mb-4">
+                  <FontAwesomeIcon icon={item.icon} className="text-[16px]" />
+                </div>
+                <h3 className="text-sm font-bold text-ink-900 mb-2">{item.title}</h3>
+                <p className="text-xs text-ink-500 leading-relaxed">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ PARTNERS ═══════════════ */}
+      <section className="py-16 bg-ink-50/20 overflow-hidden" style={{ marginTop: '50px', marginBottom: '50px' }}>
+        <div className="container">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+            <p className="text-xs font-semibold text-ink-400 uppercase tracking-wider text-center mb-10">
+              Our Partners &amp; Collaborators
+            </p>
+            <div className="relative">
+              <div className="flex gap-8 animate-scroll" style={{ width: 'max-content' }}>
+                {[...partners, ...partners].map((p, i) => (
+                  <div key={`${p.name}-${i}`}
+                    className="flex items-center justify-center px-8 py-6 rounded-lg bg-white border border-ink-100/60 shadow-sm shrink-0 w-[200px] h-[90px]">
+                    <img src={p.logo ?? ''} alt={p.name} className="h-12 w-auto object-contain" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ═══════════════ COMMUNITY HEALTH WORKERS ═══════════════ */}
+      <section id="community" className="py-16 bg-white">
+        <div className="container">
+          <motion.div {...fadeUp} className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 border border-brand-200/60 text-brand-700 text-xs font-semibold uppercase tracking-[.08em] mb-5">
+              <FontAwesomeIcon icon={faUsers} className="text-[11px]" />
+              Community Network
+            </div>
+            <h2 className="text-[30px] lg:text-[40px] font-extrabold text-ink-900 tracking-[-.02em] mb-4 leading-[1.15]">
+              Community Health Worker Integration
+            </h2>
+            <p className="text-ink-600 max-w-[640px] mx-auto text-base leading-relaxed">
+              In Rwanda, trust is built through people &mdash; not just technology. Community Health Workers introduce the platform, help with onboarding, and refer high-risk individuals to professional care.
+            </p>
+          </motion.div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+            {[
+              { count: '640+', role: 'Community Health Workers', desc: 'Trained CHWs introducing the platform and supporting users at the community level.', icon: faHandshake },
+              { count: '180+', role: 'Trained Facilitators', desc: 'Facilitators helping with onboarding, guidance, and community-based support.', icon: faUsers },
+              { count: '24', role: 'Youth Programs', desc: 'Dedicated youth-focused programs operating across multiple districts nationwide.', icon: faGraduationCap },
+              { count: '95+', role: 'Trained Counselors', desc: 'Professional counsellors providing support through the platform and referrals.', icon: faShield },
+            ].map((item, i) => (
+              <motion.div key={item.role} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}
+                className="bg-ink-50/30 rounded-xl border border-ink-100/60 p-6 text-center shadow-sm hover:shadow-md hover:-translate-y-[2px] transition-all duration-300">
+                <div className="w-11 h-11 mx-auto rounded-xl bg-brand-50 flex items-center justify-center text-brand-600 mb-3">
+                  <FontAwesomeIcon icon={item.icon} className="text-[18px]" />
+                </div>
+                <p className="text-3xl font-extrabold text-brand-700">{item.count}</p>
+                <p className="text-sm font-bold text-ink-800 mt-1.5">{item.role}</p>
+                <p className="text-xs text-ink-500 mt-2 leading-relaxed">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ IMPACT / QUOTE ═══════════════ */}
+      <section className="py-16 bg-ink-50/20">
+        <div className="container">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+            <motion.div {...fadeUp}>
+              <h2 className="text-[30px] lg:text-[40px] font-extrabold text-ink-900 tracking-[-.02em] mb-6 leading-[1.15]">
+                Our Impact<br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-brand-400">Breaking the Cycle of Intergenerational Trauma</span>
+              </h2>
+              <div className="relative bg-white rounded-xl border border-ink-100/60 p-6 shadow-sm">
+                <FontAwesomeIcon icon={faQuoteLeft} className="text-lg text-brand-300 mb-3 opacity-60" />
+                <p className="text-sm text-ink-600 leading-relaxed mb-4 italic">
+                  &ldquo;Trauma is not only individual but intergenerational. The effects of past events continue to influence younger generations who did not directly experience them but live with their consequences. Humura bridges this gap through community healing and culturally relevant care.&rdquo;
+                </p>
+                <div className="flex items-center gap-3 pt-4 border-t border-ink-100/60">
+                  <img src="/adolphe profile.jpg" alt="Adolphe" className="w-9 h-9 rounded-full object-cover shrink-0" />
+                  <div>
+                    <p className="text-xs font-bold text-ink-800">Adolphe K.</p>
+                    <p className="text-xs text-ink-400">Humura Initiative, Rwanda</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+              <div className="rounded-2xl p-8 text-white bg-gradient-to-br from-brand-800 to-brand-950 shadow-lg">
+                <h3 className="text-xl font-bold mb-4">Expected Impact</h3>
+                <ul className="space-y-4">
+                  {[
+                    'Increase access to mental health support nationwide',
+                    'Reduce stigma through private, digital-first access',
+                    'Improve early detection of mental health issues',
+                    'Support youth emotional development across 30 districts',
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCircleCheck} className="text-brand-300 text-sm mt-0.5 shrink-0" />
+                      <span className="text-sm text-white/80 leading-relaxed">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* ═══════════════ CONTACT ═══════════════ */}
-      <section id="contact" className="py-24 bg-white mt-10">
+      <section id="contact" className="py-16 bg-white">
         <div className="container">
-          <motion.div {...fadeUp} className="text-center mb-20">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200/60 text-brand-700 text-xs font-semibold uppercase tracking-[.08em] mb-8">{trans.landing.contactBadge}</span>
-            <h2 className="text-[34px] lg:text-[44px] font-extrabold text-ink-900 tracking-[-.02em] mb-8">{trans.landing.contactHeading}</h2>
-            <p className="text-ink-600 max-w-[540px] mx-auto text-base leading-[1.8]">
-              {trans.landing.contactText}
+          <motion.div {...fadeUp} className="text-center mb-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 border border-brand-200/60 text-brand-700 text-xs font-semibold uppercase tracking-[.08em] mb-5">
+              <FontAwesomeIcon icon={faEnvelope} className="text-[11px]" />
+              Get in Touch
+            </div>
+            <h2 className="text-[30px] lg:text-[40px] font-extrabold text-ink-900 tracking-[-.02em] mb-4">Contact Us</h2>
+            <p className="text-ink-600 max-w-[520px] mx-auto text-base leading-relaxed">
+              Have questions or want to learn more about Humura? Reach out to our team.
             </p>
           </motion.div>
 
-          <div className="grid lg:grid-cols-5 gap-12 max-w-5xl mx-auto">
+          <div className="grid lg:grid-cols-5 gap-10 max-w-5xl mx-auto">
             <div className="lg:col-span-3">
-              <form className="space-y-6" onSubmit={e => e.preventDefault()}>
-                <div className="grid sm:grid-cols-2 gap-8">
-                  <input type="text" placeholder={trans.landing.contactNamePlaceholder}
-                    className="h-16 w-full px-8 rounded-xl text-sm bg-white border border-ink-200 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/40 transition-all placeholder:text-ink-300 outline-none" />
-                  <input type="email" placeholder={trans.landing.contactEmailPlaceholder}
-                    className="h-16 w-full px-8 rounded-xl text-sm bg-white border border-ink-200 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/40 transition-all placeholder:text-ink-300 outline-none" />
+              <form className="space-y-4" onSubmit={e => e.preventDefault()}>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <input type="text" placeholder="Your Name"
+                    className="h-12 w-full px-4 rounded-lg text-sm bg-white border border-ink-200 focus:border-brand-400 focus:ring-2 focus:ring-brand-500/15 transition-all placeholder:text-ink-300 outline-none" />
+                  <input type="email" placeholder="Your Email"
+                    className="h-12 w-full px-4 rounded-lg text-sm bg-white border border-ink-200 focus:border-brand-400 focus:ring-2 focus:ring-brand-500/15 transition-all placeholder:text-ink-300 outline-none" />
                 </div>
-                <select className="h-16 w-full px-8 rounded-xl text-sm text-ink-500 bg-white border border-ink-200 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/40 transition-all outline-none appearance-none cursor-pointer">
-                  <option value="">{trans.landing.contactTopicPlaceholder}</option>
-                  <option>{trans.landing.contactTopicPartnership}</option>
-                  <option>{trans.landing.contactTopicSupport}</option>
-                  <option>{trans.landing.contactTopicTraining}</option>
-                  <option>{trans.landing.contactTopicGeneral}</option>
+                <select className="h-12 w-full px-4 rounded-lg text-sm text-ink-500 bg-white border border-ink-200 focus:border-brand-400 focus:ring-2 focus:ring-brand-500/15 transition-all outline-none appearance-none cursor-pointer">
+                  <option value="">Select a topic</option>
+                  <option>Partnership Inquiry</option>
+                  <option>Technical Support</option>
+                  <option>Training &amp; Onboarding</option>
+                  <option>General Inquiry</option>
                 </select>
-                <textarea placeholder={trans.landing.contactMessagePlaceholder} rows={4}
-                  className="w-full px-8 py-6 rounded-xl text-sm bg-white border border-ink-200 focus:border-brand-400 focus:ring-2 focus:ring-brand-200/40 transition-all placeholder:text-ink-300 outline-none resize-none" />
-                <Button type="submit" variant="primary" size="lg" className="!h-14 !px-10 !text-base">
-                  <FontAwesomeIcon icon={faPaperPlane} className="text-[16px]" /> {trans.landing.contactSend} <FontAwesomeIcon icon={faArrowRight} className="text-[16px]" />
+                <textarea placeholder="Your Message" rows={4}
+                  className="w-full px-4 py-3 rounded-lg text-sm bg-white border border-ink-200 focus:border-brand-400 focus:ring-2 focus:ring-brand-500/15 transition-all placeholder:text-ink-300 outline-none resize-none" />
+                <Button type="submit" variant="primary" size="lg" className="!h-12 !px-8">
+                  <FontAwesomeIcon icon={faArrowRight} className="text-sm" /> Send Message
                 </Button>
               </form>
             </div>
-            <div className="lg:col-span-2 space-y-10 lg:pt-0 pt-4">
+            <div className="lg:col-span-2 space-y-8 lg:pt-0 pt-4">
               {[
-                { icon: <FontAwesomeIcon icon={faLocationDot} className="text-[18px]" />, label: trans.landing.contactAddress, value: `${trans.landing.contactAddressValue}\n${trans.landing.contactAddressSub}` },
-                { icon: <FontAwesomeIcon icon={faPhone} className="text-[18px]" />, label: trans.landing.contactPhone, value: `${trans.landing.contactPhoneValue1}\n${trans.landing.contactPhoneValue2}` },
-                { icon: <FontAwesomeIcon icon={faEnvelope} className="text-[18px]" />, label: trans.landing.contactEmail, value: `${trans.landing.contactEmailValue1}\n${trans.landing.contactEmailValue2}` },
+                { icon: faLocationDot, label: 'Address', value: 'KG 123 St, Kigali, Rwanda' },
+                { icon: faPhone, label: 'Phone', value: '+250 788 123 456\n+250 788 789 012' },
+                { icon: faEnvelope, label: 'Email', value: 'info@humura.rw\nsupport@humura.rw' },
               ].map(c => (
                 <div key={c.label} className="flex items-center gap-4">
-                  <div className="flex items-center justify-center shrink-0">{c.icon}</div>
+                  <div className="w-10 h-10 rounded-lg bg-brand-50 flex items-center justify-center text-brand-600 shrink-0">
+                    <FontAwesomeIcon icon={c.icon} className="text-base" />
+                  </div>
                   <div>
-                    <p className="text-xs font-bold text-ink-400 uppercase tracking-[.06em] mb-1">{c.label}</p>
+                    <p className="text-xs font-bold text-ink-400 uppercase tracking-wide mb-1">{c.label}</p>
                     {c.value.split('\n').map((line, i) => (
                       <p key={i} className="text-sm text-ink-700">{line}</p>
                     ))}
@@ -801,81 +734,10 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ═══════════════ CTA ═══════════════ */}
-      <section className="relative overflow-hidden py-[100px] mt-10"
-        style={{ background: 'linear-gradient(165deg, #000c0a 0%, #003128 35%, #007A64 70%, #33a38f 100%)' }}>
-        {/* Decorative orbs */}
-        <div className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-brand-400/10 blur-[120px]" />
-        <div className="absolute -bottom-40 -left-40 w-[400px] h-[400px] rounded-full bg-brand-300/10 blur-[100px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-white/[.03] blur-[80px]" />
-
-        {/* Dot grid overlay */}
-        <div className="absolute inset-0 opacity-[.04]"
-          style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,.6) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
-
-        {/* Floating particles */}
-        <div className="absolute top-20 left-[10%] w-2 h-2 rounded-full bg-brand-300/20 blur-sm" />
-        <div className="absolute bottom-32 right-[15%] w-3 h-3 rounded-full bg-brand-200/15 blur-sm" />
-        <div className="absolute top-1/3 right-[25%] w-1.5 h-1.5 rounded-full bg-white/10 blur-sm" />
-
-        {/* Max width container */}
-        <div className="max-w-[1400px] mx-auto px-10 relative">
-          <div className="grid lg:grid-cols-2 gap-8 xl:gap-12 items-center">
-            {/* Left: text */}
-            <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: '-80px' }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}>
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white/60 text-xs font-semibold uppercase tracking-[.08em] border border-white/10 mb-8">
-                <FontAwesomeIcon icon={faWandSparkles} className="text-[11px]" />
-                {trans.landing.ctaHeading.split(' ').slice(0, 2).join(' ')}
-              </div>
-              <h2 className="text-4xl sm:text-5xl lg:text-[64px] font-extrabold text-white tracking-[-.02em] leading-[1.1] mb-6">
-                {trans.landing.ctaHeading}
-              </h2>
-              <p className="text-white/50 max-w-[520px] mb-10 text-base sm:text-lg xl:text-xl leading-[1.8]">
-                {trans.landing.ctaText}
-              </p>
-              <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-5">
-                <a href="/register">
-                  <Button variant="primary" size="lg" className="!h-14 !px-10 !text-sm sm:!text-base !bg-gradient-to-r !from-brand-600 !to-brand-500 hover:!from-brand-500 hover:!to-brand-400 !text-white !shadow-[0_8px_32px_rgba(0,122,100,.35)] hover:!shadow-[0_12px_40px_rgba(0,122,100,.45)] hover:!-translate-y-0.5 !transition-all !duration-300 w-full sm:w-auto !border-0">
-                    {trans.landing.ctaCreateAccount} <FontAwesomeIcon icon={faArrowRight} className="text-[15px] sm:text-[17px] ml-1" />
-                  </Button>
-                </a>
-                <a href="/login">
-                  <Button variant="secondary" size="lg" className="!h-14 !px-10 !text-sm sm:!text-base !bg-white/[0.06] !text-white !border-white/[0.15] hover:!bg-white/[0.12] !backdrop-blur-md hover:!-translate-y-0.5 !transition-all !duration-300 w-full sm:w-auto">
-                    {trans.landing.ctaSignIn}
-                  </Button>
-                </a>
-              </div>
-            </motion.div>
-
-            {/* Right: stat cards */}
-            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: '-80px' }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}>
-              <div className="grid grid-cols-2 gap-6">
-                {[
-                  { value: '26%', label: 'PTSD Prevalence', icon: faUsers },
-                  { value: '30', label: 'Districts Nationwide', icon: faGlobe },
-                  { value: '16-25', label: 'Youth Age Focus', icon: faGraduationCap },
-                  { value: 'Multi-Channel', label: 'App \u2022 Web \u2022 USSD \u2022 SMS', icon: faHandshake },
-                ].map((stat, i) => (
-                  <motion.div key={stat.label}
-                    initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }} transition={{ delay: 0.3 + i * 0.1 }}
-                    className="group bg-white/[0.06] backdrop-blur-md border border-white/[0.08] rounded-3xl p-8 hover:bg-white/[0.1] hover:border-white/[0.15] hover:-translate-y-1.5 hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)] transition-all duration-300 text-center">
-                    <div className="w-12 h-12 rounded-2xl bg-brand-500/15 flex items-center justify-center mx-auto mb-5 group-hover:bg-brand-500/25 transition-colors duration-300">
-                      <FontAwesomeIcon icon={stat.icon} className="text-xl text-brand-400" />
-                    </div>
-                    <p className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-1.5">{stat.value}</p>
-                    <p className="text-xs font-medium text-white/45 uppercase tracking-[.06em]">{stat.label}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
 
       {/* ═══════════════ FOOTER ═══════════════ */}
-      <footer className="relative overflow-hidden text-ink-400"
-        style={{ background: 'linear-gradient(170deg, #0f242a 0%, #132e36 30%, #1a3f49 60%, #1f525f 100%)' }}>
+      <footer className="reset-margin relative overflow-hidden text-ink-400"
+        style={{ background: '#0F3015' }}>
         {/* Dark overlay for depth */}
         <div className="absolute inset-0 bg-black/10" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,.04)_0%,transparent_50%)]" />
@@ -897,12 +759,11 @@ export default function Landing() {
                   </div>
                 </div>
                 <p className="text-sm leading-relaxed text-ink-400 max-w-[320px] mb-8">
-                  {trans.landing.footerDesc}
+                  Humura is a multi-channel digital mental health platform providing accessible, culturally relevant mental health support across Rwanda.
                 </p>
                 <div className="flex items-center gap-3 mb-6">
                   {[
                     { icon: faGlobe, href: '#', label: 'Website' },
-                    { icon: faArrowUpRightFromSquare, href: '#', label: 'Portal' },
                     { icon: faEnvelope, href: '#', label: 'Email' },
                   ].map((s, i) => (
                     <a key={i} href={s.href} aria-label={s.label}
@@ -922,7 +783,7 @@ export default function Landing() {
                   {trans.landing.footerQuickLinks}
                 </p>
                 <ul className="space-y-4">
-                  {[trans.landing.about, trans.landing.services, trans.landing.youth, trans.landing.community, trans.landing.contact].map(l => (
+                  {['Home', 'About', 'Services', 'Youth', 'Community', 'Contact'].map(l => (
                     <li key={l}>
                       <a href={`#${l.toLowerCase()}`} onClick={e => scrollTo(e, `#${l.toLowerCase()}`)}
                         className="text-sm text-ink-400 hover:text-white transition-all duration-300 flex items-center gap-2 group">
@@ -943,7 +804,7 @@ export default function Landing() {
                   {trans.landing.footerPrograms}
                 </p>
                 <ul className="space-y-4">
-                  {[trans.landing.serviceScreening, trans.landing.serviceReferral, trans.landing.serviceSociotherapy, trans.landing.serviceEmergency].map(p => (
+                  {['Self-Assessment', 'Youth Module', 'Counselling', 'Coping Tools'].map(p => (
                     <li key={p}>
                       <span className="text-sm text-ink-400 flex items-center gap-2 group cursor-default">
                         <span className="w-1.5 h-1.5 rounded-full bg-brand-500/40 group-hover:bg-brand-400 transition-colors duration-300 shrink-0" />
@@ -1008,7 +869,7 @@ export default function Landing() {
                 <input type="email" placeholder="your@email.com"
                   className="h-11 flex-1 min-w-0 px-5 rounded-xl text-sm bg-white/[0.05] border border-white/10 focus:border-brand-400/50 focus:ring-2 focus:ring-brand-400/20 outline-none transition-all placeholder:text-ink-500 text-white" />
                 <button className="h-11 px-6 rounded-xl bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white text-sm font-bold transition-all duration-300 shrink-0 shadow-lg shadow-brand-600/20">
-                  <FontAwesomeIcon icon={faPaperPlane} className="text-[13px]" />
+                  <FontAwesomeIcon icon={faArrowRight} className="text-[13px]" />
                 </button>
               </div>
             </div>
@@ -1019,22 +880,15 @@ export default function Landing() {
         <div className="relative border-t border-white/5 mt-16">
           <div className="absolute inset-0 bg-black/20" />
           <div className="max-w-[1400px] mx-auto px-10 relative py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-ink-500">
-            <span>{trans.landing.footerCopyright.replace('{year}', String(new Date().getFullYear()))}</span>
+            <span>&copy; {new Date().getFullYear()} Humura. All rights reserved.</span>
             <div className="flex items-center gap-5">
-              <Link to="/privacy" className="hover:text-brand-300 transition-colors">{trans.privacy.footer}</Link>
+              <Link to="/privacy" className="hover:text-brand-300 transition-colors">Privacy Policy</Link>
               <span className="w-1 h-1 rounded-full bg-ink-600" />
-              <span className="flex items-center gap-1.5">{trans.landing.footerCredit} <FontAwesomeIcon icon={faHeartPulse} className="text-[11px] text-brand-400/60" /></span>
-              <span className="w-1 h-1 rounded-full bg-ink-600" />
-              <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                className="flex items-center gap-1.5 text-ink-500 hover:text-brand-300 transition-colors">
-                <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[10px]" />
-                Top
-              </button>
+              <span className="flex items-center gap-1.5">Made with <FontAwesomeIcon icon={faHeartPulse} className="text-[11px] text-brand-400/60" /> for Rwanda</span>
             </div>
           </div>
         </div>
       </footer>
-      <ChatWidget />
     </div>
   );
 }

@@ -177,58 +177,58 @@ export default function DashboardLayout() {
         transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
         className={clsx(
           'flex flex-col shrink-0 h-screen sticky top-0 z-50 overflow-hidden',
-          'bg-white border-r border-ink-200/60',
+          'bg-[#0B2653] border-r border-white/5',
           isMobile && !mobileOpen && 'border-0 min-w-0',
           isMobile && mobileOpen && 'shadow-2xl',
-          !isMobile && 'shadow-sm',
+          !isMobile && 'shadow-lg',
         )}
       >
         <div className={clsx(
-          'h-16 flex items-center shrink-0 border-b border-ink-100/60',
+          'h-16 flex items-center shrink-0 border-b border-white/10',
           showLabels ? 'gap-2.5 px-4 justify-between' : 'px-0 justify-center',
         )}>
           {sidebarExpanded ? (
             <>
               <div className="flex items-center gap-3 min-w-0">
-                <img src="/logo.png" alt="HUMURA" className="h-8 w-auto shrink-0" />
+                <img src="/logo.png" alt="HUMURA" className="h-8 w-auto shrink-0 brightness-[3] grayscale hue-rotate-[180deg] saturate-[.6]" />
                 <div className="min-w-0">
-                  <p className="text-ink-900 text-sm font-bold tracking-wide leading-none">HUMURA</p>
-                  <p className="text-ink-400 text-[9px] font-medium leading-none mt-0.5 tracking-[.12em] uppercase">Trauma Recovery</p>
+                  <p className="text-white text-sm font-bold tracking-wide leading-none">HUMURA</p>
+                  <p className="text-white/40 text-[9px] font-medium leading-none mt-0.5 tracking-[.12em] uppercase">Trauma Recovery</p>
                 </div>
               </div>
               <button onClick={() => { if (isMobile) setMobileOpen(false); else toggleSidebar(); }}
-                className="w-7 h-7 rounded-lg flex items-center justify-center text-ink-400 hover:text-brand-600 hover:bg-brand-50 border border-transparent hover:border-brand-200 transition-all shrink-0">
+                className="w-7 h-7 rounded-lg flex items-center justify-center text-white/40 hover:text-gold-400 hover:bg-white/10 border border-transparent hover:border-gold-400/30 transition-all shrink-0">
                 <FontAwesomeIcon icon={faChevronLeft} className="text-[11px]" />
               </button>
             </>
           ) : !isMobile ? (
             <>
               <div className="flex items-center justify-center w-full h-full">
-                <img src="/logo.png" alt="HUMURA" className="h-7 w-auto" />
+                <img src="/logo.png" alt="HUMURA" className="h-7 w-auto brightness-[3] grayscale hue-rotate-[180deg] saturate-[.6]" />
               </div>
               <button onClick={toggleSidebar}
-                className="absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 w-7 h-7 rounded-full flex items-center justify-center text-brand-600 hover:text-brand-700 hover:bg-brand-100 bg-white border-2 border-brand-200 shadow-sm transition-all z-10">
+                className="absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-1/2 w-7 h-7 rounded-full flex items-center justify-center text-brand-500 hover:text-brand-600 hover:bg-brand-50 bg-white border-2 border-brand-200 shadow-sm transition-all z-10">
                 <FontAwesomeIcon icon={faChevronRight} className="text-[10px]" />
               </button>
             </>
           ) : mobileOpen && (
             <>
               <div className="flex items-center gap-3 min-w-0">
-                <img src="/logo.png" alt="HUMURA" className="h-8 w-auto shrink-0" />
+                <img src="/logo.png" alt="HUMURA" className="h-8 w-auto shrink-0 brightness-[3] grayscale hue-rotate-[180deg] saturate-[.6]" />
                 <div className="min-w-0">
-                  <p className="text-ink-900 text-sm font-bold tracking-wide leading-none">HUMURA</p>
-                  <p className="text-ink-400 text-[9px] font-medium leading-none mt-0.5 tracking-[.12em] uppercase">Trauma Recovery</p>
+                  <p className="text-white text-sm font-bold tracking-wide leading-none">HUMURA</p>
+                  <p className="text-white/40 text-[9px] font-medium leading-none mt-0.5 tracking-[.12em] uppercase">Trauma Recovery</p>
                 </div>
               </div>
               <button onClick={() => setMobileOpen(false)}
-                className="w-6 h-6 rounded-lg flex items-center justify-center text-ink-400 hover:text-ink-700 hover:bg-ink-50 transition-all shrink-0">
+                className="w-6 h-6 rounded-lg flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all shrink-0">
                 <FontAwesomeIcon icon={faXmark} className="text-[13px]" />
               </button>
             </>
           )}
         </div>
 
-        <nav className="flex-1 py-4">
+        <nav className="reset-margin flex-1 py-4">
           <div className={showLabels ? 'px-3 space-y-1' : 'px-2 space-y-0.5'}>
           {items.map(({ to, label, icon }) => {
             const isActive = location.pathname === to || (to !== '/dashboard' && location.pathname.startsWith(to));
@@ -237,16 +237,16 @@ export default function DashboardLayout() {
                 <div className={clsx(
                   'flex items-center text-sm font-medium transition-all duration-150 cursor-pointer select-none',
                   showLabels ? 'gap-3 px-3 py-[9px] rounded-xl' : 'gap-0 px-0 py-2.5 justify-center',
-                  isActive && showLabels && 'bg-brand-50/70 border-l-[3px] border-l-brand-500 rounded-none rounded-r-xl ml-0 pl-[calc(0.75rem-3px)]',
-                  isActive && !showLabels && 'bg-brand-500/10 rounded-xl',
-                  isActive ? 'text-brand-700 font-semibold' : 'text-ink-500 hover:text-ink-800 hover:bg-ink-50'
+                  isActive && showLabels && 'bg-brand-500/10 border-l-[3px] border-l-brand-500 rounded-none rounded-r-xl ml-0 pl-[calc(0.75rem-3px)]',
+                  isActive && !showLabels && 'bg-brand-500/15 rounded-xl',
+                  isActive ? 'text-brand-400 font-semibold' : 'text-white/50 hover:text-white hover:bg-white/5'
                 )}>
                   <div className={clsx(
                     'flex items-center justify-center w-9 h-9 rounded-xl shrink-0',
                     isActive && 'bg-brand-500/10',
-                    !isActive && 'group-hover:bg-ink-50'
+                    !isActive && 'group-hover:bg-white/5'
                   )}>
-                    <span className={clsx(isActive ? 'text-brand-600' : 'text-ink-400')}>{icon}</span>
+                    <span className={clsx(isActive ? 'text-brand-400' : 'text-white/40')}>{icon}</span>
                   </div>
                   {showLabels && (
                     <>
@@ -255,7 +255,7 @@ export default function DashboardLayout() {
                   )}
                 </div>
                 {!showLabels && !isMobile && (
-                  <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 rounded-lg bg-white text-ink-800 text-xs font-medium whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all pointer-events-none z-[60] border border-ink-200/60 shadow-lg">
+                  <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 rounded-lg bg-[#0B2653] text-white/80 text-xs font-medium whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all pointer-events-none z-[60] border border-white/10 shadow-lg">
                     {label}
                   </div>
                 )}
@@ -266,19 +266,19 @@ export default function DashboardLayout() {
         </nav>
 
         {showLabels && (
-          <div className="mx-3 mb-3 p-3 rounded-xl bg-rose-50/70 border border-rose-200/50">
+          <div className="mx-3 mb-3 p-3 rounded-xl bg-rose-500/10 border border-rose-400/20">
             <div className="flex items-center gap-2 mb-0.5">
-              <span className="w-5 h-5 rounded-full bg-rose-100 flex items-center justify-center shrink-0">
-                <FontAwesomeIcon icon={faTriangleExclamation} className="text-[9px] text-rose-500" />
+              <span className="w-5 h-5 rounded-full bg-rose-500/20 flex items-center justify-center shrink-0">
+                <FontAwesomeIcon icon={faTriangleExclamation} className="text-[9px] text-rose-300" />
               </span>
-              <p className="text-[11px] font-semibold text-rose-700">Need Help?</p>
+              <p className="text-[11px] font-semibold text-rose-200">Need Help?</p>
             </div>
-            <p className="text-[10px] text-rose-500/80 leading-relaxed ml-7">Emergency Support 24/7</p>
-            <p className="text-[11px] font-bold text-rose-600 ml-7 mt-0.5">116 — Toll Free</p>
+            <p className="text-[10px] text-rose-300/80 leading-relaxed ml-7">Emergency Support 24/7</p>
+            <p className="text-[11px] font-bold text-rose-200 ml-7 mt-0.5">116 — Toll Free</p>
           </div>
         )}
 
-        <div className="border-t border-ink-100/60">
+        <div className="border-t border-white/10">
           <div className={clsx(
             'flex items-center rounded-xl transition-colors',
             showLabels ? 'gap-2.5 p-3' : 'gap-0 py-3 justify-center relative group'
@@ -298,13 +298,13 @@ export default function DashboardLayout() {
             <AnimatePresence>
               {showLabels && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex-1 min-w-0">
-                  <p className="text-ink-800 text-xs font-semibold truncate leading-tight">{user?.fullName}</p>
-                  <p className="text-ink-400 text-[10px] truncate leading-tight mt-0.5">{user?.email}</p>
+                  <p className="text-white/80 text-xs font-semibold truncate leading-tight">{user?.fullName}</p>
+                  <p className="text-white/40 text-[10px] truncate leading-tight mt-0.5">{user?.email}</p>
                 </motion.div>
               )}
             </AnimatePresence>
             {!showLabels && !isMobile && (
-              <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 rounded-lg bg-white text-ink-800 text-xs font-medium whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all pointer-events-none z-[60] border border-ink-200/60 shadow-lg">
+              <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 rounded-lg bg-[#0B2653] text-white/80 text-xs font-medium whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all pointer-events-none z-[60] border border-white/10 shadow-lg">
                 {user?.fullName}
               </div>
             )}
@@ -313,7 +313,7 @@ export default function DashboardLayout() {
             <button onClick={logout}
               className={clsx(
                 'flex items-center gap-2 w-full rounded-lg text-xs font-medium transition-all',
-                showLabels ? 'px-3 py-2 justify-start text-ink-400 hover:text-rose-600 hover:bg-rose-50' : 'mx-auto w-9 h-9 justify-center text-ink-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl'
+                showLabels ? 'px-3 py-2 justify-start text-white/40 hover:text-rose-300 hover:bg-rose-500/10' : 'mx-auto w-9 h-9 justify-center text-white/40 hover:text-rose-300 hover:bg-rose-500/10 rounded-xl'
               )}>
               <FontAwesomeIcon icon={faArrowRightFromBracket} className="text-[13px]" />
               {showLabels && <span>{trans.common.signOut}</span>}
@@ -403,7 +403,7 @@ export default function DashboardLayout() {
                           <span className={clsx('w-2 h-2 rounded-full mt-1.5 shrink-0', {
                             'bg-rose-500': n.type === 'alert',
                             'bg-brand-500': n.type === 'referral',
-                            'bg-warm-500': n.type === 'screening',
+                            'bg-brand-400': n.type === 'screening',
                             'bg-ink-400': !['alert', 'referral', 'screening'].includes(n.type),
                           })} />
                           <div className="min-w-0 flex-1">
@@ -424,7 +424,7 @@ export default function DashboardLayout() {
               <button onClick={() => setProfileOpen(!profileOpen)}
                 className="flex items-center gap-2.5 pl-3 border-l border-ink-100/60 cursor-pointer hover:opacity-80 transition-opacity">
                 {user?.avatar ? renderAvatar('w-8 h-8 rounded-full shrink-0 shadow-sm') : (
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white text-[10px] font-bold shrink-0 shadow-sm">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-brand-400 to-brand-500 flex items-center justify-center text-white text-[10px] font-bold shrink-0 shadow-sm">
                     {initials}
                   </div>
                 )}
@@ -442,7 +442,7 @@ export default function DashboardLayout() {
                   <div className="px-5 py-4 border-b border-ink-100/60">
                     <div className="flex items-center gap-3 mb-3">
                       {user?.avatar ? renderAvatar('w-10 h-10 rounded-full shrink-0') : (
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white text-sm font-bold shrink-0">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-400 to-brand-500 flex items-center justify-center text-white text-sm font-bold shrink-0">
                           {initials}
                         </div>
                       )}
